@@ -1,74 +1,158 @@
-<h2>Record 6c — Monthly Cleaning Schedule</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record 6c — Monthly Cleaning</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("kitchen.jpg") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 20px;
+    }
+    .overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: -1;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    h1, h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="text"], input[type="date"] {
+      padding: 6px;
+      border-radius: 6px;
+      border: 1px solid #aaa;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    input[type="checkbox"] {
+      width: 20px; height: 20px;
+    }
+    .btn-row {
+      margin-top: 20px;
+      text-align: center;
+    }
+    button {
+      margin: 0 5px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      background: #007BFF;
+      color: #fff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    button:hover { background: #0056b3; }
+    .back-btn {
+      background: #ffc107;
+      color: #000;
+    }
+    .back-btn:hover { background: #e0a800; }
+  </style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="container">
+  <a href="kitchen.html"><button class="back-btn">← Back</button></a>
+  <h1>Record 6c — Monthly Cleaning Schedule</h1>
 
-<div style="margin-bottom: 15px;">
-  <label for="monthInput"><strong>Month / Year:</strong></label>
-  <input type="text" id="monthInput" placeholder="e.g. 01/2025">
-</div>
+  <div style="margin-bottom: 15px; text-align:center;">
+    <label for="monthInput">Month / Year:</label>
+    <input type="text" id="monthInput" placeholder="e.g. 01/2025">
+  </div>
 
-<table border="1" cellpadding="6" cellspacing="0" width="100%">
-  <thead>
-    <tr>
-      <th>Task</th>
-      <th>Completed</th>
-      <th>Initials</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Clear out cupboards and wipe over shelves (Kitchen & Pantry)</td>
-      <td><input type="checkbox"></td>
-      <td><input type="text" style="width:80px;"></td>
-      <td><input type="date"></td>
-    </tr>
-    <tr>
-      <td>Clear out drawers / cutlery drawers</td>
-      <td><input type="checkbox"></td>
-      <td><input type="text" style="width:80px;"></td>
-      <td><input type="date"></td>
-    </tr>
-    <tr>
-      <td>Wipe over ceiling fan</td>
-      <td><input type="checkbox"></td>
-      <td><input type="text" style="width:80px;"></td>
-      <td><input type="date"></td>
-    </tr>
-  </tbody>
-</table>
+  <h2>Monthly Cleaning Tasks</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Completed</th>
+        <th>Initials</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Clear out cupboards and wipe shelves</td>
+        <td><input type="checkbox"></td>
+        <td><input type="text" style="width:70px;"></td>
+        <td><input type="date"></td>
+      </tr>
+      <tr>
+        <td>Clear out drawers & cutlery drawers</td>
+        <td><input type="checkbox"></td>
+        <td><input type="text" style="width:70px;"></td>
+        <td><input type="date"></td>
+      </tr>
+      <tr>
+        <td>Wipe over ceiling fan</td>
+        <td><input type="checkbox"></td>
+        <td><input type="text" style="width:70px;"></td>
+        <td><input type="date"></td>
+      </tr>
+    </tbody>
+  </table>
 
-<h3>Quarterly / Yearly Cleaning</h3>
-<table border="1" cellpadding="6" cellspacing="0" width="100%">
-  <thead>
-    <tr>
-      <th>Task</th>
-      <th>Responsible Person</th>
-      <th>Date Scheduled</th>
-      <th>Date Completed</th>
-      <th>Checked By</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td contenteditable="true"></td>
-      <td contenteditable="true"></td>
-      <td><input type="date"></td>
-      <td><input type="date"></td>
-      <td contenteditable="true"></td>
-    </tr>
-    <tr>
-      <td contenteditable="true"></td>
-      <td contenteditable="true"></td>
-      <td><input type="date"></td>
-      <td><input type="date"></td>
-      <td contenteditable="true"></td>
-    </tr>
-  </tbody>
-</table>
+  <h2>Quarterly / Yearly Cleaning</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Responsible Person</th>
+        <th>Date Scheduled</th>
+        <th>Date Completed</th>
+        <th>Checked By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td><input type="date"></td>
+        <td><input type="date"></td>
+        <td contenteditable="true"></td>
+      </tr>
+      <tr>
+        <td contenteditable="true"></td>
+        <td contenteditable="true"></td>
+        <td><input type="date"></td>
+        <td><input type="date"></td>
+        <td contenteditable="true"></td>
+      </tr>
+    </tbody>
+  </table>
 
-<div style="margin-top:20px;">
-  <button onclick="window.print()">Print</button>
-  <button onclick="clearForm()">Clear</button>
-  <button onclick="saveData()">Save</button>
+  <div class="btn-row">
+    <button onclick="window.print()">Print</button>
+    <button onclick="clearForm()">Clear</button>
+    <button onclick="saveData()">Save</button>
+  </div>
 </div>
 
 <script>
@@ -79,6 +163,8 @@ function clearForm() {
   });
 }
 function saveData() {
-  alert("Saved (later this will archive the month).");
+  alert("Saved for this month (later this will archive automatically).");
 }
 </script>
+</body>
+</html>

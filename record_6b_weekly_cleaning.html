@@ -1,93 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Record 6b — Weekly Cleaning Schedule</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th, td { border: 1px solid #333; padding: 6px; text-align: center; }
-    th { background: #f2f2f2; }
-    td:first-child { text-align: left; }
-    .controls { margin-bottom: 15px; }
-    .controls button { margin-right: 10px; padding: 6px 12px; }
-    @media print {
-      body { margin: 15mm; }
-      table { width: 100%; }
-      @page { size: A4 portrait; margin: 15mm; }
-    }
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Record 6b — Weekly Cleaning Schedule</title>
+<style>
+  :root{--ink:#0f172a;--ring:#d1d5db;--bgw:rgba(255,255,255,.88);--accent:#ffc107;--brand:#0ea5e9;}
+  html,body{height:100%;margin:0;font-family:system-ui,Arial,sans-serif;color:var(--ink);
+    background:url("kitchen.jpg") center/cover fixed no-repeat;}
+  .wash{position:fixed;inset:0;background:rgba(255,255,255,.65);z-index:0;}
+  main{position:relative;z-index:1;max-width:1000px;margin:28px auto;padding:22px;background:var(--bgw);
+    border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.12);}
+  header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+  h1{margin:8px 0;font-size:clamp(18px,2.4vw,26px);font-weight:800}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;border:none;border-radius:10px;padding:10px 14px;background:#f3f4f6;cursor:pointer;font-weight:600}
+  .btn--accent{background:var(--accent)}
+  .pill{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  input[type="date"]{padding:10px 12px;border:1px solid var(--ring);border-radius:10px;background:#fff}
+  table{width:100%;border-collapse:separate;border-spacing:0 10px}
+  thead th{font-size:.9rem;text-align:center}
+  th,td{padding:8px}
+  .row{background:#fff;border:1px solid var(--ring);border-radius:12px;overflow:hidden}
+  .task{width:70%;font-weight:600}
+  .days{width:30%;text-align:center;white-space:nowrap}
+  .chk{appearance:none;width:28px;height:28px;border:2px solid var(--ring);border-radius:9px;background:#fff;cursor:pointer}
+  .chk:checked{background:var(--brand);border-color:var(--brand)}
+  @media print{ body{background:none}.wash{background:#fff} main{box-shadow:none;margin:0;padding:0} header .btn{display:none} }
+</style>
 </head>
 <body>
-  <div class="controls">
-    <label>Week Commencing: <input type="date" id="weekDate"></label>
-    <button onclick="archiveData()">Archive</button>
-    <button onclick="clearData()">Clear</button>
-    <button onclick="window.print()">Print</button>
-    <button onclick="history.back()">Back</button>
-  </div>
+<div class="wash"></div>
+<main>
+  <header>
+    <div>
+      <a class="btn btn--accent" href="kitchen.html">← Back</a>
+      <button class="btn" onclick="print()">🖨️ Print</button>
+      <button class="btn" id="clearBtn">✖ Clear</button>
+    </div>
+    <h1>Record 6b — Weekly Cleaning</h1>
+    <div class="pill">
+      <label for="wc"><strong>Week commencing:</strong></label>
+      <input id="wc" type="date">
+    </div>
+  </header>
 
-  <h2>Record 6b — Weekly Cleaning Schedule</h2>
-
-  <table id="weeklyTable">
-    <tr>
-      <th>Task</th>
-      <th>Mon</th>
-      <th>Tue</th>
-      <th>Wed</th>
-      <th>Thu</th>
-      <th>Fri</th>
-    </tr>
-    <tr><td>Clean out fridge (shelves & doors)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Clean inside of ovens</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Chemical cupboard (refill if needed)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Clean pantry (check expiry, wipe shelves & sill)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Sweep & mop pantry floor</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+  <table>
+    <thead>
+      <tr><th class="task">Task</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th></tr>
+    </thead>
+    <tbody id="rows"></tbody>
   </table>
+</main>
 
-  <p><em>Weekly or more often if required</em></p>
+<script>
+(function(){
+  const KEY = location.pathname + "::v1";
+  const tasks = [
+    "Clean out fridge (wipe over shelves and inside doors)",
+    "Clean inside of ovens",
+    "Clean out chemical cupboard (refill when required)",
+    "Clean pantry (wipe each shelf; check & discard expired items; wipe windowsill)",
+    "Sweep & mop pantry floor"
+  ];
 
-  <script>
-    const STORAGE_KEY = "weeklyCleaning6b";
+  const rows = document.getElementById('rows');
+  tasks.forEach((t,i)=>{
+    const tr=document.createElement('tr'); tr.className='row';
+    tr.innerHTML = `
+      <td class="task">${t}</td>
+      ${['m','t','w','th','f'].map(d=>`<td class="days"><input class="chk" type="checkbox" data-k="${i}-${d}"></td>`).join('')}
+    `;
+    rows.appendChild(tr);
+  });
 
-    function saveData() {
-      const checkboxes = document.querySelectorAll("input[type='checkbox']");
-      let data = Array.from(checkboxes).map(cb => cb.checked);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        week: document.getElementById("weekDate").value,
-        checks: data
-      }));
-    }
-
-    function loadData() {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved) {
-        document.getElementById("weekDate").value = saved.week;
-        const checkboxes = document.querySelectorAll("input[type='checkbox']");
-        saved.checks.forEach((val, i) => { checkboxes[i].checked = val; });
-      }
-    }
-
-    function archiveData() {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (!saved) { alert("Nothing to archive"); return; }
-      const blob = new Blob([JSON.stringify(saved, null, 2)], {type: "application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "weekly_cleaning_archive.json";
-      a.click();
-      URL.revokeObjectURL(url);
-      clearData();
-    }
-
-    function clearData() {
-      localStorage.removeItem(STORAGE_KEY);
-      location.reload();
-    }
-
-    document.addEventListener("change", saveData);
-    window.onload = loadData;
-  </script>
-</body>
-</html>
+  const state = JSON.parse(localStorage.getItem(KEY) || "{}");
+  document.querySelectorAll('.chk').forEach(chk=>{
+    const k=chk.dataset.k; if

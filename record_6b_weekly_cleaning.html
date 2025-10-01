@@ -1,78 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Record 6b — Weekly Cleaning Schedule</title>
 <style>
-  :root{--ink:#0f172a;--ring:#d1d5db;--bgw:rgba(255,255,255,.88);--accent:#ffc107;--brand:#0ea5e9;}
-  html,body{height:100%;margin:0;font-family:system-ui,Arial,sans-serif;color:var(--ink);
-    background:url("kitchen.jpg") center/cover fixed no-repeat;}
-  .wash{position:fixed;inset:0;background:rgba(255,255,255,.65);z-index:0;}
-  main{position:relative;z-index:1;max-width:1000px;margin:28px auto;padding:22px;background:var(--bgw);
-    border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.12);}
-  header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
-  h1{margin:8px 0;font-size:clamp(18px,2.4vw,26px);font-weight:800}
-  .btn{display:inline-flex;align-items:center;gap:.5rem;border:none;border-radius:10px;padding:10px 14px;background:#f3f4f6;cursor:pointer;font-weight:600}
-  .btn--accent{background:var(--accent)}
-  .pill{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-  input[type="date"]{padding:10px 12px;border:1px solid var(--ring);border-radius:10px;background:#fff}
+  :root{
+    --card:#ffffff; --ink:#0b1320; --muted:#6b7280; --line:#e6e8ef;
+    --accent:#ffd24d; --accent-ink:#1f2937;
+  }
+  @page { size: A4 portrait; margin: 14mm; }
+  *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+  body{margin:0;background:#f5f7fb;color:var(--ink)}
+  .page{max-width:1024px;margin:28px auto;padding:8px 12px}
+  /* header */
+  .toolbar{display:flex;gap:8px;align-items:center;margin:4px 0 14px}
+  .btn{appearance:none;border:0;border-radius:10px;background:#eef2ff;color:#111827;
+       padding:8px 12px;font-weight:600;cursor:pointer}
+  .btn:hover{filter:brightness(.97)}
+  .btn--accent{background:var(--accent);color:var(--accent-ink)}
+  /* card */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px}
+  h1{font-size:22px;margin:4px 0 12px}
+  .hint{font-size:13px;color:var(--muted);margin:0 0 10px}
+  /* table */
   table{width:100%;border-collapse:separate;border-spacing:0 10px}
-  thead th{font-size:.9rem;text-align:center}
-  th,td{padding:8px}
-  .row{background:#fff;border:1px solid var(--ring);border-radius:12px;overflow:hidden}
-  .task{width:70%;font-weight:600}
-  .days{width:30%;text-align:center;white-space:nowrap}
-  .chk{appearance:none;width:28px;height:28px;border:2px solid var(--ring);border-radius:9px;background:#fff;cursor:pointer}
-  .chk:checked{background:var(--brand);border-color:var(--brand)}
-  @media print{ body{background:none}.wash{background:#fff} main{box-shadow:none;margin:0;padding:0} header .btn{display:none} }
+  th,td{padding:10px 12px;vertical-align:middle}
+  thead th{font-size:13px;color:#374151;text-align:center}
+  .col-task{width:58%;text-align:left}
+  .col-week{width:22%}
+  .date-wrap{display:flex;gap:8px;align-items:center}
+  input[type="date"]{width:180px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
+  /* row card look */
+  .row{background:#fff;border:1px solid var(--line);border-radius:12px}
+  .tickbox{display:flex;justify-content:center}
+  input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
+  /* notes */
+  .notes{margin-top:14px}
+  .notes label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .notes textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  @media print{
+    .toolbar{display:none}
+    body{background:#fff}
+    .card{border-color:#ddd}
+  }
 </style>
 </head>
 <body>
-<div class="wash"></div>
-<main>
-  <header>
-    <div>
-      <a class="btn btn--accent" href="kitchen.html">← Back</a>
-      <button class="btn" onclick="print()">🖨️ Print</button>
-      <button class="btn" id="clearBtn">✖ Clear</button>
-    </div>
-    <h1>Record 6b — Weekly Cleaning</h1>
-    <div class="pill">
-      <label for="wc"><strong>Week commencing:</strong></label>
-      <input id="wc" type="date">
-    </div>
-  </header>
+<div class="page">
 
-  <table>
-    <thead>
-      <tr><th class="task">Task</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th></tr>
-    </thead>
-    <tbody id="rows"></tbody>
-  </table>
-</main>
+  <!-- TOP BUTTONS -->
+  <div class="toolbar">
+    <a href="kitchen.html" class="btn btn--accent">← Back</a>
+    <button class="btn" onclick="window.print()">Print</button>
+    <button class="btn" onclick="clearForm()">Clear</button>
+  </div>
+
+  <div class="card">
+    <h1>Record 6b — Weekly Cleaning Schedule</h1>
+    <p class="hint">Tick the day completed. Use one row per task and week. Week starts on the date below.</p>
+
+    <!-- Week commencing -->
+    <div class="date-wrap" style="margin:8px 0 14px">
+      <strong style="font-size:14px">Week Commencing:</strong>
+      <input id="weekStart" type="date" />
+    </div>
+
+    <table aria-label="Weekly Cleaning">
+      <thead>
+        <tr>
+          <th class="col-task" style="text-align:left">Task</th>
+          <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th>
+        </tr>
+      </thead>
+      <tbody id="rows">
+        <!-- Tasks from the Food Safety Program -->
+        <tr class="row">
+          <td class="col-task">Clean out fridge (wipe over shelves & doors)</td>
+          <td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+        </tr>
+        <tr class="row">
+          <td class="col-task">Clean inside of ovens</td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+        </tr>
+        <tr class="row">
+          <td class="col-task">Clean out chemical cupboard (refill chemicals when required)</td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+        </tr>
+        <tr class="row">
+          <td class="col-task">Clean pantry (wipe every shelf and check for expired food items). Wipe over pantry windowsill.</td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+        </tr>
+        <tr class="row">
+          <td class="col-task">Sweep & mop pantry floor</td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
+          <td class="tickbox"><input type="checkbox" /></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="notes">
+      <label for="notes">Notes / Corrective actions (e.g., refill chemicals, replace shelves liners, report maintenance):</label>
+      <textarea id="notes" placeholder="Describe action(s), who was notified, and outcome."></textarea>
+    </div>
+    <p class="hint" style="margin-top:8px">Tip: use <strong>Print</strong> → “Save as PDF” to keep a weekly archive.</p>
+  </div>
+</div>
 
 <script>
-(function(){
-  const KEY = location.pathname + "::v1";
-  const tasks = [
-    "Clean out fridge (wipe over shelves and inside doors)",
-    "Clean inside of ovens",
-    "Clean out chemical cupboard (refill when required)",
-    "Clean pantry (wipe each shelf; check & discard expired items; wipe windowsill)",
-    "Sweep & mop pantry floor"
-  ];
-
-  const rows = document.getElementById('rows');
-  tasks.forEach((t,i)=>{
-    const tr=document.createElement('tr'); tr.className='row';
-    tr.innerHTML = `
-      <td class="task">${t}</td>
-      ${['m','t','w','th','f'].map(d=>`<td class="days"><input class="chk" type="checkbox" data-k="${i}-${d}"></td>`).join('')}
-    `;
-    rows.appendChild(tr);
-  });
-
-  const state = JSON.parse(localStorage.getItem(KEY) || "{}");
-  document.querySelectorAll('.chk').forEach(chk=>{
-    const k=chk.dataset.k; if
+  const KEY = 'mdk_record_6b_weekly_v1';
+  function save(){ 
+    const data = {
+      week: document.getElementById('weekStart').value,
+      ticks: Array.from(document.querySelectorAll('tbody input[type="checkbox"]')).map(c=>c.checked),
+      notes: document.getElementById('notes').value
+    };
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+  function load(){
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    if(data.week) document.getElementById('weekStart').value = data.week;
+    const boxes = document.querySelectorAll('tbody input[type="checkbox"]');
+    (data.ticks||[]).forEach((v,i)=>{ if(boxes[i]) boxes[i].checked = v; });
+    if(data.notes) document.getElementById('notes').value = data.notes;
+  }
+  function clearForm(){
+    document.getElementById('weekStart').value = '';
+    document.querySelectorAll('tbody input[type="checkbox"]').forEach(c=>c.checked=false);
+    document.getElementById('notes').value='';
+    save();
+  }
+  document.addEventListener('input', save);
+  window.addEventListener('load', load);
+</script>
+</body>
+</html>

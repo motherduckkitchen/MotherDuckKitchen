@@ -1,53 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Record 6a — Daily Cleaning</title>
-  <style>
-    :root{
-      --brand:#0d6efd;
-      --brand-hover:#0b5ed7;
-      --accent:#ffc107;
-      --card-bg: rgba(255,255,255,.85);
-      --text:#0f172a;
-    }
-    body,html{height:100%; margin:0; font-family:system-ui, sans-serif; color:var(--text);
-      background:url("kitchen.jpg") center/cover fixed no-repeat;}
-    .overlay{position:fixed; inset:0; background:rgba(255,255,255,0.65); z-index:0;}
-    main.container{position:relative; z-index:1; max-width:1000px; margin:40px auto;
-      padding:24px; background:var(--card-bg); border-radius:12px;
-      box-shadow:0 10px 25px rgba(0,0,0,.12);}
-    header{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:20px;}
-    h1{margin:0; font-size:clamp(20px,2.4vw,28px);}
-    .btn-back{background:var(--accent); color:#000; text-decoration:none;
-      font-weight:600; padding:8px 14px; border-radius:8px;}
-    table{width:100%; border-collapse:collapse; margin-top:18px;}
-    th,td{border:1px solid #333; padding:8px; text-align:left;}
-    th{background:#f3f3f3;}
-    input[type="checkbox"]{width:20px; height:20px;}
-  </style>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Record 6a — Daily Cleaning & Sanitising</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#4b5563; --ring:#d1d5db; --bgw:rgba(255,255,255,.88);
+    --pill:#f8fafc; --headline:#111827; --accent:#ffc107; --brand:#0ea5e9;
+  }
+  html,body{height:100%;margin:0;font-family:system-ui,Arial,sans-serif;color:var(--ink);
+    background:url("kitchen.jpg") center/cover fixed no-repeat;}
+  .wash{position:fixed;inset:0;background:rgba(255,255,255,.65);z-index:0;}
+  main{position:relative;z-index:1;max-width:1000px;margin:28px auto;padding:22px;background:var(--bgw);
+    border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.12);}
+  header{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+  h1{margin:8px 0;font-size:clamp(18px,2.4vw,26px);font-weight:800;color:var(--headline)}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;border:none;border-radius:10px;padding:10px 14px;
+    background:#f3f4f6;cursor:pointer;font-weight:600}
+  .btn:active{transform:translateY(1px)}
+  .btn--accent{background:var(--accent)}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+  .note{margin:10px 0 14px;color:var(--muted);font-size:.95rem;background:#f8fafc;border:1px dashed var(--ring);
+    border-radius:12px;padding:10px 12px}
+  table{width:100%;border-collapse:separate;border-spacing:0 10px}
+  thead th{font-size:.9rem;color:#334155;text-align:center}
+  th,td{padding:8px}
+  .row{background:#fff;border:1px solid var(--ring);border-radius:12px;overflow:hidden}
+  .task{width:70%;font-weight:600}
+  .days{width:30%;text-align:center;white-space:nowrap}
+  .chk{appearance:none;width:28px;height:28px;border:2px solid var(--ring);border-radius:9px;background:#fff;cursor:pointer}
+  .chk:checked{background:var(--brand);border-color:var(--brand)}
+  .footnote{margin-top:16px;color:#374151}
+  .pill{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  input[type="date"]{padding:10px 12px;border:1px solid var(--ring);border-radius:10px;background:#fff}
+  textarea{width:100%;min-height:130px;border:1px solid var(--ring);border-radius:12px;padding:12px;background:#fff}
+  @media print{
+    body{background:none}
+    .wash{background:#fff}
+    main{box-shadow:none;margin:0;padding:0}
+    header .btn-row{display:none}
+  }
+</style>
 </head>
 <body>
-  <div class="overlay"></div>
-  <main class="container">
-    <header>
-      <a class="btn-back" href="kitchen.html">← Back</a>
-      <h1>Record 6a — Daily Cleaning</h1>
-      <span></span>
-    </header>
+<div class="wash"></div>
+<main>
+  <header>
+    <div class="btn-row">
+      <a href="kitchen.html" class="btn btn--accent" id="backBtn">← Back</a>
+      <button class="btn" id="printBtn">🖨️ Print</button>
+      <button class="btn" id="clearBtn">✖ Clear</button>
+    </div>
+    <h1>Record 6a — Daily Cleaning &amp; Sanitising</h1>
+    <div class="pill">
+      <label for="weekStart"><strong>Week starting:</strong></label>
+      <input id="weekStart" type="date"/>
+    </div>
+  </header>
 
-    <table>
-      <tr><th>Area / Equipment</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th></tr>
-      <tr><td>Chopping boards (replace if damaged)</td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-      <tr><td>Benches</td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-      <tr><td>Serving utensils</td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-      <!-- add rest of daily tasks here -->
-    </table>
-  </main>
+  <div class="note">Tick each day once the task is completed. Use <em>Print → Save as PDF</em> to archive weekly.</div>
+
+  <table aria-label="Daily cleaning">
+    <thead>
+      <tr><th class="task">Area / Equipment</th><th class="days">M</th><th class="days">T</th><th class="days">W</th><th class="days">T</th><th class="days">F</th></tr>
+    </thead>
+    <tbody id="rows">
+      <!-- rows injected by JS to keep HTML compact -->
+    </tbody>
+  </table>
+
+  <div class="footnote">
+    <strong>Please list any extra areas/equipment to be cleaned daily:</strong>
+    <textarea id="extras"></textarea>
+  </div>
+</main>
+
+<script>
+(function(){
+  const KEY = location.pathname + "::v1"; // per-page autosave key
+
+  const tasks = [
+    "AFTER EACH USE",
+    "Chopping boards (replace if damaged)",
+    "Benches",
+    "Serving utensils",
+    "Bowls, cups, plates etc.",
+    "Drinking jugs clean/sanitised & put away",
+    "DAILY or more often if required",
+    "Cupboards clean/tidy (wipe outside doors)",
+    "Microwave inside & outside; nothing stored on top",
+    "Wipe over front of ovens",
+    "Wipe over front of dishwasher",
+    "Windowsill/skirting/splashback wiped",
+    "All utensils put away",
+    "Door handles & entrance doors",
+    "Bin emptied, lid cleaned",
+    "Benches disinfected & clear of clutter",
+    "Floors mopped (PM)",
+    "Tea towels & dish cloths washed (end of day)",
+    "Oven trays cleaned after use",
+    "All fixtures/fittings sanitised"
+  ];
+
+  const rows = document.getElementById('rows');
+  tasks.forEach((t,i)=>{
+    const tr=document.createElement('tr'); tr.className='row';
+    tr.innerHTML = `
+      <td class="task">${t}</td>
+      ${['m','t','w','th','f'].map(d=>`<td class="days"><input class="chk" type="checkbox" data-k="${i}-${d}"></td>`).join('')}
+    `;
+    rows.appendChild(tr);
+  });
+
+  // Restore + autosave
+  const state = JSON.parse(localStorage.getItem(KEY) || "{}");
+  document.querySelectorAll('.chk').forEach(chk=>{
+    const k = chk.dataset.k; if(state[k]) chk.checked = true;
+    chk.addEventListener('change', ()=>{ state[k]=chk.checked; localStorage.setItem(KEY, JSON.stringify(state)); });
+  });
+  const weekStart = document.getElementById('weekStart');
+  if(state.weekStart) weekStart.value = state.weekStart;
+  weekStart.addEventListener('change', ()=>{ state.weekStart = weekStart.value; localStorage.setItem(KEY, JSON.stringify(state)); });
+  const extras = document.getElementById('extras');
+  if(state.extras) extras.value = state.extras;
+  extras.addEventListener('input', ()=>{ state.extras = extras.value; localStorage.setItem(KEY, JSON.stringify(state)); });
+
+  // Buttons
+  document.getElementById('printBtn').onclick = ()=>window.print();
+  document.getElementById('clearBtn').onclick = ()=>{
+    if(!confirm("Clear ticks and notes for this page?")) return;
+    localStorage.removeItem(KEY); location.reload();
+  };
+})();
+</script>
 </body>
 </html>

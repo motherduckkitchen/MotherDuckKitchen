@@ -3,11 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <title>Record 6a — Daily Cleaning & Sanitising Schedule</title>
-  <link rel="stylesheet" href="shared/styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff; /* remove blue */
+      margin: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    table {
+      width: 900px; /* fixed width, like A4 */
+      margin: auto;
+      border-collapse: collapse;
+      border: 1px solid #000;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 6px;
+      text-align: left;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    td input[type="checkbox"] {
+      transform: scale(1.3);
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h2>Record 6a — Daily Cleaning & Sanitising Schedule</h2>
-  <table border="1" style="width:100%; border-collapse:collapse; text-align:left;">
+  <table>
     <thead>
       <tr>
         <th>Area/Equipment</th>
@@ -15,27 +42,27 @@
       </tr>
     </thead>
     <tbody>
-      <tr><td>AFTER EACH USE</td><td colspan="5"></td></tr>
-      <tr><td>Chopping boards (if knife marks discard & order new ones)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Benches</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Serving utensils</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Bowls, Cups, Plates etc.</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Drinking jugs clean/sanitised & put away</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>AFTER EACH USE</b></td><td colspan="5"></td></tr>
+      <tr><td>Chopping boards (discard if damaged)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Benches</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Serving utensils</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Bowls, Cups, Plates etc.</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Drinking jugs clean/sanitised & put away</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
 
-      <tr><td>DAILY or more often if required</td><td colspan="5"></td></tr>
-      <tr><td>Cupboards clean/tidy (wipe outside doors)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Microwave inside & outside</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Oven fronts</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Dishwasher front</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Windowsill, skirting, sink splash back</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>All utensils put away</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Door handles & entrance doors</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Bin emptied, lid cleaned</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Benches disinfected & clear</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Floors mopped (PM)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Tea towels & dish cloths washed (end of day)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Oven trays cleaned after use</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>All fixtures/fittings sanitised</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>DAILY or more often if required</b></td><td colspan="5"></td></tr>
+      <tr><td>Cupboards clean/tidy (outside doors wiped)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Microwave inside & outside</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Oven fronts</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Dishwasher front</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Windowsill/skirting/sink splash back</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>All utensils put away</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Door handles & entrance doors</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Bin emptied, lid cleaned</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Benches disinfected & clear</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Floors mopped (PM)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Tea towels & dish cloths washed</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Oven trays cleaned after use</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Fixtures/fittings sanitised</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
     </tbody>
   </table>
   <p><i>Please list any areas/equipment to be cleaned daily:</i></p>

@@ -5,7 +5,7 @@
   <title>Record 6b — Weekly Cleaning Schedule</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 700px; border-collapse: collapse; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #333; padding: 6px; text-align: center; }
     th { background: #f2f2f2; }
     .controls { margin-bottom: 15px; }
@@ -30,7 +30,11 @@
   <table id="weeklyTable">
     <tr>
       <th>Task</th>
-      <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th>
+      <th>Monday</th>
+      <th>Tuesday</th>
+      <th>Wednesday</th>
+      <th>Thursday</th>
+      <th>Friday</th>
     </tr>
     <tr><td>Clean out fridge (shelves & doors)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
     <tr><td>Clean inside of ovens</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
@@ -78,7 +82,7 @@
       location.reload();
     }
 
-    // auto-save every time a box is ticked or date changed
+    // Auto-save whenever something changes
     document.addEventListener("change", saveData);
     window.onload = loadData;
   </script>

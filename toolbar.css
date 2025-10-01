@@ -1,0 +1,42 @@
+.mdk-toolbar {
+  display:flex;
+  gap:18px;
+  align-items:center;
+  margin:18px 0 22px;
+}
+
+.mdk-btn {
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:18px 28px;
+  border:0;
+  border-radius:24px;
+  font: 700 24px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  text-decoration:none;
+  cursor:pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
+}
+
+.mdk-btn--back {
+  background:#f6b900;
+  color:#3b1a8f;
+}
+.mdk-btn--back:hover { filter:brightness(0.97); }
+.mdk-btn--back:active { transform: translateY(1px); }
+
+.mdk-btn--pill {
+  background:#f3f5f8;
+  color:#0f172a;
+}
+.mdk-btn--pill:hover { filter:brightness(0.98); }
+.mdk-btn--pill:active { transform: translateY(1px); }
+
+.mdk-ico { font-size: 26px; line-height: 1; }
+
+@media (max-width: 640px){
+  .mdk-btn { padding:14px 22px; font-size:20px; border-radius:20px; }
+  .mdk-ico { font-size:22px; }
+  .mdk-toolbar { gap:12px; }
+}

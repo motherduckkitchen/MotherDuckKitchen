@@ -1,115 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Record 12 — Supervisor Checklist</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th, td { border: 1px solid #333; padding: 6px; text-align: left; }
-    th { background: #f2f2f2; text-align: center; }
-    .controls { margin-bottom: 15px; }
-    .controls button { margin-right: 10px; padding: 6px 12px; }
-    @media print {
-      @page { size: A4 portrait; margin: 15mm; }
+    /* Page & background */
+    body{
+      margin:0;
+      font-family: Arial, sans-serif;
+      background: url("kitchen.jpg") center/cover fixed no-repeat;
+      color:#0b1320;
+      padding:20px;
     }
+    .overlay{
+      position:fixed; inset:0; background:rgba(255,255,255,0.85); z-index:-1;
+    }
+    .container{
+      max-width: 850px; margin: 0 auto;
+      background:#fff; border-radius:12px; padding:22px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.12);
+      border:1px solid #e5e7eb;
+    }
+
+    /* Header & buttons */
+    .topbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
+    .btn{
+      border:0; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer;
+      background:#e5e7eb;
+    }
+    .btn:hover{filter:brightness(.97)}
+    .btn--back{background:#ffc107; color:#000;}
+    .btn--primary{background:#0d6efd; color:#fff;}
+    h1{margin:6px 0 14px; font-size:22px; text-align:center;}
+
+    /* Meta row */
+    .meta{
+      display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:center;
+      margin-bottom:14px;
+    }
+    label{font-weight:700;}
+    input[type="date"], input[type="text"]{
+      border:1px solid #d1d5db; border-radius:8px; padding:8px 10px; min-width:190px;
+    }
+
+    /* Table */
+    table{width:100%; border-collapse:collapse; margin-top:8px; border-radius:10px; overflow:hidden;}
+    th, td{border:1px solid #e5e7eb; padding:10px; vertical-align:middle;}
+    th{background:#f3f4f6; text-align:left;}
+    td.check{width:70px; text-align:center;}
+    .section{background:#f9fafb; font-weight:700;}
+
+    /* Textareas */
+    textarea{
+      width:100%; min-height:90px; padding:10px; border:1px solid #e5e7eb; border-radius:10px;
+      margin-top:6px;
+    }
+
+    @page{size:A4 portrait; margin:14mm;}
+    @media print{ .topbar{display:none} body{background:#fff} .overlay{display:none} }
   </style>
 </head>
 <body>
-  <div class="controls">
-    <label>Date: <input type="date" id="checkDate"></label>
-    <label>Supervisor: <input type="text" id="supervisor"></label>
-    <button onclick="archiveData()">Archive</button>
-    <button onclick="clearData()">Clear</button>
-    <button onclick="window.print()">Print</button>
-    <button onclick="history.back()">Back</button>
+  <div class="overlay"></div>
+  <div class="container">
+
+    <!-- Buttons -->
+    <div class="topbar">
+      <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
+      <button class="btn" onclick="window.print()">Print</button>
+      <button class="btn" onclick="clearForm()">Clear</button>
+      <button class="btn btn--primary" onclick="saveForm()">Save</button>
+    </div>
+
+    <h1>Record 12 — Supervisor Checklist</h1>
+
+    <!-- Meta -->
+    <div class="meta">
+      <div>
+        <label for="checkDate">Date:&nbsp;</label>
+        <input id="checkDate" type="date" />
+      </div>
+      <div>
+        <label for="supervisor">Supervisor:&nbsp;</label>
+        <input id="supervisor" type="text" placeholder="Name / Initials" />
+      </div>
+    </div>
+
+    <!-- Checklist (mirrors Food Safety Program sections) -->
+    <table id="checklist">
+      <tr><th class="section" colspan="2">Equipment & Premises</th></tr>
+      <tr><td>All equipment operating correctly</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Premises structurally sound</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Maintenance records completed (Record 7)</td><td class="check"><input type="checkbox"></td></tr>
+
+      <tr><th class="section" colspan="2">Temperature Measuring Devices</th></tr>
+      <tr><td>Thermometers calibrated/accurate</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Staff trained in correct thermometer use</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Calibration log completed (Record 7a)</td><td class="check"><input type="checkbox"></td></tr>
+
+      <tr><th class="section" colspan="2">Pest Control</th></tr>
+      <tr><td>Cleanliness maintained; no evidence of pests</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Pest control treatments up to date</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Cleaning records completed (6a, 6b, 6c)</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Pest control log completed (Record 8)</td><td class="check"><input type="checkbox"></td></tr>
+
+      <tr><th class="section" colspan="2">Staff Instruction / Training</th></tr>
+      <tr><td>All staff trained in hygiene and safe food handling</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Training records completed</td><td class="check"><input type="checkbox"></td></tr>
+
+      <tr><th class="section" colspan="2">Customer Complaints</th></tr>
+      <tr><td>Complaints monitored and addressed</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Complaint log completed (Record 10)</td><td class="check"><input type="checkbox"></td></tr>
+
+      <tr><th class="section" colspan="2">Annual Food Safety Program Review</th></tr>
+      <tr><td>Forms & flow diagrams are current</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Corrective actions implemented where required</td><td class="check"><input type="checkbox"></td></tr>
+      <tr><td>Review details & auditor findings recorded</td><td class="check"><input type="checkbox"></td></tr>
+    </table>
+
+    <!-- Comments / Corrective Actions (as per program) -->
+    <div style="margin-top:14px;">
+      <label for="comments">Comments / Observations</label>
+      <textarea id="comments" placeholder="Notes, observations, non-conformances…"></textarea>
+    </div>
+    <div style="margin-top:10px;">
+      <label for="actions">Corrective Actions</label>
+      <textarea id="actions" placeholder="Describe action(s), person responsible, and completion date."></textarea>
+    </div>
+
   </div>
 
-  <h2>Record 12 — Supervisor Checklist</h2>
-
-  <table id="checklistTable">
-    <tr><th colspan="2">Equipment & Premises</th></tr>
-    <tr><td>All equipment operating correctly</td><td><input type="checkbox"></td></tr>
-    <tr><td>Premises structurally sound</td><td><input type="checkbox"></td></tr>
-    <tr><td>Maintenance records completed (Record 7)</td><td><input type="checkbox"></td></tr>
-
-    <tr><th colspan="2">Temperature Measuring Devices</th></tr>
-    <tr><td>All thermometers calibrated/accurate</td><td><input type="checkbox"></td></tr>
-    <tr><td>Staff trained in thermometer use</td><td><input type="checkbox"></td></tr>
-    <tr><td>Calibration log completed (Record 7a)</td><td><input type="checkbox"></td></tr>
-
-    <tr><th colspan="2">Pest Control</th></tr>
-    <tr><td>Cleanliness maintained, no pest signs</td><td><input type="checkbox"></td></tr>
-    <tr><td>Pest control treatments up to date</td><td><input type="checkbox"></td></tr>
-    <tr><td>Cleaning records completed (6a–c)</td><td><input type="checkbox"></td></tr>
-    <tr><td>Pest control log completed (Record 8)</td><td><input type="checkbox"></td></tr>
-
-    <tr><th colspan="2">Staff Training</th></tr>
-    <tr><td>All staff trained in hygiene & handling</td><td><input type="checkbox"></td></tr>
-    <tr><td>Training records completed</td><td><input type="checkbox"></td></tr>
-
-    <tr><th colspan="2">Customer Complaints</th></tr>
-    <tr><td>Complaints monitored/addressed</td><td><input type="checkbox"></td></tr>
-    <tr><td>Complaint log completed (Record 10)</td><td><input type="checkbox"></td></tr>
-
-    <tr><th colspan="2">Annual Food Safety Program Review</th></tr>
-    <tr><td>All forms & flow diagrams current</td><td><input type="checkbox"></td></tr>
-    <tr><td>Corrective actions taken as needed</td><td><input type="checkbox"></td></tr>
-    <tr><td>Details of review & auditor findings recorded</td><td><input type="checkbox"></td></tr>
-  </table>
-
-  <h3>Comments / Observations</h3>
-  <textarea id="comments" style="width:100%;height:80px;"></textarea>
-
-  <h3>Corrective Actions</h3>
-  <textarea id="actions" style="width:100%;height:80px;"></textarea>
-
   <script>
-    const STORAGE_KEY = "supervisorChecklist";
+    const KEY = 'mdk_supervisor_checklist_v1';
 
-    function saveData() {
+    function saveForm(){
       const data = {
-        date: document.getElementById("checkDate").value,
-        supervisor: document.getElementById("supervisor").value,
-        checks: Array.from(document.querySelectorAll("#checklistTable input[type='checkbox']")).map(cb => cb.checked),
-        comments: document.getElementById("comments").value,
-        actions: document.getElementById("actions").value
+        date: document.getElementById('checkDate').value || '',
+        supervisor: document.getElementById('supervisor').value || '',
+        checks: Array.from(document.querySelectorAll('#checklist input[type=checkbox]')).map(c=>c.checked),
+        comments: document.getElementById('comments').value || '',
+        actions: document.getElementById('actions').value || ''
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      localStorage.setItem(KEY, JSON.stringify(data));
+      alert('Saved locally.');
     }
 
-    function loadData() {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved) {
-        document.getElementById("checkDate").value = saved.date;
-        document.getElementById("supervisor").value = saved.supervisor;
-        document.querySelectorAll("#checklistTable input[type='checkbox']").forEach((cb, i) => cb.checked = saved.checks[i]);
-        document.getElementById("comments").value = saved.comments;
-        document.getElementById("actions").value = saved.actions;
-      }
+    function loadForm(){
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return;
+      try{
+        const d = JSON.parse(raw);
+        if(d.date) document.getElementById('checkDate').value = d.date;
+        if(d.supervisor) document.getElementById('supervisor').value = d.supervisor;
+        const boxes = document.querySelectorAll('#checklist input[type=checkbox]');
+        (d.checks||[]).forEach((v,i)=>{ if(boxes[i]) boxes[i].checked = !!v; });
+        if(d.comments) document.getElementById('comments').value = d.comments;
+        if(d.actions) document.getElementById('actions').value = d.actions;
+      }catch(e){}
     }
 
-    function archiveData() {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (!saved) { alert("Nothing to archive"); return; }
-      const blob = new Blob([JSON.stringify(saved, null, 2)], {type: "application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "supervisor_checklist_archive.json";
-      a.click();
-      URL.revokeObjectURL(url);
-      clearData();
+    function clearForm(){
+      document.getElementById('checkDate').value = '';
+      document.getElementById('supervisor').value = '';
+      document.querySelectorAll('#checklist input[type=checkbox]').forEach(c=>c.checked=false);
+      document.getElementById('comments').value = '';
+      document.getElementById('actions').value = '';
+      localStorage.removeItem(KEY);
     }
 
-    function clearData() {
-      localStorage.removeItem(STORAGE_KEY);
-      location.reload();
-    }
+    // Auto-save on change for convenience
+    document.addEventListener('input', ()=> {
+      const data = {
+        date: document.getElementById('checkDate').value || '',
+        supervisor: document.getElementById('supervisor').value || '',
+        checks: Array.from(document.querySelectorAll('#checklist input[type=checkbox]')).map(c=>c.checked),
+        comments: document.getElementById('comments').value || '',
+        actions: document.getElementById('actions').value || ''
+      };
+      localStorage.setItem(KEY, JSON.stringify(data));
+    });
 
-    document.addEventListener("change", saveData);
-    document.addEventListener("input", saveData);
-    window.onload = loadData;
+    window.addEventListener('load', loadForm);
   </script>
 </body>
 </html>

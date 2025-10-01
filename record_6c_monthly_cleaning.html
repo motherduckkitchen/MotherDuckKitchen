@@ -1,11 +1,11 @@
 <h2>Record 6c — Monthly Cleaning Schedule</h2>
 
-<div class="row">
-  <label for="month">Month:&nbsp;</label>
-  <input id="month" type="month">
+<div style="margin-bottom: 15px;">
+  <label for="monthInput"><strong>Month / Year:</strong></label>
+  <input type="text" id="monthInput" placeholder="e.g. 01/2025">
 </div>
 
-<table>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
   <thead>
     <tr>
       <th>Task</th>
@@ -18,26 +18,26 @@
     <tr>
       <td>Clear out cupboards and wipe over shelves (Kitchen & Pantry)</td>
       <td><input type="checkbox"></td>
-      <td><input type="text" placeholder="Initials"></td>
+      <td><input type="text" style="width:80px;"></td>
       <td><input type="date"></td>
     </tr>
     <tr>
       <td>Clear out drawers / cutlery drawers</td>
       <td><input type="checkbox"></td>
-      <td><input type="text" placeholder="Initials"></td>
+      <td><input type="text" style="width:80px;"></td>
       <td><input type="date"></td>
     </tr>
     <tr>
       <td>Wipe over ceiling fan</td>
       <td><input type="checkbox"></td>
-      <td><input type="text" placeholder="Initials"></td>
+      <td><input type="text" style="width:80px;"></td>
       <td><input type="date"></td>
     </tr>
   </tbody>
 </table>
 
 <h3>Quarterly / Yearly Cleaning</h3>
-<table>
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
   <thead>
     <tr>
       <th>Task</th>
@@ -65,7 +65,7 @@
   </tbody>
 </table>
 
-<div class="actions">
+<div style="margin-top:20px;">
   <button onclick="window.print()">Print</button>
   <button onclick="clearForm()">Clear</button>
   <button onclick="saveData()">Save</button>
@@ -79,6 +79,6 @@ function clearForm() {
   });
 }
 function saveData() {
-  alert("Saved (this will later archive)");
+  alert("Saved (later this will archive the month).");
 }
 </script>

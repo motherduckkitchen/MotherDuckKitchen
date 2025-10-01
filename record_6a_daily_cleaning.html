@@ -1,224 +1,53 @@
  <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Record 6a — Daily Cleaning & Sanitising Schedule</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  :root{
-    --page-w: 900px; /* close to A4 printable width */
-    --accent: #f2f2f2;
-    --ink:#000;
-  }
-  html,body{background:#fff;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-  .bar{
-    width:var(--page-w);margin:16px auto 8px;display:flex;gap:8px;align-items:center
-  }
-  .btn{
-    background:#ffd84d;border:1px solid #d1b72b;border-radius:8px;
-    padding:8px 14px; font-weight:600; cursor:pointer
-  }
-  .btn.secondary{background:#eee;border-color:#bbb}
-  h2{width:var(--page-w);margin:4px auto 12px;text-align:center}
-  table{
-    width:var(--page-w); margin:0 auto 14px; border-collapse:collapse;
-    border:1px solid #000; table-layout:fixed
-  }
-  th,td{border:1px solid #000;padding:6px}
-  th{background:var(--accent)}
-  td input[type="checkbox"]{transform:scale(1.3); display:block; margin:auto; cursor:pointer}
-  .note{width:var(--page-w); margin:6px auto 28px; font-style:italic}
-  dialog{
-    border:1px solid #999; border-radius:10px; padding:14px 16px; width:min(600px, 90vw)
-  }
-  dialog h3{margin:0 0 10px}
-  .archive-list{max-height:45vh; overflow:auto; margin-top:6px}
-  .row{display:flex; gap:8px; align-items:center; margin:8px 0}
-  .row input[type="month"]{padding:6px}
-  .row input[type="text"]{padding:6px; width:180px}
-  @media print{
-    .bar, dialog{display:none!important}
-    body{margin:0}
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Record 6a — Daily Cleaning & Sanitising Schedule</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #333; padding: 6px; text-align: center; }
+    th { background: #f2f2f2; }
+    .controls { margin-bottom: 15px; }
+    .controls button { margin-right: 10px; padding: 6px 12px; }
+  </style>
 </head>
 <body>
-
-  <!-- top actions -->
-  <div class="bar">
-    <button class="btn secondary" onclick="goBack()">← Back</button>
-    <button class="btn" onclick="window.print()">Print</button>
-    <button class="btn" onclick="saveMonth()">Save (Month)</button>
-    <button class="btn secondary" onclick="openArchive()">Open Archive</button>
+  <div class="controls">
+    <label>Week Commencing: <input type="date"></label>
+    <button onclick="window.print()">Print</button>
+    <button onclick="history.back()">Back</button>
+    <button>Save/Archive</button>
   </div>
 
-  <h2>Record 6a — Daily Cleaning &amp; Sanitising Schedule</h2>
+  <h2>Record 6a — Daily Cleaning & Sanitising Schedule</h2>
 
-  <table id="sheet">
-    <thead>
-      <tr>
-        <th style="width:74%">Area / Equipment</th>
-        <th style="width:5%">M</th>
-        <th style="width:5%">T</th>
-        <th style="width:5%">W</th>
-        <th style="width:5%">T</th>
-        <th style="width:5%">F</th>
-      </tr>
-    </thead>
-    <tbody id="tbody">
-      <!-- headings -->
-      <tr><td><b>AFTER EACH USE</b></td><td></td><td></td><td></td><td></td><td></td></tr>
-
-      <!-- tasks (each row gets 5 checkboxes) -->
-      <tr data-task="Chopping boards (discard if damaged)"><td>Chopping boards (discard if damaged)</td></tr>
-      <tr data-task="Benches"><td>Benches</td></tr>
-      <tr data-task="Serving utensils"><td>Serving utensils</td></tr>
-      <tr data-task="Bowls, Cups, Plates etc."><td>Bowls, Cups, Plates etc.</td></tr>
-      <tr data-task="Drinking jugs clean/sanitised & put away"><td>Drinking jugs clean/sanitised &amp; put away</td></tr>
-
-      <tr><td><b>DAILY or more often if required</b></td><td></td><td></td><td></td><td></td><td></td></tr>
-
-      <tr data-task="Cupboards clean/tidy (wipe outside doors)"><td>Cupboards clean/tidy (wipe outside doors)</td></tr>
-      <tr data-task="Microwave inside & outside"><td>Microwave inside &amp; outside</td></tr>
-      <tr data-task="Oven fronts"><td>Oven fronts</td></tr>
-      <tr data-task="Dishwasher front"><td>Dishwasher front</td></tr>
-      <tr data-task="Windowsill / skirting / sink splash back"><td>Windowsill / skirting / sink splash back</td></tr>
-      <tr data-task="All utensils put away"><td>All utensils put away</td></tr>
-      <tr data-task="Door handles & entrance doors"><td>Door handles &amp; entrance doors</td></tr>
-      <tr data-task="Bin emptied, lid cleaned"><td>Bin emptied, lid cleaned</td></tr>
-      <tr data-task="Benches disinfected & clear"><td>Benches disinfected &amp; clear</td></tr>
-      <tr data-task="Floors mopped (PM)"><td>Floors mopped (PM)</td></tr>
-      <tr data-task="Tea towels & dish cloths washed (end of day)"><td>Tea towels &amp; dish cloths washed (end of day)</td></tr>
-      <tr data-task="Oven trays cleaned after use"><td>Oven trays cleaned after use</td></tr>
-      <tr data-task="All fixtures/fittings sanitised"><td>All fixtures/fittings sanitised</td></tr>
-    </tbody>
+  <table>
+    <tr>
+      <th>Area/Equipment</th>
+      <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th>
+    </tr>
+    <tr><td><b>AFTER EACH USE</b></td><td colspan="5"></td></tr>
+    <tr><td>Chopping boards (if knife marks discard & order new ones)</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Benches</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Serving utensils</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Bowls, Cups, Plates etc.</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Drinking jugs clean/sanitised & put away</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td><b>DAILY or more often if required</b></td><td colspan="5"></td></tr>
+    <tr><td>Cupboards clean/tidy (wipe over outside doors)</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Microwave inside & outside</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Oven fronts</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Dishwasher front</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Windowsill, skirting, sink splash back</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>All utensils put away</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Door handles & entrance doors</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Bin emptied, lid cleaned</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Benches disinfected & clear</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Floors mopped (PM)</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Tea towels & dish cloths washed (end of day)</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Oven trays cleaned after use</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>All fixtures/fittings sanitised</td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td><i>Please list any areas/equipment to be cleaned daily:</i></td><td colspan="5"></td></tr>
   </table>
-
-  <p class="note">Please list any areas/equipment to be cleaned daily:</p>
-
-  <!-- Archive viewer -->
-  <dialog id="dlg">
-    <h3>Record 6a — Archive</h3>
-    <div class="archive-list" id="archiveList"></div>
-    <div class="row" style="justify-content: flex-end;">
-      <button class="btn secondary" onclick="document.getElementById('dlg').close()">Close</button>
-    </div>
-  </dialog>
-
-<script>
-  const KEY_PREFIX = "mdk-6a-"; // localStorage key prefix
-
-  // build 5 checkbox cells for each task row
-  (function buildCheckboxes(){
-    const days = ["M","Tu","W","Th","F"];
-    document.querySelectorAll('#tbody tr[data-task]').forEach((tr, rIdx)=>{
-      days.forEach((d,i)=>{
-        const td = document.createElement('td');
-        const cb = document.createElement('input');
-        cb.type = 'checkbox';
-        cb.id = `r${rIdx}d${i}`;
-        td.appendChild(cb);
-        tr.appendChild(td);
-      });
-    });
-  })();
-
-  function goBack(){
-    // If opened from a dashboard, this returns there; otherwise fallback to kitchen.html
-    if (document.referrer) history.back();
-    else location.href = 'kitchen.html';
-  }
-
-  // Save current sheet to localStorage under selected month/year
-  async function saveMonth(){
-    // ask for which month/year this save belongs to
-    let defaultMonth = new Date().toISOString().slice(0,7); // YYYY-MM
-    const month = prompt("Save month (YYYY-MM):", defaultMonth);
-    if(!month) return;
-
-    // optional initials
-    const initials = prompt("Initials (optional):", "");
-
-    // capture all checkbox states
-    const data = [];
-    document.querySelectorAll('#tbody tr[data-task]').forEach((tr)=>{
-      const task = tr.getAttribute('data-task');
-      const checks = [...tr.querySelectorAll('input[type=checkbox]')].map(cb=>cb.checked?1:0);
-      data.push({task, checks});
-    });
-
-    const payload = {
-      savedAt: new Date().toISOString(),
-      month,
-      initials,
-      data
-    };
-
-    localStorage.setItem(KEY_PREFIX + month, JSON.stringify(payload));
-    alert("Saved for " + month + (initials?(" ("+initials+")"):""));
-  }
-
-  // Open a modal showing all saved months, allow restore/print/delete
-  function openArchive(){
-    const holder = document.getElementById('archiveList');
-    holder.innerHTML = "";
-
-    // list all keys that match this sheet
-    const keys = Object.keys(localStorage).filter(k=>k.startsWith(KEY_PREFIX)).sort();
-    if(keys.length===0){
-      holder.innerHTML = "<p>No archived months yet.</p>";
-    }else{
-      keys.forEach(k=>{
-        try{
-          const rec = JSON.parse(localStorage.getItem(k)||"{}");
-          const div = document.createElement('div');
-          div.className = 'row';
-          div.innerHTML = `
-            <b>${rec.month}</b>&nbsp; — saved ${new Date(rec.savedAt).toLocaleString()} ${rec.initials?(" • "+rec.initials):""}
-            <span style="flex:1"></span>
-            <button class="btn secondary" data-act="restore" data-key="${k}">Restore</button>
-            <button class="btn" data-act="print" data-key="${k}">Load & Print</button>
-            <button class="btn secondary" data-act="delete" data-key="${k}">Delete</button>
-          `;
-          holder.appendChild(div);
-        }catch(e){}
-      });
-    }
-
-    holder.onclick = (ev)=>{
-      const t = ev.target;
-      if(!t.dataset.act) return;
-      const key = t.dataset.key;
-      if(t.dataset.act==="delete"){
-        if(confirm("Delete archive "+key.replace(KEY_PREFIX,"")+"?")){
-          localStorage.removeItem(key);
-          openArchive(); // refresh
-        }
-      }else if(t.dataset.act==="restore" || t.dataset.act==="print"){
-        const rec = JSON.parse(localStorage.getItem(key)||"{}");
-        // apply to current sheet
-        applyData(rec);
-        if(t.dataset.act==="print") setTimeout(()=>window.print(), 250);
-      }
-    };
-
-    document.getElementById('dlg').showModal();
-  }
-
-  function applyData(rec){
-    if(!rec || !Array.isArray(rec.data)) return;
-    const rows = [...document.querySelectorAll('#tbody tr[data-task]')];
-    rows.forEach((tr,i)=>{
-      const entry = rec.data[i];
-      const cbs = tr.querySelectorAll('input[type=checkbox]');
-      if(entry && Array.isArray(entry.checks)){
-        cbs.forEach((cb,idx)=> cb.checked = !!entry.checks[idx]);
-      }else{
-        cbs.forEach(cb=> cb.checked=false);
-      }
-    });
-  }
-</script>
-
 </body>
 </html>

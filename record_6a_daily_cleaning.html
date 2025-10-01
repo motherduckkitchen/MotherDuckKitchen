@@ -1,93 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Record 6a — Daily Cleaning & Sanitising Schedule</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Record 6a — Daily Cleaning</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-    th, td { border: 1px solid #333; padding: 6px; text-align: center; }
-    th { background: #f2f2f2; }
-    td:first-child { text-align: left; }
-    .controls { margin-bottom: 15px; }
-    .controls button { margin-right: 10px; padding: 6px 12px; }
-    @media print {
-      @page { size: A4 portrait; margin: 15mm; }
+    :root{
+      --brand:#0d6efd;
+      --brand-hover:#0b5ed7;
+      --accent:#ffc107;
+      --card-bg: rgba(255,255,255,.85);
+      --text:#0f172a;
     }
+    body,html{height:100%; margin:0; font-family:system-ui, sans-serif; color:var(--text);
+      background:url("kitchen.jpg") center/cover fixed no-repeat;}
+    .overlay{position:fixed; inset:0; background:rgba(255,255,255,0.65); z-index:0;}
+    main.container{position:relative; z-index:1; max-width:1000px; margin:40px auto;
+      padding:24px; background:var(--card-bg); border-radius:12px;
+      box-shadow:0 10px 25px rgba(0,0,0,.12);}
+    header{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:20px;}
+    h1{margin:0; font-size:clamp(20px,2.4vw,28px);}
+    .btn-back{background:var(--accent); color:#000; text-decoration:none;
+      font-weight:600; padding:8px 14px; border-radius:8px;}
+    table{width:100%; border-collapse:collapse; margin-top:18px;}
+    th,td{border:1px solid #333; padding:8px; text-align:left;}
+    th{background:#f3f3f3;}
+    input[type="checkbox"]{width:20px; height:20px;}
   </style>
 </head>
 <body>
-  <div class="controls">
-    <label>Week Commencing: <input type="date" id="weekDate"></label>
-    <button onclick="archiveData()">Archive</button>
-    <button onclick="clearData()">Clear</button>
-    <button onclick="window.print()">Print</button>
-    <button onclick="history.back()">Back</button>
-  </div>
+  <div class="overlay"></div>
+  <main class="container">
+    <header>
+      <a class="btn-back" href="kitchen.html">← Back</a>
+      <h1>Record 6a — Daily Cleaning</h1>
+      <span></span>
+    </header>
 
-  <h2>Record 6a — Daily Cleaning & Sanitising Schedule</h2>
-
-  <table id="dailyTable">
-    <tr>
-      <th>Task</th>
-      <th>Mon</th>
-      <th>Tue</th>
-      <th>Wed</th>
-      <th>Thu</th>
-      <th>Fri</th>
-    </tr>
-    <tr><td>Chopping boards (replace if damaged)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Benches</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Serving utensils</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Bowls, cups, plates</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Microwave inside & outside</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Fridge front</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Dishwasher front</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Floors mopped (PM)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Tea towels/dish cloths washed (end of day)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-  </table>
-
-  <script>
-    const STORAGE_KEY = "dailyCleaning6a";
-
-    function saveData() {
-      const checkboxes = document.querySelectorAll("input[type='checkbox']");
-      let data = Array.from(checkboxes).map(cb => cb.checked);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        week: document.getElementById("weekDate").value,
-        checks: data
-      }));
-    }
-
-    function loadData() {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (saved) {
-        document.getElementById("weekDate").value = saved.week;
-        const checkboxes = document.querySelectorAll("input[type='checkbox']");
-        saved.checks.forEach((val, i) => { checkboxes[i].checked = val; });
-      }
-    }
-
-    function archiveData() {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-      if (!saved) { alert("Nothing to archive"); return; }
-      const blob = new Blob([JSON.stringify(saved, null, 2)], {type: "application/json"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "daily_cleaning_archive.json";
-      a.click();
-      URL.revokeObjectURL(url);
-      clearData();
-    }
-
-    function clearData() {
-      localStorage.removeItem(STORAGE_KEY);
-      location.reload();
-    }
-
-    document.addEventListener("change", saveData);
-    window.onload = loadData;
-  </script>
+    <table>
+      <tr><th>Area / Equipment</th><th>M</th><th>T</th><th>W</th><th>T</th><th>F</th></tr>
+      <tr><td>Chopping boards (replace if damaged)</td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Benches</td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Serving utensils</td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <!-- add rest of daily tasks here -->
+    </table>
+  </main>
 </body>
 </html>

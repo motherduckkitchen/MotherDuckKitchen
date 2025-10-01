@@ -2,56 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Record 6b — Weekly Cleaning Schedule</title>
+  <title>Record 6a — Daily Cleaning & Sanitising Schedule</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 700px; border-collapse: collapse; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #333; padding: 6px; text-align: center; }
     th { background: #f2f2f2; }
+    td:first-child { text-align: left; }
     .controls { margin-bottom: 15px; }
     .controls button { margin-right: 10px; padding: 6px 12px; }
     @media print {
-      body { margin: 10mm; }
-      table { width: 100%; }
+      @page { size: A4 portrait; margin: 15mm; }
     }
   </style>
 </head>
 <body>
   <div class="controls">
     <label>Week Commencing: <input type="date" id="weekDate"></label>
-    <button onclick="saveData()">Save</button>
+    <button onclick="archiveData()">Archive</button>
     <button onclick="clearData()">Clear</button>
     <button onclick="window.print()">Print</button>
     <button onclick="history.back()">Back</button>
   </div>
 
-  <h2>Record 6b — Weekly Cleaning Schedule</h2>
+  <h2>Record 6a — Daily Cleaning & Sanitising Schedule</h2>
 
-  <table id="weeklyTable">
+  <table id="dailyTable">
     <tr>
       <th>Task</th>
-      <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
     </tr>
-    <tr><td>Clean out fridge (shelves & doors)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Clean inside of ovens</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Chemical cupboard (refill if needed)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Clean pantry (check expiry, wipe shelves & sill)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    <tr><td>Sweep & mop pantry floor</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Chopping boards (replace if damaged)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Benches</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Serving utensils</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Bowls, cups, plates</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Microwave inside & outside</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Fridge front</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Dishwasher front</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Floors mopped (PM)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Tea towels/dish cloths washed (end of day)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
   </table>
 
   <script>
-    const STORAGE_KEY = "weeklyCleaning6b";
+    const STORAGE_KEY = "dailyCleaning6a";
 
     function saveData() {
-      const table = document.getElementById("weeklyTable");
-      const checkboxes = table.querySelectorAll("input[type='checkbox']");
-      let data = [];
-      checkboxes.forEach(cb => data.push(cb.checked));
+      const checkboxes = document.querySelectorAll("input[type='checkbox']");
+      let data = Array.from(checkboxes).map(cb => cb.checked);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         week: document.getElementById("weekDate").value,
         checks: data
       }));
-      alert("Saved!");
     }
 
     function loadData() {
@@ -63,11 +68,25 @@
       }
     }
 
+    function archiveData() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (!saved) { alert("Nothing to archive"); return; }
+      const blob = new Blob([JSON.stringify(saved, null, 2)], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "daily_cleaning_archive.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      clearData();
+    }
+
     function clearData() {
       localStorage.removeItem(STORAGE_KEY);
       location.reload();
     }
 
+    document.addEventListener("change", saveData);
     window.onload = loadData;
   </script>
 </body>

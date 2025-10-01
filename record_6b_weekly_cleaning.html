@@ -5,125 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Record 6b — Weekly Cleaning Schedule</title>
 <style>
-  :root{
-    --card:#ffffff; --ink:#0b1320; --muted:#6b7280; --line:#e6e8ef;
-    --accent:#ffd24d; --accent-ink:#1f2937;
+  :root {
+    --line:#d1d5db; --bg:#f9fafb; --card:#fff; --accent:#ffd24d;
   }
   @page { size: A4 portrait; margin: 14mm; }
-  *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
-  body{margin:0;background:#f5f7fb;color:var(--ink)}
-  .page{max-width:1024px;margin:28px auto;padding:8px 12px}
-  /* header */
-  .toolbar{display:flex;gap:8px;align-items:center;margin:4px 0 14px}
-  .btn{appearance:none;border:0;border-radius:10px;background:#eef2ff;color:#111827;
-       padding:8px 12px;font-weight:600;cursor:pointer}
-  .btn:hover{filter:brightness(.97)}
-  .btn--accent{background:var(--accent);color:var(--accent-ink)}
-  /* card */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px}
-  h1{font-size:22px;margin:4px 0 12px}
-  .hint{font-size:13px;color:var(--muted);margin:0 0 10px}
-  /* table */
-  table{width:100%;border-collapse:separate;border-spacing:0 10px}
-  th,td{padding:10px 12px;vertical-align:middle}
-  thead th{font-size:13px;color:#374151;text-align:center}
-  .col-task{width:58%;text-align:left}
-  .col-week{width:22%}
-  .date-wrap{display:flex;gap:8px;align-items:center}
-  input[type="date"]{width:180px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff}
-  /* row card look */
-  .row{background:#fff;border:1px solid var(--line);border-radius:12px}
-  .tickbox{display:flex;justify-content:center}
-  input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
-  /* notes */
-  .notes{margin-top:14px}
-  .notes label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
-  .notes textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-  @media print{
-    .toolbar{display:none}
-    body{background:#fff}
-    .card{border-color:#ddd}
-  }
+  body { font-family: Arial, sans-serif; background: var(--bg); margin:0; }
+  .page { max-width: 850px; margin: 20px auto; padding: 10px; }
+  .toolbar { display:flex; gap:8px; margin-bottom:12px; }
+  .btn { border:0; padding:6px 14px; border-radius:6px; font-weight:600; cursor:pointer; }
+  .btn--back { background: var(--accent); }
+  .btn--print { background:#e5e7eb; }
+  .btn--clear { background:#e5e7eb; }
+  .card { background: var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; }
+  h1 { margin-top:0; font-size:18px; }
+  .hint { font-size:13px; color:#555; margin-bottom:10px; }
+  table { width:100%; border-collapse: collapse; margin-bottom:12px; }
+  th, td { border:1px solid var(--line); padding:8px; text-align:center; }
+  th { background:#f3f4f6; font-size:14px; }
+  td.task { text-align:left; }
+  input[type="checkbox"] { width:18px; height:18px; }
+  input[type="date"] { padding:4px; }
+  textarea { width:100%; min-height:80px; border:1px solid var(--line); border-radius:6px; padding:8px; }
+  @media print { .toolbar{display:none} body{background:#fff} }
 </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- TOP BUTTONS -->
   <div class="toolbar">
-    <a href="kitchen.html" class="btn btn--accent">← Back</a>
-    <button class="btn" onclick="window.print()">Print</button>
-    <button class="btn" onclick="clearForm()">Clear</button>
+    <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
+    <button class="btn btn--print" onclick="window.print()">Print</button>
+    <button class="btn btn--clear" onclick="clearForm()">Clear</button>
   </div>
 
   <div class="card">
     <h1>Record 6b — Weekly Cleaning Schedule</h1>
-    <p class="hint">Tick the day completed. Use one row per task and week. Week starts on the date below.</p>
+    <p class="hint">Tick the day completed. Week starts on the date below.</p>
 
-    <!-- Week commencing -->
-    <div class="date-wrap" style="margin:8px 0 14px">
-      <strong style="font-size:14px">Week Commencing:</strong>
-      <input id="weekStart" type="date" />
-    </div>
+    <label>Week Commencing: <input type="date" id="weekStart"></label>
 
-    <table aria-label="Weekly Cleaning">
+    <table>
       <thead>
         <tr>
-          <th class="col-task" style="text-align:left">Task</th>
+          <th>Task</th>
           <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th>
         </tr>
       </thead>
-      <tbody id="rows">
-        <!-- Tasks from the Food Safety Program -->
-        <tr class="row">
-          <td class="col-task">Clean out fridge (wipe over shelves & doors)</td>
-          <td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
+      <tbody>
+        <tr>
+          <td class="task">Clean out fridge (shelves & doors)</td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td>
         </tr>
-        <tr class="row">
-          <td class="col-task">Clean inside of ovens</td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
+        <tr>
+          <td class="task">Clean inside of ovens</td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td>
         </tr>
-        <tr class="row">
-          <td class="col-task">Clean out chemical cupboard (refill chemicals when required)</td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
+        <tr>
+          <td class="task">Clean out chemical cupboard (refill if needed)</td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td>
         </tr>
-        <tr class="row">
-          <td class="col-task">Clean pantry (wipe every shelf and check for expired food items). Wipe over pantry windowsill.</td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
+        <tr>
+          <td class="task">Clean pantry (check expiry, wipe shelves & sill)</td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td>
         </tr>
-        <tr class="row">
-          <td class="col-task">Sweep & mop pantry floor</td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td><td class="tickbox"><input type="checkbox" /></td>
-          <td class="tickbox"><input type="checkbox" /></td>
+        <tr>
+          <td class="task">Sweep & mop pantry floor</td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
+          <td><input type="checkbox"></td><td><input type="checkbox"></td>
         </tr>
       </tbody>
     </table>
 
-    <div class="notes">
-      <label for="notes">Notes / Corrective actions (e.g., refill chemicals, replace shelves liners, report maintenance):</label>
-      <textarea id="notes" placeholder="Describe action(s), who was notified, and outcome."></textarea>
-    </div>
-    <p class="hint" style="margin-top:8px">Tip: use <strong>Print</strong> → “Save as PDF” to keep a weekly archive.</p>
+    <label for="notes">Notes / Corrective actions:</label>
+    <textarea id="notes" placeholder="Describe action(s), who was notified, and outcome."></textarea>
   </div>
 </div>
 
 <script>
-  const KEY = 'mdk_record_6b_weekly_v1';
-  function save(){ 
+  const KEY = 'weekly_cleaning_v1';
+  function save(){
     const data = {
       week: document.getElementById('weekStart').value,
-      ticks: Array.from(document.querySelectorAll('tbody input[type="checkbox"]')).map(c=>c.checked),
+      checks: Array.from(document.querySelectorAll('tbody input[type=checkbox]')).map(c=>c.checked),
       notes: document.getElementById('notes').value
     };
     localStorage.setItem(KEY, JSON.stringify(data));
@@ -131,16 +98,17 @@
   function load(){
     const raw = localStorage.getItem(KEY);
     if(!raw) return;
-    const data = JSON.parse(raw);
-    if(data.week) document.getElementById('weekStart').value = data.week;
-    const boxes = document.querySelectorAll('tbody input[type="checkbox"]');
-    (data.ticks||[]).forEach((v,i)=>{ if(boxes[i]) boxes[i].checked = v; });
-    if(data.notes) document.getElementById('notes').value = data.notes;
+    const d = JSON.parse(raw);
+    document.getElementById('weekStart').value = d.week || '';
+    document.getElementById('notes').value = d.notes || '';
+    document.querySelectorAll('tbody input[type=checkbox]').forEach((c,i)=>{
+      if(d.checks && d.checks[i]!==undefined) c.checked = d.checks[i];
+    });
   }
   function clearForm(){
-    document.getElementById('weekStart').value = '';
-    document.querySelectorAll('tbody input[type="checkbox"]').forEach(c=>c.checked=false);
+    document.getElementById('weekStart').value='';
     document.getElementById('notes').value='';
+    document.querySelectorAll('tbody input[type=checkbox]').forEach(c=>c.checked=false);
     save();
   }
   document.addEventListener('input', save);

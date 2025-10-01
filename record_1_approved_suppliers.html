@@ -34,10 +34,24 @@
   .line{border-bottom:1px solid #94a3b8;min-width:240px;height:1.2em}
   .label{font-size:12px;color:#334155}
   @media print{
-    .toolbar,.banner{display:none!important}
-    input::placeholder{color:transparent}
-    th,td{padding:4px}
-  }
+    <!-- Toolbar -->
+<nav class="mdk-toolbar">
+  <!-- Change the href for Brewer pages -->
+  <a class="mdk-btn mdk-btn--back" href="kitchen.html">
+    <span class="mdk-ico">←</span>
+    <span>Back</span>
+  </a>
+
+  <button class="mdk-btn mdk-btn--pill" type="button" onclick="window.print()">
+    <span class="mdk-ico">🖨️</span>
+    <span>Print</span>
+  </button>
+
+  <button class="mdk-btn mdk-btn--pill" type="button" onclick="clearForm?.()">
+    <span class="mdk-ico">✖️</span>
+    <span>Clear</span>
+  </button>
+</nav>  }
 </style>
 </head>
 <body>

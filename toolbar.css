@@ -1,21 +1,21 @@
 .mdk-toolbar {
   display:flex;
-  gap:18px;
+  gap:12px;
   align-items:center;
-  margin:18px 0 22px;
+  margin:12px 0 18px;
 }
 
 .mdk-btn {
   display:inline-flex;
   align-items:center;
-  gap:12px;
-  padding:18px 28px;
+  gap:8px;
+  padding:8px 14px;   /* smaller padding */
   border:0;
-  border-radius:24px;
-  font: 700 24px/1.1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  border-radius:12px;
+  font: 600 16px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   text-decoration:none;
   cursor:pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  box-shadow: 0 3px 8px rgba(0,0,0,.05);
   transition: transform .05s ease, filter .15s ease, box-shadow .15s ease;
 }
 
@@ -33,10 +33,10 @@
 .mdk-btn--pill:hover { filter:brightness(0.98); }
 .mdk-btn--pill:active { transform: translateY(1px); }
 
-.mdk-ico { font-size: 26px; line-height: 1; }
+.mdk-ico { font-size: 18px; line-height: 1; }
 
 @media (max-width: 640px){
-  .mdk-btn { padding:14px 22px; font-size:20px; border-radius:20px; }
-  .mdk-ico { font-size:22px; }
-  .mdk-toolbar { gap:12px; }
+  .mdk-btn { padding:6px 10px; font-size:14px; border-radius:10px; }
+  .mdk-ico { font-size:16px; }
+  .mdk-toolbar { gap:8px; }
 }

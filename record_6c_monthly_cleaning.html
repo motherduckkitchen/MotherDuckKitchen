@@ -2,44 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Record 6c — Monthly Cleaning Schedule</title>
+  <title>Record 6c — Monthly Cleaning</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #333; padding: 6px; text-align: center; }
     th { background: #f2f2f2; }
+    td:first-child { text-align: left; }
     .controls { margin-bottom: 15px; }
     .controls button { margin-right: 10px; padding: 6px 12px; }
+    @media print {
+      @page { size: A4 portrait; margin: 15mm; }
+    }
   </style>
 </head>
 <body>
   <div class="controls">
-    <label>Month: <input type="text" placeholder="e.g. October 2025"></label>
+    <label>Month: <input type="month" id="monthDate"></label>
+    <button onclick="archiveData()">Archive</button>
+    <button onclick="clearData()">Clear</button>
     <button onclick="window.print()">Print</button>
     <button onclick="history.back()">Back</button>
-    <button>Save/Archive</button>
   </div>
 
   <h2>Record 6c — Monthly Cleaning Schedule</h2>
 
-  <table>
+  <table id="monthlyTable">
     <tr>
       <th>Task</th>
-      <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th>
-      <th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th>
-      <th>Nov</th><th>Dec</th>
+      <th>Completed</th>
     </tr>
-    <tr><td>Clear cupboards & shelves (Kitchen & Pantry)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Clear cutlery drawers</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Wipe ceiling fan</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Clear cupboards & wipe shelves (Kitchen + Pantry)</td><td><input type="checkbox"></td></tr>
+    <tr><td>Clear cutlery drawers</td><td><input type="checkbox"></td></tr>
+    <tr><td>Wipe ceiling fan</td><td><input type="checkbox"></td></tr>
   </table>
 
-  <h3>Quarterly/Yearly Cleaning & Sanitising</h3>
-  <table>
-    <tr>
-      <th>Task</th><th>Responsible Person</th><th>Date Scheduled</th><th>Date Completed</th><th>Checked by</th>
-    </tr>
-    <tr><td><i>List tasks here</i></td><td></td><td></td><td></td><td></td></tr>
-  </table>
-</body>
-</html>
+  <h3>Quarterly / Yearly Cleaning</h

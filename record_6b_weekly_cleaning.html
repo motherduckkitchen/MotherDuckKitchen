@@ -5,35 +5,70 @@
   <title>Record 6b — Weekly Cleaning Schedule</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 700px; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #333; padding: 6px; text-align: center; }
     th { background: #f2f2f2; }
     .controls { margin-bottom: 15px; }
     .controls button { margin-right: 10px; padding: 6px 12px; }
+    @media print {
+      body { margin: 10mm; }
+      table { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <div class="controls">
-    <label>Month: <input type="text" placeholder="e.g. October 2025"></label>
+    <label>Week Commencing: <input type="date" id="weekDate"></label>
+    <button onclick="saveData()">Save</button>
+    <button onclick="clearData()">Clear</button>
     <button onclick="window.print()">Print</button>
     <button onclick="history.back()">Back</button>
-    <button>Save/Archive</button>
   </div>
 
   <h2>Record 6b — Weekly Cleaning Schedule</h2>
 
-  <table>
+  <table id="weeklyTable">
     <tr>
-      <th>Week Commencing</th>
       <th>Task</th>
       <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th>
     </tr>
-    <tr><td rowspan="6"><input type="date"></td><td>Clean out fridge (shelves & doors)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Clean inside of ovens</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Chemical cupboard (refill if needed)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Clean pantry (check expiry, wipe shelves & sill)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Sweep & mop pantry floor</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td colspan="6"><i>Weekly or more often if required</i></td></tr>
+    <tr><td>Clean out fridge (shelves & doors)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Clean inside of ovens</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Chemical cupboard (refill if needed)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Clean pantry (check expiry, wipe shelves & sill)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Sweep & mop pantry floor</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
   </table>
+
+  <script>
+    const STORAGE_KEY = "weeklyCleaning6b";
+
+    function saveData() {
+      const table = document.getElementById("weeklyTable");
+      const checkboxes = table.querySelectorAll("input[type='checkbox']");
+      let data = [];
+      checkboxes.forEach(cb => data.push(cb.checked));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        week: document.getElementById("weekDate").value,
+        checks: data
+      }));
+      alert("Saved!");
+    }
+
+    function loadData() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved) {
+        document.getElementById("weekDate").value = saved.week;
+        const checkboxes = document.querySelectorAll("input[type='checkbox']");
+        saved.checks.forEach((val, i) => { checkboxes[i].checked = val; });
+      }
+    }
+
+    function clearData() {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+
+    window.onload = loadData;
+  </script>
 </body>
 </html>

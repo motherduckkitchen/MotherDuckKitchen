@@ -2,26 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Record 6b — Weekly Cleaning Schedule</title>
-  <link rel="stylesheet" href="shared/styles.css">
+  <title>Record 6b — Weekly Cleaning</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { color: #222; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    button { margin: 10px 5px; padding: 8px 12px; }
+    .controls { margin-bottom: 10px; }
+  </style>
 </head>
 <body>
+  <div class="controls">
+    <button onclick="window.history.back()">← Back</button>
+    <button onclick="window.print()">🖨 Print</button>
+    <button onclick="saveArchive()">💾 Save (Month)</button>
+  </div>
+
   <h2>Record 6b — Weekly Cleaning Schedule</h2>
-  <p><b>Week Commencing:</b> _______</p>
-  <table border="1" style="width:100%; border-collapse:collapse; text-align:left;">
+
+  <table>
     <thead>
       <tr>
         <th>Task</th>
-        <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th>
+        <th>M</th>
+        <th>T</th>
+        <th>W</th>
+        <th>T</th>
+        <th>F</th>
       </tr>
     </thead>
     <tbody>
-      <tr><td>Clean out fridge (shelves & inside doors)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Clean inside ovens</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Clean chemical cupboard (refill when required)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Clean pantry (check & discard expired food)</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>Sweep & mop pantry floor</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>Fridge interior full clean</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Freezer interior full clean</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Dishwasher filters and descale if needed</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Rangehood & filters — degrease</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+      <tr><td>Sweep and mop pantry floor</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
     </tbody>
   </table>
+
+  <script>
+    function saveArchive() {
+      alert("Weekly record archived (placeholder).");
+    }
+  </script>
 </body>
 </html>

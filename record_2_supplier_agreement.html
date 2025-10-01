@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Record No. 2 – Approved Food Supplier Agreement Form</title>
+<style>
+  :root{
+    --ink:#0f172a; --muted:#6b7280; --line:#cfd6dd; --grid:#e5eaf0; --head:#f6f8fb; --accent:#0ea5e9;
+    --fs:13px;
+  }
+  @page{ size:A4 landscape; margin:10mm }
+  html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .wrap{max-width:1180px;margin:20px auto 24px;padding:0 14px}
+  .toolbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+  .btn{border:1px solid #cfd6dd;background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:600}
+  .btn:hover{background:#f8fafc}
+  h1{font-size:20px;margin:10px 0}
+  .card{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:10px}
+  .card h2{margin:0;font-size:14px;background:var(--head);padding:8px 10px;border-bottom:1px solid var(--grid)}
+  .section{padding:10px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  label{font-weight:600;color:#334155;font-size:12px;display:block;margin-bottom:4px}
+  input,select,textarea{width:100%;height:32px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:#fff;box-sizing:border-box}
+  textarea{min-height:86px}
+  input.center{text-align:center}
+  .init{width:60px;text-transform:uppercase;text-align:center}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px;vertical-align:middle;background:#fff;font-size:12px}
+  th:last-child,td:last-child{border-right:0}
+  tr:last-child td{border-bottom:0}
+  thead th{background:var(--head);text-align:center;font-weight:700}
+  .muted{color:var(--muted);font-size:12px}
+  .sigrow{display:grid;grid-template-columns:2fr 1fr 2fr 1fr;gap:12px;align-items:end}
+  .line{border-bottom:1px solid #94a3b8;height:1.6em}
+  @media print{
+    .toolbar{display:none!important}
+    input::placeholder,textarea::placeholder{color:transparent}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨 Print</button>
+    <button class="btn" onclick="clearForm()">🧹 Clear</button>
+  </div>
+
+  <h1>Record No. 2 – Approved Food Supplier Agreement Form</h1>
+
+  <!-- Supplier details -->
+  <div class="card">
+    <h2>Supplier details</h2>
+    <div class="section grid">
+      <div><label>Supplier / Company</label><input placeholder="Company legal name"></div>
+      <div><label>Contact person</label><input placeholder="Name"></div>
+      <div><label>Phone</label><input placeholder="0400 000 000"></div>
+      <div><label>Email</label><input placeholder="name@example.com"></div>
+      <div style="grid-column:1 / -1"><label>Address</label><input placeholder="Street, suburb, state, postcode"></div>
+    </div>
+  </div>
+
+  <!-- Scope of supply -->
+  <div class="card">
+    <h2>Scope of supply</h2>
+    <div class="section grid-3">
+      <div><label>Product categories</label><input placeholder="e.g., meat, dairy, produce, dry goods"></div>
+      <div><label>Delivery days / frequency</label><input placeholder="e.g., Mon/Wed/Fri · weekly"></div>
+      <div><label>Delivery times (24‑hour)</label><input placeholder="e.g., 08:00–12:00"></div>
+      <div><label>Transport type</label><input placeholder="e.g., refrigerated van, insulated boxes"></div>
+      <div><label>Min delivery temp (chilled)</label><input placeholder="≤ 5 °C" class="center"></div>
+      <div><label>Min delivery temp (frozen)</label><input placeholder="≤ −15 °C" class="center"></div>
+    </div>
+  </div>
+
+  <!-- Compliance / Evidence -->
+  <div class="card">
+    <h2>Compliance evidence</h2>
+    <div class="section">
+      <table>
+        <thead>
+          <tr><th>Requirement / Evidence</th><th>Provided</th><th>Ref / Notes</th></tr>
+        </thead>
+        <tbody id="evidence">
+          <tr><td>Food business licence / registration</td><td><select><option value=""></option><option>Yes</option><option>No</option></select></td><td><input placeholder="Licence number / issuing authority"></td></tr>
+          <tr><td>Temperature‑controlled transport</td><td><select><option value=""></option><option>Yes</option><option>No</option></select></td><td><input placeholder="Make/model, calibration, photos"></td></tr>
+          <tr><td>Food Safety Program / HACCP</td><td><select><option value=""></option><option>Yes</option><option>No</option></select></td><td><input placeholder="Certificate/summary"></td></tr>
+          <tr><td>Recall / complaint procedure</td><td><select><option value=""></option><option>Yes</option><option>No</option></select></td><td><input placeholder="Contact & process"></td></tr>
+          <tr><td>Allergen management</td><td><select><option value=""></option><option>Yes</option><option>No</option></select></td><td><input placeholder="Statement / controls"></td></tr>
+        </tbody>
+      </table>
+      <div class="muted" style="margin-top:6px">Use notes to capture document references, renewal dates, or links.</div>
+    </div>
+  </div>
+
+  <!-- Agreed conditions -->
+  <div class="card">
+    <h2>Agreed conditions</h2>
+    <div class="section grid-3">
+      <div><label>Rejected if chilled above</label><input placeholder="> 5 °C" class="center"></div>
+      <div><label>Rejected if frozen above</label><input placeholder="> −15 °C" class="center"></div>
+      <div><label>Damaged/compromised packaging</label><select><option value=""></option><option>Reject</option><option>Quarantine & assess</option></select></div>
+      <div style="grid-column:1 / -1"><label>Other conditions</label><input placeholder="e.g., intact seals, use-by date ≥ X days, clean crates"></div>
+    </div>
+  </div>
+
+  <!-- Approvals -->
+  <div class="card">
+    <h2>Approval & review</h2>
+    <div class="section row">
+      <div><label>Date added</label><input class="center" data-autodate placeholder="dd/mm/yyyy"></div>
+      <div><label>Review date</label><input class="center" data-autodate placeholder="dd/mm/yyyy"></div>
+    </div>
+    <div class="section">
+      <label>Notes / Corrective actions</label>
+      <textarea placeholder="Describe actions taken if criteria not met; who notified; outcome."></textarea>
+    </div>
+    <div class="section sigrow">
+      <div><label>Approved by (name)</label><input></div>
+      <div><label>Initials</label><input class="init" maxlength="3"></div>
+      <div><label>Supervisor signature</label><div class="line"></div></div>
+      <div><label>Date</label><input class="center" data-autodate placeholder="dd/mm/yyyy"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function pad(n){return String(n).padStart(2,'0')}
+  function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+  function attachAuto(){
+    document.querySelectorAll('[data-autodate]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
+    });
+  }
+  function clearForm(){
+    document.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(el.tagName==='SELECT'){el.selectedIndex=0}else{el.value=''}
+    });
+  }
+  attachAuto();
+</script>
+</body>
+</html>

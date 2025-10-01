@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Record No. 6b – Weekly Cleaning Schedule</title>
+<style>
+  :root{ --ink:#0f172a; --line:#cfd6dd; --grid:#e5eaf0; --head:#f6f8fb; --fs:11px; }
+  @page{ size:A4 landscape; margin:10mm }
+  html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .wrap{max-width:1180px;margin:20px auto 24px;padding:0 14px}
+  .toolbar{display:flex;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 8px;cursor:pointer;font-weight:600;font-size:11px}
+  .btn:hover{background:#f8fafc}
+  h1{font-size:16px;margin:6px 0;text-align:center}
+  .top{display:flex;gap:12px;justify-content:center;align-items:center;margin-bottom:6px;font-weight:600}
+  .top input{border:1px solid var(--line);border-radius:6px;padding:3px 5px;width:120px;text-align:center;font-size:11px}
+  table{width:100%;border-collapse:collapse;table-layout:fixed;border:1px solid var(--line)}
+  th,td{border:1px solid var(--grid);padding:3px;vertical-align:middle;background:#fff;text-align:center}
+  thead th{background:var(--head);font-weight:700;font-size:11px}
+  .task{text-align:left;font-size:11px;padding-left:4px}
+  .tick{cursor:pointer;user-select:none;border:1px solid var(--line);border-radius:4px;width:14px;height:14px;margin:auto;font-size:10px;line-height:14px}
+  .tick.checked{background:#e6f7ef;border-color:#86efac}
+  .note{font-size:10px;color:#555;margin-top:6px}
+  @media print{ .toolbar{display:none!important} .tick{border-color:#bbb} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">🖨 Print</button>
+    <button class="btn" onclick="clearForm()">🧹 Clear</button>
+  </div>
+
+  <h1>Record No. 6b – Weekly Cleaning Schedule</h1>
+
+  <div class="top">
+    <div>Week Commencing: <input id="week" placeholder="dd/mm/yyyy"></div>
+  </div>
+
+  <table>
+    <colgroup>
+      <col style="width:52%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:12%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="task">Task</th>
+        <th>M</th>
+        <th>T</th>
+        <th>W</th>
+        <th>T</th>
+        <th>F</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="note"><b>Notes:</b> Tick when complete. Use correct chemicals and methods. Record any issues or corrective actions on relevant logs.</div>
+</div>
+
+<script>
+  const TASKS = [
+    "Fridges thoroughly cleaned (inside & out)",
+    "Freezers defrosted / cleaned",
+    "Ovens cleaned (inside & trays)",
+    "Microwave detailed clean",
+    "Dishwasher deep clean & descaled",
+    "Pantry shelves wiped & rotated",
+    "Chemical cupboard checked & cleaned",
+    "Floors scrubbed & skirtings wiped",
+    "Walls & splashbacks washed",
+    "Bins scrubbed & sanitised",
+    "Light switches & door frames wiped",
+    "Ceiling vents / fans cleaned",
+    "Store room / dry goods area tidy",
+    "Equipment (blenders, processors) cleaned",
+    "Grease filters (rangehoods) washed",
+    "Outdoor bin area cleaned",
+    "Window sills & ledges wiped",
+    "Staff room kitchenette cleaned"
+  ];
+
+  function tickCell(el){
+    el.classList.toggle('checked');
+    el.textContent = el.classList.contains('checked') ? '✓' : '';
+  }
+
+  function rowTemplate(text=""){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="task">${text}</td>
+      <td><div class="tick" onclick="tickCell(this)"></div></td>
+      <td><div class="tick" onclick="tickCell(this)"></div></td>
+      <td><div class="tick" onclick="tickCell(this)"></div></td>
+      <td><div class="tick" onclick="tickCell(this)"></div></td>
+      <td><div class="tick" onclick="tickCell(this)"></div></td>
+    `;
+    return tr;
+  }
+
+  function build(){
+    const tbody = document.getElementById('rows');
+    TASKS.forEach(t=> tbody.appendChild(rowTemplate(t)));
+  }
+
+  function clearForm(){
+    document.querySelectorAll('.tick').forEach(el=> {el.classList.remove('checked'); el.textContent='';});
+    document.getElementById('week').value='';
+  }
+
+  build();
+</script>
+</body>
+</html>

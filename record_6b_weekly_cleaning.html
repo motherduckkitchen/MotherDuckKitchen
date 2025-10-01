@@ -19,7 +19,7 @@
 <body>
   <div class="controls">
     <label>Week Commencing: <input type="date" id="weekDate"></label>
-    <button onclick="saveData()">Save</button>
+    <button onclick="archiveData()">Archive</button>
     <button onclick="clearData()">Clear</button>
     <button onclick="window.print()">Print</button>
     <button onclick="history.back()">Back</button>
@@ -43,15 +43,12 @@
     const STORAGE_KEY = "weeklyCleaning6b";
 
     function saveData() {
-      const table = document.getElementById("weeklyTable");
-      const checkboxes = table.querySelectorAll("input[type='checkbox']");
-      let data = [];
-      checkboxes.forEach(cb => data.push(cb.checked));
+      const checkboxes = document.querySelectorAll("input[type='checkbox']");
+      let data = Array.from(checkboxes).map(cb => cb.checked);
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         week: document.getElementById("weekDate").value,
         checks: data
       }));
-      alert("Saved!");
     }
 
     function loadData() {
@@ -63,11 +60,26 @@
       }
     }
 
+    function archiveData() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (!saved) { alert("Nothing to archive"); return; }
+      const blob = new Blob([JSON.stringify(saved, null, 2)], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "weekly_cleaning_archive.json";
+      a.click();
+      URL.revokeObjectURL(url);
+      clearData();
+    }
+
     function clearData() {
       localStorage.removeItem(STORAGE_KEY);
       location.reload();
     }
 
+    // auto-save every time a box is ticked or date changed
+    document.addEventListener("change", saveData);
     window.onload = loadData;
   </script>
 </body>

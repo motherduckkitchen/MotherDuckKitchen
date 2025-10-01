@@ -2,46 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Record 6c — Monthly Cleaning</title>
+  <title>Record 6c — Monthly Cleaning Schedule</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    h2 { color: #222; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { border: 1px solid #444; padding: 8px; text-align: left; }
-    th { background: #f0f0f0; }
-    button { margin: 10px 5px; padding: 8px 12px; }
-    .controls { margin-bottom: 10px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #333; padding: 6px; text-align: center; }
+    th { background: #f2f2f2; }
+    .controls { margin-bottom: 15px; }
+    .controls button { margin-right: 10px; padding: 6px 12px; }
   </style>
 </head>
 <body>
   <div class="controls">
-    <button onclick="window.history.back()">← Back</button>
-    <button onclick="window.print()">🖨 Print</button>
-    <button onclick="saveArchive()">💾 Save (Month)</button>
+    <label>Month: <input type="text" placeholder="e.g. October 2025"></label>
+    <button onclick="window.print()">Print</button>
+    <button onclick="history.back()">Back</button>
+    <button>Save/Archive</button>
   </div>
 
-  <h2>Record 6c — Monthly Cleaning</h2>
+  <h2>Record 6c — Monthly Cleaning Schedule</h2>
 
   <table>
-    <thead>
-      <tr>
-        <th>Task</th>
-        <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th>
-        <th>May</th><th>Jun</th><th>Jul</th><th>Aug</th>
-        <th>Sep</th><th>Oct</th><th>Nov</th><th>Dec</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>Clear cupboards & wipe shelves</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-      <tr><td>Clean drawers/cutlery drawers</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-      <tr><td>Wipe ceiling fan</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
-    </tbody>
+    <tr>
+      <th>Task</th>
+      <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th>
+      <th>Jun</th><th>Jul</th><th>Aug</th><th>Sep</th><th>Oct</th>
+      <th>Nov</th><th>Dec</th>
+    </tr>
+    <tr><td>Clear cupboards & shelves (Kitchen & Pantry)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Clear cutlery drawers</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>Wipe ceiling fan</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
   </table>
 
-  <script>
-    function saveArchive() {
-      alert("Monthly record archived (placeholder).");
-    }
-  </script>
+  <h3>Quarterly/Yearly Cleaning & Sanitising</h3>
+  <table>
+    <tr>
+      <th>Task</th><th>Responsible Person</th><th>Date Scheduled</th><th>Date Completed</th><th>Checked by</th>
+    </tr>
+    <tr><td><i>List tasks here</i></td><td></td><td></td><td></td><td></td></tr>
+  </table>
 </body>
 </html>

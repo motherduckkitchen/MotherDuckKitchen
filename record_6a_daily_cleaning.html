@@ -1,53 +1,74 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Record 6a — Daily Cleaning & Sanitising Schedule</title>
+  <title>Record 6b — Weekly Cleaning Schedule</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; }
-    table { width: 100%; border-collapse: collapse; }
+    table { width: 700px; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #333; padding: 6px; text-align: center; }
     th { background: #f2f2f2; }
     .controls { margin-bottom: 15px; }
     .controls button { margin-right: 10px; padding: 6px 12px; }
+    @media print {
+      body { margin: 10mm; }
+      table { width: 100%; }
+    }
   </style>
 </head>
 <body>
   <div class="controls">
-    <label>Week Commencing: <input type="date"></label>
+    <label>Week Commencing: <input type="date" id="weekDate"></label>
+    <button onclick="saveData()">Save</button>
+    <button onclick="clearData()">Clear</button>
     <button onclick="window.print()">Print</button>
     <button onclick="history.back()">Back</button>
-    <button>Save/Archive</button>
   </div>
 
-  <h2>Record 6a — Daily Cleaning & Sanitising Schedule</h2>
+  <h2>Record 6b — Weekly Cleaning Schedule</h2>
 
-  <table>
+  <table id="weeklyTable">
     <tr>
-      <th>Area/Equipment</th>
+      <th>Task</th>
       <th>M</th><th>T</th><th>W</th><th>T</th><th>F</th>
     </tr>
-    <tr><td><b>AFTER EACH USE</b></td><td colspan="5"></td></tr>
-    <tr><td>Chopping boards (if knife marks discard & order new ones)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Benches</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Serving utensils</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Bowls, Cups, Plates etc.</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Drinking jugs clean/sanitised & put away</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td><b>DAILY or more often if required</b></td><td colspan="5"></td></tr>
-    <tr><td>Cupboards clean/tidy (wipe over outside doors)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Microwave inside & outside</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Oven fronts</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Dishwasher front</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Windowsill, skirting, sink splash back</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>All utensils put away</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Door handles & entrance doors</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Bin emptied, lid cleaned</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Benches disinfected & clear</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Floors mopped (PM)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Tea towels & dish cloths washed (end of day)</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>Oven trays cleaned after use</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td>All fixtures/fittings sanitised</td><td></td><td></td><td></td><td></td><td></td></tr>
-    <tr><td><i>Please list any areas/equipment to be cleaned daily:</i></td><td colspan="5"></td></tr>
+    <tr><td>Clean out fridge (shelves & doors)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Clean inside of ovens</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Chemical cupboard (refill if needed)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Clean pantry (check expiry, wipe shelves & sill)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+    <tr><td>Sweep & mop pantry floor</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
   </table>
+
+  <script>
+    const STORAGE_KEY = "weeklyCleaning6b";
+
+    function saveData() {
+      const table = document.getElementById("weeklyTable");
+      const checkboxes = table.querySelectorAll("input[type='checkbox']");
+      let data = [];
+      checkboxes.forEach(cb => data.push(cb.checked));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        week: document.getElementById("weekDate").value,
+        checks: data
+      }));
+      alert("Saved!");
+    }
+
+    function loadData() {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (saved) {
+        document.getElementById("weekDate").value = saved.week;
+        const checkboxes = document.querySelectorAll("input[type='checkbox']");
+        saved.checks.forEach((val, i) => { checkboxes[i].checked = val; });
+      }
+    }
+
+    function clearData() {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+
+    window.onload = loadData;
+  </script>
 </body>
 </html>

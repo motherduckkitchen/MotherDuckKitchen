@@ -1,13 +1,77 @@
-<main class="container">
-  <div class="btn-row">
-    <a href="record_3a_incoming_goods.html"><button>Record 3a — Incoming Goods</button></a>
-    <a href="record_4_appliances_fixed.html"><button>Record 4 — Appliances</button></a>
-    <a href="record_5_heating_log.html"><button>Record 5 — Heating Log</button></a>
-    <a href="record_5a_cook_cool_reheat_nobatch.html"><button>Record 5a — Cook/Cool/Reheat</button></a>
-    <a href="record_5b_transport_brewer_balanced.html"><button>Record 5b — Transport (Dispatch)</button></a>
-    <a href="record_6a_daily_cleaning.html"><button>Record 6a — Daily Cleaning</button></a>
-    <a href="record_6b_weekly_cleaning.html"><button>Record 6b — Weekly Cleaning</button></a>
-    <a href="record_6c_monthly_cleaning.html"><button>Record 6c — Monthly Cleaning</button></a>
-    <a href="record_12_supervisor_checklist.html"><button>Supervisor Checklist</button></a>
-  </div>
-</main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitchen Records</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: url("kitchen.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #000;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7); /* lighter wash so image shows */
+      z-index: -1;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .btn-row a button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      background: #007BFF;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-row a button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+
+  <main class="container">
+    <h1>Kitchen Records</h1>
+    <div class="btn-row">
+      <a href="record_3a_incoming_goods.html"><button>Record 3a — Incoming Goods</button></a>
+      <a href="record_4_appliances_fixed.html"><button>Record 4 — Appliances</button></a>
+      <a href="record_5_heating_log.html"><button>Record 5 — Heating Log</button></a>
+      <a href="record_5a_cook_cool_reheat_notabch.html"><button>Record 5a — Cook/Cool/Reheat</button></a>
+      <a href="record_5b_transport_brewer_balanced.html"><button>Record 5b — Transport (Dispatch)</button></a>
+      <a href="record_6a_daily_cleaning.html"><button>Record 6a — Daily Cleaning</button></a>
+      <a href="record_6b_weekly_cleaning.html"><button>Record 6b — Weekly Cleaning</button></a>
+      <a href="record_6c_monthly_cleaning.html"><button>Record 6c — Monthly Cleaning</button></a>
+      <a href="record_12_supervisor_checklist.html"><button>Supervisor Checklist</button></a>
+    </div>
+  </main>
+</body>
+</html>

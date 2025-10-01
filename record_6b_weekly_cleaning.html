@@ -8,11 +8,13 @@
     table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     th, td { border: 1px solid #333; padding: 6px; text-align: center; }
     th { background: #f2f2f2; }
+    td:first-child { text-align: left; }
     .controls { margin-bottom: 15px; }
     .controls button { margin-right: 10px; padding: 6px 12px; }
     @media print {
-      body { margin: 10mm; }
+      body { margin: 15mm; }
       table { width: 100%; }
+      @page { size: A4 portrait; margin: 15mm; }
     }
   </style>
 </head>
@@ -30,11 +32,11 @@
   <table id="weeklyTable">
     <tr>
       <th>Task</th>
-      <th>Monday</th>
-      <th>Tuesday</th>
-      <th>Wednesday</th>
-      <th>Thursday</th>
-      <th>Friday</th>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
     </tr>
     <tr><td>Clean out fridge (shelves & doors)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
     <tr><td>Clean inside of ovens</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
@@ -42,6 +44,8 @@
     <tr><td>Clean pantry (check expiry, wipe shelves & sill)</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
     <tr><td>Sweep & mop pantry floor</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
   </table>
+
+  <p><em>Weekly or more often if required</em></p>
 
   <script>
     const STORAGE_KEY = "weeklyCleaning6b";
@@ -82,7 +86,6 @@
       location.reload();
     }
 
-    // Auto-save whenever something changes
     document.addEventListener("change", saveData);
     window.onload = loadData;
   </script>

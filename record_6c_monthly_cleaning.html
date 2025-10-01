@@ -1,197 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Record 6c — Monthly Cleaning</title>
-<style>
-  :root { --line:#d1d5db; --bg:#f9fafb; --card:#fff; --accent:#ffd24d; }
-  @page { size: A4 portrait; margin: 14mm; }
-  body { font-family: Arial, sans-serif; background: var(--bg); margin:0; }
-  .page { max-width: 850px; margin: 20px auto; padding: 10px; }
-  .toolbar { display:flex; gap:8px; margin-bottom:12px; }
-  .btn { border:0; padding:6px 14px; border-radius:6px; font-weight:600; cursor:pointer; }
-  .btn--back { background: var(--accent); }
-  .btn--print, .btn--clear { background:#e5e7eb; }
-  .card { background: var(--card); border:1px solid var(--line); border-radius:8px; padding:16px; }
-  h1 { margin-top:0; font-size:18px; }
-  .row { display:flex; gap:12px; align-items:center; margin:8px 0 14px; }
-  label { font-size:14px; }
-  input[type="number"] { width: 100px; padding:4px; }
-  table { width:100%; border-collapse: collapse; margin: 10px 0 14px; }
-  th, td { border:1px solid var(--line); padding:8px; text-align:center; }
-  th { background:#f3f4f6; font-size:14px; }
-  td.task { text-align:left; }
-  input[type="checkbox"] { width:18px; height:18px; }
-  textarea { width:100%; min-height:90px; border:1px solid var(--line); border-radius:6px; padding:8px; }
-  .subhead { font-weight:700; margin:18px 0 6px; }
-  @media print { .toolbar{display:none} body{background:#fff} }
-</style>
-</head>
-<body>
-<div class="page">
+<h2>Record 6c — Monthly Cleaning Schedule</h2>
 
-  <div class="toolbar">
-    <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
-    <button class="btn btn--print" onclick="window.print()">Print</button>
-    <button class="btn btn--clear" onclick="clearForm()">Clear</button>
-  </div>
+<div class="row">
+  <label for="month">Month:&nbsp;</label>
+  <input id="month" type="month">
+</div>
 
-  <div class="card">
-    <h1>Record 6c — Cleaning Schedule (Monthly)</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Completed</th>
+      <th>Initials</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Clear out cupboards and wipe over shelves (Kitchen & Pantry)</td>
+      <td><input type="checkbox"></td>
+      <td><input type="text" placeholder="Initials"></td>
+      <td><input type="date"></td>
+    </tr>
+    <tr>
+      <td>Clear out drawers / cutlery drawers</td>
+      <td><input type="checkbox"></td>
+      <td><input type="text" placeholder="Initials"></td>
+      <td><input type="date"></td>
+    </tr>
+    <tr>
+      <td>Wipe over ceiling fan</td>
+      <td><input type="checkbox"></td>
+      <td><input type="text" placeholder="Initials"></td>
+      <td><input type="date"></td>
+    </tr>
+  </tbody>
+</table>
 
-    <div class="row">
-      <label for="year">Year:&nbsp;</label>
-      <input id="year" type="number" min="2020" max="2100" step="1" />
-      <span style="font-size:13px;color:#555;">Tick the month when each task is completed.</span>
-    </div>
+<h3>Quarterly / Yearly Cleaning</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Responsible Person</th>
+      <th>Date Scheduled</th>
+      <th>Date Completed</th>
+      <th>Checked By</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td contenteditable="true"></td>
+      <td contenteditable="true"></td>
+      <td><input type="date"></td>
+      <td><input type="date"></td>
+      <td contenteditable="true"></td>
+    </tr>
+    <tr>
+      <td contenteditable="true"></td>
+      <td contenteditable="true"></td>
+      <td><input type="date"></td>
+      <td><input type="date"></td>
+      <td contenteditable="true"></td>
+    </tr>
+  </tbody>
+</table>
 
-    <!-- MONTHLY TASKS -->
-    <table>
-      <thead>
-        <tr>
-          <th>MONTHLY or more often if required — Task</th>
-          <th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>May</th><th>Jun</th>
-          <th>Jul</th><th>Aug</th><th>Sept</th><th>Oct</th><th>Nov</th><th>Dec</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="task">Clear out cupboards and wipe over shelves — Kitchen &amp; Pantry</td>
-          <!-- 12 months -->
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td class="task">Clear out drawers/cutlery drawers</td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-        </tr>
-        <tr>
-          <td class="task">Wipe over ceiling fan</td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-          <td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- QUARTERLY / YEARLY -->
-    <div class="subhead">Quarterly/Yearly cleaning &amp; sanitising</div>
-    <table>
-      <thead>
-        <tr>
-          <th style="width:45%">Quarterly/Yearly cleaning task</th>
-          <th style="width:12%">Resp. Person</th>
-          <th style="width:12%">Date scheduled</th>
-          <th style="width:12%">Date completed</th>
-          <th style="width:12%">Checked by</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- 6 editable rows -->
-        <tr>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-        <tr>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-        <tr>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-        <tr>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-        <tr>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-        <tr>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td><td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="subhead">Notes</div>
-    <textarea id="notes" placeholder="List any areas/equipment to be cleaned monthly; include corrective actions as needed."></textarea>
-  </div>
+<div class="actions">
+  <button onclick="window.print()">Print</button>
+  <button onclick="clearForm()">Clear</button>
+  <button onclick="saveData()">Save</button>
 </div>
 
 <script>
-  const KEY = 'monthly_cleaning_v1';
-
-  function save() {
-    const year = document.getElementById('year').value;
-    const notes = document.getElementById('notes').value;
-    const checks = Array.from(document.querySelectorAll('tbody input[type=checkbox]')).map(c => c.checked);
-
-    // capture quarterly/yearly rows (as arrays of cell text)
-    const qyRows = Array.from(document.querySelectorAll('table + .subhead + table tbody tr')).map(tr =>
-      Array.from(tr.cells).map(td => td.getAttribute('contenteditable') ? td.innerText : null)
-    );
-
-    localStorage.setItem(KEY, JSON.stringify({ year, notes, checks, qyRows }));
-  }
-
-  function load() {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) { 
-      // prefill current year
-      document.getElementById('year').value = new Date().getFullYear();
-      return;
-    }
-    const d = JSON.parse(raw);
-    if (d.year) document.getElementById('year').value = d.year;
-    if (d.notes) document.getElementById('notes').value = d.notes;
-
-    const boxes = document.querySelectorAll('tbody input[type=checkbox]');
-    if (d.checks && d.checks.length === boxes.length) {
-      boxes.forEach((b,i)=> b.checked = !!d.checks[i]);
-    }
-
-    if (Array.isArray(d.qyRows)) {
-      const rows = document.querySelectorAll('table + .subhead + table tbody tr');
-      rows.forEach((tr, r) => {
-        const cells = tr.cells;
-        if (d.qyRows[r]) {
-          Array.from(cells).forEach((td, c) => {
-            if (td.getAttribute('contenteditable')) td.innerText = d.qyRows[r][c] ?? '';
-          });
-        }
-      });
-    }
-  }
-
-  function clearForm() {
-    document.getElementById('year').value = new Date().getFullYear();
-    document.getElementById('notes').value = '';
-    document.querySelectorAll('tbody input[type=checkbox]').forEach(cb => cb.checked = false);
-    document.querySelectorAll('table + .subhead + table tbody tr td[contenteditable]')
-      .forEach(td => td.innerText = '');
-    save();
-  }
-
-  document.addEventListener('input', save);
-  document.addEventListener('keyup', save);
-  window.addEventListener('load', load);
+function clearForm() {
+  document.querySelectorAll("input").forEach(el => {
+    if (el.type === "checkbox") el.checked = false;
+    else el.value = "";
+  });
+}
+function saveData() {
+  alert("Saved (this will later archive)");
+}
 </script>
-</body>
-</html>

@@ -9,9 +9,18 @@
   @page{ size:A4 landscape; margin:10mm }
   html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
   .wrap{max-width:1180px;margin:20px auto 24px;padding:0 14px}
-  .toolbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-  .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:6px 10px;cursor:pointer;font-weight:600}
-  .btn:hover{background:#f8fafc}
+
+  /* Toolbar */
+  .toolbar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .btn{
+    border:0;border-radius:12px;padding:8px 14px;font-weight:700;
+    background:#eef2f7;color:#0f172a;cursor:pointer;
+    box-shadow:0 2px 6px rgba(2,6,23,.06);
+  }
+  .btn:hover{filter:brightness(.97)}
+  .btn--back{background:#ffc107;color:#1f2937}
+  .btn--primary{background:#0d6efd;color:#fff}
+
   h1{font-size:18px;margin:10px 0}
   .banner{border:1px dashed var(--grid);border-radius:10px;background:#fbfdff;padding:6px 8px;color:#334155;margin-bottom:8px;font-size:12px}
   table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -30,15 +39,14 @@
 <body>
 <div class="wrap">
   
-  <!-- Navigation bar -->
-<div class="topbar">
-  <a href="kitchen.html">
-    <button class="btn btn--back">← Back</button>
-  </a>
-  <button class="btn" onclick="window.print()">Print</button>
-  <button class="btn" onclick="clearForm()">Clear</button>
-  <button class="btn btn--primary" onclick="saveForm()">Save</button>
-</div>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
+    <button class="btn" onclick="window.print()">Print</button>
+    <button class="btn" onclick="clearForm()">Clear</button>
+    <button class="btn btn--primary" onclick="saveForm()">Save</button>
+  </div>
+
   <h1>Record No. 5a – Temperature Control Log: Cook / Cool / Reheat & Serve</h1>
   <div class="banner"><b>Process targets:</b> Cook ≥ 75&nbsp;°C · Reheat ≥ 60&nbsp;°C · Cool 60→21&nbsp;°C within 2 hrs, 21→5&nbsp;°C within 4 hrs · Serve promptly. Take corrective action if outside limits.</div>
 
@@ -112,6 +120,13 @@
     document.querySelectorAll('input,textarea,select').forEach(el=>{
       if(el.tagName==='SELECT'){el.selectedIndex=0}else{el.value=''}
     });
+  }
+
+  // optional saveForm so Save button works (localStorage like others)
+  function saveForm(){
+    const vals=[...document.querySelectorAll('input,select,textarea')].map(el=>el.value);
+    localStorage.setItem('rec5a', JSON.stringify(vals));
+    alert('Saved locally.');
   }
 
   build();

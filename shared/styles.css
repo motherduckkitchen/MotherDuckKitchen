@@ -1,72 +1,99 @@
-/* ---------- Base ---------- */
-:root{
-  --brand:#0e6fa8;         /* light blue */
-  --brand-2:#3aa9d9;       /* light blue */
-  --accent:#ffd54d;        /* yellow */
-  --text:#123047;
-  --ink:#1b1b1b;
-  --paper:#ffffff;
-  --wash:rgba(18,48,71,.78);
-  --radius:14px;
-  --shadow:0 8px 20px rgba(0,0,0,.08);
+/* ===== Mother Duck Kitchen — Base Styles ===== */
+
+/* Page background (uses /images/kitchen.jpg) */
+html, body {
+  height: 100%;
 }
-*{box-sizing:border-box}
-html,body{height:100%}
+
 body{
-  margin:0; color:var(--text); font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
-  background:#b6d6e3 url("kitchen.jpg") center/cover fixed no-repeat;
-}
-body.overlay:before{
-  content:""; position:fixed; inset:0; background:var(--wash); pointer-events:none;
-}
-
-/* ---------- Frame ---------- */
-.header{
-  display:flex; align-items:center; gap:14px;
-  padding:18px 22px;
-}
-.header .brand{
-  display:flex; align-items:center; gap:12px;
-}
-.header img.logo{height:62px; width:auto}
-.header h1{margin:0; font-size:22px; font-weight:700; color:#fff}
-
-/* ---------- Cards & Sections ---------- */
-.container{
-  max-width:1200px; margin:14px auto 48px; padding:18px;
-}
-.panel{
-  background:var(--paper); border-radius:var(--radius); box-shadow:var(--shadow);
-  padding:18px;
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  color:#0b172a;
+  /* CSS file is in /shared, so go up one level to /images */
+  background: url("../images/kitchen.jpg") center / cover fixed no-repeat;
 }
 
-/* ---------- Pills / Buttons ---------- */
-.btn-row{display:flex; flex-wrap:wrap; gap:12px; margin:6px 0 18px}
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.45rem;
-  padding:10px 14px; min-width:210px;
-  background:var(--accent); color:#3a2a00; text-decoration:none; font-weight:700;
-  border-radius:999px; border:2px solid #ffcc2d; transition:transform .06s ease, box-shadow .15s ease;
-  box-shadow:0 4px 0 #eab500;
+/* soft white wash so the bg photo is visible but content stays readable */
+.mdk-wash{
+  position:fixed; inset:0;
+  background: rgba(255,255,255,.78);
+  z-index:-1;
 }
-.btn:hover{transform:translateY(-1px)}
-.btn:active{transform:translateY(1px)}
-.btn.small{min-width:unset; padding:8px 12px}
 
-/* ---------- Utilities ---------- */
-.tools{display:flex; gap:10px; margin-bottom:12px}
-.tools .back,.tools .print{
-  background:#f1f5f9; border:1px solid #d8e0ea; border-radius:10px; padding:8px 12px; cursor:pointer
+/* Page shell */
+.mdk-wrap{
+  max-width: 980px;
+  margin: 32px auto;
+  padding: 0 18px;
 }
-.center{display:flex; justify-content:center}
 
-/* ---------- Tables / Forms ---------- */
-.table{width:100%; border-collapse:collapse}
-.table th,.table td{border:1px solid #e4e7ee; padding:8px 10px; vertical-align:top; background:#fff}
-.table th{background:#f6f7fb; text-align:left; font-weight:700}
-.table .muted{color:#6b778b; font-size:.9rem}
-.table input[type="text"], .table input[type="date"]{
-  width:100%; border:1px solid #d9e1ea; border-radius:8px; padding:6px 8px; background:#fff
+/* Header */
+.mdk-brand{
+  display:flex; align-items:center; gap:18px;
+  justify-content:center;
+  margin-bottom: 12px;
 }
-.table .cell-inline{display:flex; gap:6px; align-items:center}
-.badge{display:inline-block; padding:.15rem .4rem; background:#eef7ff; border:1px solid #cfe6ff; color:#255; border-radius:6px; font-size:.8rem}
+.mdk-brand img{
+  width: 160px; height: auto; display:block;
+}
+.mdk-title{
+  font-weight:800; font-size: 28px;
+  text-shadow: 0 1px 0 rgba(0,0,0,.05);
+}
+
+/* Card */
+.mdk-card{
+  background:#fff;
+  border:1px solid #e7ecf3;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(2,6,23,.08);
+}
+
+/* Button row */
+.mdk-button-row{
+  display:flex; flex-wrap:wrap;
+  gap:14px; justify-content:center;
+}
+
+/* MDK pill buttons (yellow) */
+.mdk-btn{
+  appearance:none; border:0; cursor:pointer;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 700;
+  background: #ffc107; /* MDK yellow */
+  color: #25185a;      /* MDK purple-ish text */
+  box-shadow: 0 6px 18px rgba(2,6,23,.06);
+  transition: transform .06s ease, filter .12s ease;
+  text-decoration: none; display:inline-flex; align-items:center; gap:8px;
+}
+.mdk-btn:hover{ filter:brightness(.97) }
+.mdk-btn:active{ transform: translateY(1px) }
+
+/* Small helper text */
+.mdk-help{
+  margin-top: 12px;
+  color: #5b6472;
+  font-size: 13px;
+  text-align:center;
+}
+
+/* Toolbar used inside record pages (Back / Print / Clear / Save) */
+.mdk-toolbar{
+  display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+  margin-bottom:12px;
+}
+.mdk-btn--light{
+  background: #eef2f7; color:#0f172a;
+}
+.mdk-btn--primary{
+  background:#0d6efd; color:#fff;
+}
+
+/* Print cleanup */
+@media print{
+  .mdk-wash{ display:none }
+  .mdk-btn, .mdk-toolbar{ display:none !important }
+  body{ background:none !important }
+}

@@ -1,104 +1,97 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Record No. 5b – Brewer St Transport Log</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Record 5b — Transport (Dispatch)</title>
 <style>
-  :root{ --ink:#0f172a; --muted:#6b7280; --line:#cfd6dd; --grid:#e5eaf0; --head:#f6f8fb; --fs:13px; }
-  @page{ size:A4 landscape; margin:10mm }
-  html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  .wrap{max-width:1180px;margin:20px auto 24px;padding:0 14px}
-  .toolbar{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-  .btn{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;cursor:pointer;font-weight:600}
-  .btn:hover{background:#f8fafc}
-  h1{font-size:20px;margin:10px 0;text-align:center}
-  .banner{border:1px dashed var(--grid);border-radius:12px;background:#fbfdff;padding:8px 10px;color:#334155;margin-bottom:8px;font-size:12px;text-align:center}
-  table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:5px 6px;vertical-align:middle;background:#fff}
-  th:last-child,td:last-child{border-right:0}
-  tr:last-child td{border-bottom:0}
-  thead th{background:var(--head);text-align:center;font-weight:700}
-  input,textarea{width:100%;height:32px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:#fff;box-sizing:border-box}
+  :root{--ink:#111827;--line:#e5e7eb;--grid:#eef2f7;--head:#f6f8fb;--muted:#6b7280;}
+  body{margin:0;font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:url("kitchen.jpg") center/cover fixed no-repeat;padding:20px;color:var(--ink)}
+  .overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:-1}
+  .wrap{max-width:1100px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid var(--line);box-shadow:0 8px 22px rgba(0,0,0,.1);padding:18px 20px 22px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+  .btn{border:0;border-radius:12px;padding:8px 14px;font-weight:700;background:#eef2f7;color:#0f172a;cursor:pointer;box-shadow:0 2px 6px rgba(2,6,23,.06)}
+  .btn:hover{filter:brightness(.97)} .btn--back{background:#ffc107;color:#1f2937} .btn--primary{background:#0d6efd;color:#fff}
+  h1{font-size:20px;margin:8px 0 6px}
+  .targets{font-size:12px;color:#334155;border:1px dashed var(--grid);background:#fbfdff;border-radius:12px;padding:8px 10px;margin-bottom:8px}
+  table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 8px;vertical-align:middle;background:#fff}
+  th:last-child,td:last-child{border-right:0} tr:last-child td{border-bottom:0}
+  thead th{background:var(--head);text-align:center;font-weight:700;font-size:13px}
+  input,textarea{width:100%;height:30px;border:1px solid var(--line);border-radius:10px;padding:4px 8px;font:inherit;background:#fff;box-sizing:border-box}
   input.center{text-align:center}
-  .init{width:60px;max-width:70px;text-transform:uppercase;text-align:center;margin:0 auto}
-  textarea{min-height:86px;border-radius:12px;width:100%}
-  .note{font-size:12px;color:var(--muted);margin-top:8px}
-  @media print{ .toolbar,.banner{display:none!important} input::placeholder,textarea::placeholder{color:transparent} th,td{padding:4px} }
+  .note{font-size:12px;color:var(--muted);margin-top:10px}
+  @page{size:A4 landscape;margin:10mm}
+  @media print{.toolbar{display:none} body{background:#fff}.overlay{display:none}}
 </style>
 </head>
 <body>
+<div class="overlay"></div>
 <div class="wrap">
- 
-  <!-- Navigation bar -->
-<div class="topbar">
-  <a href="kitchen.html">
-    <button class="btn btn--back">← Back</button>
-  </a>
-  <button class="btn" onclick="window.print()">Print</button>
-  <button class="btn" onclick="clearForm()">Clear</button>
-  <button class="btn btn--primary" onclick="saveForm()">Save</button>
-</div>
-  <h1>Record No. 5b – Brewer St Transport Log</h1>
-  <div class="banner"><b>Transport targets:</b> Maintain cold chain – transport temp ≤ 5&nbsp;°C for chilled and ≤ −15&nbsp;°C for frozen. Record departure/arrival times & temps. Take corrective action if out of spec.</div>
+  <div class="toolbar">
+    <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
+    <button class="btn" onclick="window.print()">Print</button>
+    <button class="btn" onclick="clearForm()">Clear</button>
+    <button class="btn btn--primary" onclick="saveForm()">Save</button>
+  </div>
 
-  <table>
+  <h1>Record 5b — Transport (Dispatch)</h1>
+  <div class="targets"><b>Start in Kitchen, finish at Brewer St.</b> Cold foods ≤ 5 °C; hot foods ≥ 60 °C at dispatch/receiving. Record times and temps.</div>
+
+  <table id="tbl">
     <colgroup>
-      <col style="width:12%"><col style="width:12%"><col style="width:14%"><col style="width:22%"><col style="width:12%"><col style="width:14%"><col style="width:10%">
+      <col style="width:12%"><col style="width:18%"><col style="width:10%"><col style="width:10%">
+      <col style="width:10%"><col style="width:10%"><col style="width:10%"><col style="width:20%">
     </colgroup>
     <thead>
       <tr>
         <th>Date</th>
-        <th>Time Out</th>
-        <th>Transport Temp (°C)</th>
-        <th>Food Item(s)</th>
-        <th>Arrival Time</th>
-        <th>Arrival Temp (°C)</th>
-        <th>Initial</th>
+        <th>Item</th>
+        <th>Dispatch Time</th>
+        <th>Temp (°C)</th>
+        <th>Arrive Time</th>
+        <th>Temp (°C)</th>
+        <th>Initials</th>
+        <th>Corrective Actions / Notes</th>
       </tr>
     </thead>
     <tbody id="rows"></tbody>
   </table>
 
-  <div class="note"><b>Notes / Corrective actions:</b> Record actions if temps are out of spec (e.g., re-chill, discard, notify receiver).</div>
-  <textarea placeholder="Describe action(s), who notified, and outcome."></textarea>
+  <div class="note">If limits not met on arrival, record action (e.g., rapid chill/reheat/discard) and notify supervisor.</div>
 </div>
 
 <script>
+  const KEY='mdk_rec5b_v1';
   function pad(n){return String(n).padStart(2,'0')}
-  function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
-  function fmtTime(d=new Date()){return pad(d.getHours())+':'+pad(d.getMinutes())}
+  function today(){const d=new Date();return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+  function time(){const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())}
 
-  function addRow(){
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><input class="center" data-autodate placeholder="dd/mm/yyyy"></td>
-      <td><input class="center" data-autotime placeholder="HH:MM"></td>
+  function row(){
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td><input class="center d" placeholder="dd/mm/yyyy"></td>
+      <td><input placeholder="Product / batch"></td>
+      <td><input class="center t" placeholder="HH:MM"></td>
       <td><input class="center" placeholder="°C"></td>
-      <td><input placeholder="Meals, salads, desserts"></td>
-      <td><input class="center" data-autotime placeholder="HH:MM"></td>
+      <td><input class="center t" placeholder="HH:MM"></td>
       <td><input class="center" placeholder="°C"></td>
-      <td><input class="init center" maxlength="3" placeholder=""></td>
+      <td><input class="center" maxlength="3" placeholder=""></td>
+      <td><input placeholder="If out of spec: action taken"></td>
     `;
     return tr;
   }
 
   function build(){
-    const tbody=document.getElementById('rows');
-    for(let i=0;i<10;i++){ tbody.appendChild(addRow()); }
-    document.querySelectorAll('[data-autodate]').forEach(el=>{
-      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
-    });
-    document.querySelectorAll('[data-autotime]').forEach(el=>{
-      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtTime(); });
-    });
+    const tb=document.getElementById('rows');
+    for(let i=0;i<10;i++) tb.appendChild(row());
+    document.querySelectorAll('.d').forEach(el=>el.addEventListener('focus',()=>{if(!el.value) el.value=today()}));
+    document.querySelectorAll('.t').forEach(el=>el.addEventListener('focus',()=>{if(!el.value) el.value=time()}));
   }
 
-  function clearForm(){
-    document.querySelectorAll('input,textarea').forEach(el=> el.value='');
-  }
-
-  build();
+  function saveForm(){const v=[...document.querySelectorAll('#tbl input')].map(i=>i.value);localStorage.setItem(KEY,JSON.stringify(v));alert('Saved locally.')}
+  function loadForm(){const r=localStorage.getItem(KEY);if(!r)return;const v=JSON.parse(r)||[];[...document.querySelectorAll('#tbl input')].forEach((el,i)=>{if(v[i])el.value=v[i]})}
+  function clearForm(){document.querySelectorAll('#tbl input').forEach(el=>el.value='');localStorage.removeItem(KEY)}
+  build();loadForm();
 </script>
 </body>
 </html>

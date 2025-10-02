@@ -76,10 +76,12 @@
 </div>
 
 <script>
+  // ---------- helpers for dates/times ----------
   function pad(n){return String(n).padStart(2,'0')}
   function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
   function fmtTime(d=new Date()){return pad(d.getHours())+':'+pad(d.getMinutes())}
 
+  // ---------- build table (unchanged) ----------
   function addRow(){
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -103,6 +105,71 @@
       <td><input class="init center" maxlength="3" placeholder=""></td>
     `;
     return tr;
+  }
+
+  function build(){
+    const tbody=document.getElementById('rows');
+    for(let i=0;i<8;i++){ tbody.appendChild(addRow()); }
+    document.querySelectorAll('[data-autodate]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
+    });
+    document.querySelectorAll('[data-autotime]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtTime(); });
+    });
+  }
+
+  // ---------- autosave / load ----------
+  const KEY = 'mdk_record5a_v1';
+
+  function serialize() {
+    // capture all inputs/selects/textarea inside the table and notes
+    const fields = document.querySelectorAll('table input, table select, textarea');
+    return Array.from(fields).map(el => el.value);
+  }
+
+  function deserialize(values){
+    if(!Array.isArray(values)) return;
+    const fields = document.querySelectorAll('table input, table select, textarea');
+    fields.forEach((el, i) => {
+      if (values[i] !== undefined) el.value = values[i];
+    });
+  }
+
+  function saveForm(showToast=true){
+    try{
+      localStorage.setItem(KEY, JSON.stringify(serialize()));
+      if (showToast) alert('Saved locally.');
+    }catch(e){}
+  }
+
+  function loadForm(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return;
+      const data = JSON.parse(raw);
+      deserialize(data);
+    }catch(e){}
+  }
+
+  function clearForm(){
+    document.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(el.tagName==='SELECT'){ el.selectedIndex = 0; }
+      else { el.value=''; }
+    });
+    localStorage.removeItem(KEY);
+  }
+
+  // small debounce so autosave isn’t too chatty
+  function debounce(fn, ms=300){
+    let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); };
+  }
+  const autoSave = debounce(()=> saveForm(false), 300);
+
+  // ---------- init ----------
+  build();
+  loadForm();
+  document.addEventListener('input', autoSave);
+</script>    return tr;
   }
 
   function build(){

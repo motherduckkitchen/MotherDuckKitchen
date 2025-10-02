@@ -1,11 +1,10 @@
- </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Record 12 — Supervisor Checklist</title>
   <style>
-    /* Page & background */
     body{
       margin:0;
       font-family: Arial, sans-serif;
@@ -23,29 +22,36 @@
       border:1px solid #e5e7eb;
     }
 
-    /* Header & buttons */
-    .topbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
-    .btn{
-      border:0; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer;
-      background:#e5e7eb;
+    /* Toolbar */
+    .topbar{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      margin-bottom:16px;
     }
-    .btn:hover{filter:brightness(.97)}
+    .btn{
+      border:0; border-radius:8px; padding:8px 14px;
+      font-weight:600; cursor:pointer; background:#f3f4f6;
+      display:flex; align-items:center; gap:6px;
+    }
+    .btn:hover{filter:brightness(.96)}
     .btn--back{background:#ffc107; color:#000;}
     .btn--primary{background:#0d6efd; color:#fff;}
+
     h1{margin:6px 0 14px; font-size:22px; text-align:center;}
 
     /* Meta row */
     .meta{
-      display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:center;
-      margin-bottom:14px;
+      display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+      justify-content:center; margin-bottom:14px;
     }
     label{font-weight:700;}
     input[type="date"], input[type="text"]{
-      border:1px solid #d1d5db; border-radius:8px; padding:8px 10px; min-width:190px;
+      border:1px solid #d1d5db; border-radius:8px; padding:8px 10px;
+      min-width:190px;
     }
 
-    /* Table */
-    table{width:100%; border-collapse:collapse; margin-top:8px; border-radius:10px; overflow:hidden;}
+    /* Checklist table */
+    table{width:100%; border-collapse:collapse; margin-top:8px;
+      border-radius:10px; overflow:hidden;}
     th, td{border:1px solid #e5e7eb; padding:10px; vertical-align:middle;}
     th{background:#f3f4f6; text-align:left;}
     td.check{width:70px; text-align:center;}
@@ -53,8 +59,8 @@
 
     /* Textareas */
     textarea{
-      width:100%; min-height:90px; padding:10px; border:1px solid #e5e7eb; border-radius:10px;
-      margin-top:6px;
+      width:100%; min-height:90px; padding:10px; border:1px solid #e5e7eb;
+      border-radius:10px; margin-top:6px;
     }
 
     @page{size:A4 portrait; margin:14mm;}
@@ -65,12 +71,12 @@
   <div class="overlay"></div>
   <div class="container">
 
-    <!-- Buttons -->
+    <!-- Toolbar -->
     <div class="topbar">
       <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
-      <button class="btn" onclick="window.print()">Print</button>
-      <button class="btn" onclick="clearForm()">Clear</button>
-      <button class="btn btn--primary" onclick="saveForm()">Save</button>
+      <button class="btn" onclick="window.print()">🖨 Print</button>
+      <button class="btn" onclick="clearForm()">✖ Clear</button>
+      <button class="btn btn--primary" onclick="saveForm()">💾 Save</button>
     </div>
 
     <h1>Record 12 — Supervisor Checklist</h1>
@@ -87,7 +93,7 @@
       </div>
     </div>
 
-    <!-- Checklist (mirrors Food Safety Program sections) -->
+    <!-- Checklist -->
     <table id="checklist">
       <tr><th class="section" colspan="2">Equipment & Premises</th></tr>
       <tr><td>All equipment operating correctly</td><td class="check"><input type="checkbox"></td></tr>
@@ -119,7 +125,7 @@
       <tr><td>Review details & auditor findings recorded</td><td class="check"><input type="checkbox"></td></tr>
     </table>
 
-    <!-- Comments / Corrective Actions (as per program) -->
+    <!-- Notes -->
     <div style="margin-top:14px;">
       <label for="comments">Comments / Observations</label>
       <textarea id="comments" placeholder="Notes, observations, non-conformances…"></textarea>
@@ -134,15 +140,18 @@
   <script>
     const KEY = 'mdk_supervisor_checklist_v1';
 
-    function saveForm(){
-      const data = {
+    function collect(){
+      return {
         date: document.getElementById('checkDate').value || '',
         supervisor: document.getElementById('supervisor').value || '',
         checks: Array.from(document.querySelectorAll('#checklist input[type=checkbox]')).map(c=>c.checked),
         comments: document.getElementById('comments').value || '',
         actions: document.getElementById('actions').value || ''
       };
-      localStorage.setItem(KEY, JSON.stringify(data));
+    }
+
+    function saveForm(){
+      localStorage.setItem(KEY, JSON.stringify(collect()));
       alert('Saved locally.');
     }
 
@@ -169,16 +178,9 @@
       localStorage.removeItem(KEY);
     }
 
-    // Auto-save on change for convenience
+    // Auto-save
     document.addEventListener('input', ()=> {
-      const data = {
-        date: document.getElementById('checkDate').value || '',
-        supervisor: document.getElementById('supervisor').value || '',
-        checks: Array.from(document.querySelectorAll('#checklist input[type=checkbox]')).map(c=>c.checked),
-        comments: document.getElementById('comments').value || '',
-        actions: document.getElementById('actions').value || ''
-      };
-      localStorage.setItem(KEY, JSON.stringify(data));
+      localStorage.setItem(KEY, JSON.stringify(collect()));
     });
 
     window.addEventListener('load', loadForm);

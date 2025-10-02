@@ -1,112 +1,153 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Record 3a — Incoming Goods</title>
-<style>
-  :root{--ink:#111827;--line:#e5e7eb;--grid:#eef2f7;--head:#f6f8fb;--muted:#6b7280;}
-  body{margin:0;font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:url("kitchen.jpg") center/cover fixed no-repeat;padding:20px;color:var(--ink)}
-  .overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);z-index:-1}
-  .wrap{max-width:1100px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid var(--line);box-shadow:0 8px 22px rgba(0,0,0,.1);padding:18px 20px 22px}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-  .btn{border:0;border-radius:12px;padding:8px 14px;font-weight:700;background:#eef2f7;color:#0f172a;cursor:pointer;box-shadow:0 2px 6px rgba(2,6,23,.06)}
-  .btn:hover{filter:brightness(.97)} .btn--back{background:#ffc107;color:#1f2937} .btn--primary{background:#0d6efd;color:#fff}
-  h1{font-size:20px;margin:8px 0 14px}
-  table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 8px;vertical-align:middle;background:#fff}
-  th:last-child,td:last-child{border-right:0} tr:last-child td{border-bottom:0}
-  thead th{background:var(--head);text-align:center;font-weight:700;font-size:13px}
-  input,textarea{width:100%;height:30px;border:1px solid var(--line);border-radius:10px;padding:4px 8px;font:inherit;background:#fff;box-sizing:border-box}
-  input.center{text-align:center}
-  .note{font-size:12px;color:var(--muted);margin-top:10px}
-  .guidance{border:1px dashed var(--grid);background:#fbfdff;border-radius:12px;padding:10px;margin:10px 0;color:#334155}
-  @page{size:A4 landscape;margin:10mm}
-  @media print{.toolbar{display:none} body{background:#fff}.overlay{display:none}}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Record 3a — Incoming Goods</title>
+  <link rel="stylesheet" href="shared/styles.css">
 </head>
 <body>
-<div class="overlay"></div>
-<div class="wrap">
-  <div class="toolbar">
-    <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
-    <button class="btn" onclick="window.print()">Print</button>
-    <button class="btn" onclick="clearForm()">Clear</button>
-    <button class="btn btn--primary" onclick="saveForm()">Save</button>
-  </div>
+  <div class="mdk-wash"></div>
 
-  <h1>Record 3a — Incoming Goods</h1>
+  <main class="mdk-wrap">
+    <!-- Toolbar -->
+    <nav class="mdk-toolbar">
+      <a class="mdk-btn mdk-btn--light" href="kitchen.html">← Back</a>
+      <button class="mdk-btn mdk-btn--light" onclick="window.print()">🖨 Print</button>
+      <button class="mdk-btn mdk-btn--light" onclick="clearForm()">✖ Clear</button>
+      <button class="mdk-btn mdk-btn--primary" onclick="saveForm()">💾 Save</button>
+    </nav>
 
-  <table id="tbl">
-    <colgroup>
-      <col style="width:14%"><col style="width:18%"><col style="width:18%"><col style="width:10%">
-      <col style="width:10%"><col style="width:10%"><col style="width:10%"><col style="width:10%">
-    </colgroup>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Supplier</th>
-        <th>Item</th>
-        <th>Temp (°C)</th>
-        <th>OK?</th>
-        <th>Use/Best-before</th>
-        <th>Packaging/Label/Pests</th>
-        <th>Initials</th>
-      </tr>
-    </thead>
-    <tbody id="rows"></tbody>
-  </table>
+    <h1>Record 3a — Incoming Goods</h1>
 
-  <div class="guidance">
-    <b>Temperature information</b><br>
-    Cold foods ≤ 5 °C &nbsp;•&nbsp; Frozen foods hard-frozen (not partially thawed) &nbsp;•&nbsp; Hot foods ≥ 60 °C
-    <br><br><b>Designated storage areas</b> — put away promptly to refrigerators/freezers, dry storage, or hot holding as relevant.
-    <br><br><b>Visual checks</b> — Use by / Best before; packaging sound and appropriate; correct labelling; no pest evidence.
-  </div>
+    <!-- Meta -->
+    <div class="mdk-meta">
+      <label>Date: <input type="date" id="date"></label>
+      <label>Supplier: <input type="text" id="supplier" placeholder="Company name"></label>
+      <label>Receiver (Initials): <input type="text" id="receiver" maxlength="3" placeholder=""></label>
+    </div>
 
-  <div class="note"><b>Corrective actions:</b> If out of spec, record action (e.g., reject, chill rapidly, repackage, notify supplier/supervisor).</div>
-</div>
+    <!-- Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Batch / Lot</th>
+          <th>Temp (°C)</th>
+          <th>Accept / Reject</th>
+          <th>Initials</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody id="rows">
+        <!-- rows injected -->
+      </tbody>
+    </table>
 
-<script>
-  const KEY='mdk_rec3a_v1';
-  function pad(n){return String(n).padStart(2,'0')}
-  function fmt(){const d=new Date();return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+    <!-- Guidance text (as in Food Safety Program) -->
+    <div class="note" style="text-align:left; margin-top:12px">
+      <b>Temperature information</b><br>
+      • Cold foods – at or below 5 °C &nbsp;&nbsp; • Frozen foods – frozen hard (not partially thawed) &nbsp;&nbsp; • Hot foods – at or above 60 °C
+      <br><br>
+      <b>Designated storage areas</b><br>
+      Store incoming goods promptly in: Refrigerators/Freezers, Dry storage, or Hot holding equipment (as appropriate).
+      <br><br>
+      <b>Visual check</b><br>
+      • Use by / Best before date &nbsp;&nbsp; • Packaging (not damaged/deteriorated/perished; appropriate material)<br>
+      • Labelling (name of food, supplier name & address, lot identification) &nbsp;&nbsp; • Pest contamination &nbsp;&nbsp; • Foreign objects
+    </div>
+  </main>
 
-  function row(){
-    const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td><input class="center dt" placeholder="dd/mm/yyyy"></td>
-      <td><input placeholder="Supplier"></td>
-      <td><input placeholder="Product / batch"></td>
-      <td><input class="center" placeholder="°C"></td>
-      <td><input class="center" placeholder="Yes/No"></td>
-      <td><input class="center" placeholder="dd/mm/yyyy"></td>
-      <td><input placeholder="Pack/label/pests check"></td>
-      <td><input class="center" maxlength="3" placeholder=""></td>
-    `;
-    return tr;
-  }
+  <script>
+    // ---- Build 10 blank rows
+    const LINES = 10;
+    const tbody = document.getElementById('rows');
 
-  function build(){
-    const tb=document.getElementById('rows');
-    for(let i=0;i<10;i++) tb.appendChild(row());
-    document.querySelectorAll('.dt').forEach(el=>el.addEventListener('focus',()=>{if(!el.value) el.value=fmt()}));
-  }
+    function addRow(){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input data-k="item" placeholder="Description of goods"></td>
+        <td><input data-k="lot" placeholder="Batch / Lot"></td>
+        <td><input type="number" step="0.1" data-k="temp" placeholder="°C"></td>
+        <td>
+          <select data-k="accept">
+            <option value=""></option>
+            <option>Accept</option>
+            <option>Reject</option>
+          </select>
+        </td>
+        <td><input data-k="init" maxlength="3" placeholder=""></td>
+        <td><input data-k="note" placeholder="Notes / corrective action"></td>
+      `;
+      return tr;
+    }
 
-  function saveForm(){
-    const vals=[...document.querySelectorAll('#tbl input')].map(i=>i.value);
-    localStorage.setItem(KEY, JSON.stringify(vals));
-    alert('Saved locally.');
-  }
-  function loadForm(){
-    const raw=localStorage.getItem(KEY); if(!raw) return;
-    const vals=JSON.parse(raw)||[];
-    [...document.querySelectorAll('#tbl input')].forEach((el,i)=>{ if(vals[i]) el.value=vals[i]; });
-  }
-  function clearForm(){
-    document.querySelectorAll('#tbl input,textarea').forEach(el=>el.value='');
-    localStorage.removeItem(KEY);
-  }
-  build(); loadForm();
-</script>
+    for (let i=0; i<LINES; i++) tbody.appendChild(addRow());
+
+    // ---- Simple Save / Load (sessionStorage for now)
+    const dateEl = document.getElementById('date');
+    const supplierEl = document.getElementById('supplier');
+    const receiverEl = document.getElementById('receiver');
+    const CACHE_KEY = 'mdk_record3a_cache';
+
+    function serialize(){
+      const rows = [...tbody.querySelectorAll('tr')].map(tr=>{
+        const get = k => tr.querySelector(`[data-k="${k}"]`)?.value || '';
+        return {
+          item: get('item'),
+          lot: get('lot'),
+          temp: get('temp'),
+          accept: get('accept'),
+          init: get('init'),
+          note: get('note')
+        };
+      });
+      return {
+        date: dateEl.value || '',
+        supplier: supplierEl.value || '',
+        receiver: receiverEl.value || '',
+        rows
+      };
+    }
+
+    function hydrate(data){
+      if(!data) return;
+      dateEl.value = data.date || '';
+      supplierEl.value = data.supplier || '';
+      receiverEl.value = data.receiver || '';
+      const trs = [...tbody.querySelectorAll('tr')];
+      (data.rows || []).forEach((r, i)=>{
+        const set = (k,v)=>{ const el = trs[i]?.querySelector(`[data-k="${k}"]`); if(el) el.value = v || ''; };
+        set('item', r.item);
+        set('lot', r.lot);
+        set('temp', r.temp);
+        set('accept', r.accept);
+        set('init', r.init);
+        set('note', r.note);
+      });
+    }
+
+    function saveForm(){
+      try{
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify(serialize()));
+        alert('Saved (temporary).');
+      }catch(e){ alert('Could not save'); }
+    }
+
+    function clearForm(){
+      document.querySelectorAll('input, select, textarea').forEach(el=>{
+        if(el.type==='checkbox' || el.type==='radio'){ el.checked = false; }
+        else { el.value = ''; }
+      });
+      try{ sessionStorage.removeItem(CACHE_KEY); }catch(e){}
+    }
+
+    (function init(){
+      try{
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if(raw) hydrate(JSON.parse(raw));
+      }catch(e){}
+    })();
+  </script>
 </body>
 </html>

@@ -9,18 +9,11 @@
   @page{ size:A4 landscape; margin:10mm }
   html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
   .wrap{max-width:1180px;margin:20px auto 24px;padding:0 14px}
-
-  /* Toolbar */
-  .toolbar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-  .btn{
-    border:0;border-radius:12px;padding:8px 14px;font-weight:700;
-    background:#eef2f7;color:#0f172a;cursor:pointer;
-    box-shadow:0 2px 6px rgba(2,6,23,.06);
-  }
-  .btn:hover{filter:brightness(.97)}
-  .btn--back{background:#ffc107;color:#1f2937}
+  .topbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:600}
+  .btn:hover{background:#f8fafc}
+  .btn--back{background:#ffc107;}
   .btn--primary{background:#0d6efd;color:#fff}
-
   h1{font-size:18px;margin:10px 0}
   .banner{border:1px dashed var(--grid);border-radius:10px;background:#fbfdff;padding:6px 8px;color:#334155;margin-bottom:8px;font-size:12px}
   table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -28,31 +21,32 @@
   th:last-child,td:last-child{border-right:0}
   tr:last-child td{border-bottom:0}
   thead th{background:var(--head);font-weight:700}
-  input,select,textarea{width:100%;height:28px;border:1px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;background:#fff;box-sizing:border-box}
+  input,select,textarea{width:100%;height:28px;border:1px solid var(--line);border-radius:6px;padding:4px 6px;font:inherit;background:#fff;box-sizing:border-box}
   input.center{text-align:center}
   .init{width:50px;text-transform:uppercase;text-align:center;margin:0 auto}
-  textarea{min-height:80px;border-radius:10px;width:100%}
-  .note{font-size:12px;color:var(--muted);margin-top:6px}
-  @media print{ .toolbar,.banner{display:none!important} input::placeholder,textarea::placeholder{color:transparent} th,td{padding:3px} }
+  textarea{min-height:80px;border-radius:8px;width:100%}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+  @media print{ .topbar,.banner{display:none!important} input::placeholder,textarea::placeholder{color:transparent} th,td{padding:3px} }
 </style>
 </head>
 <body>
 <div class="wrap">
-  
-  <!-- Toolbar -->
-  <div class="toolbar">
+
+  <!-- Navigation bar -->
+  <div class="topbar">
     <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
     <button class="btn" onclick="window.print()">Print</button>
     <button class="btn" onclick="clearForm()">Clear</button>
-    <button class="btn btn--primary" onclick="saveForm()">Save</button>
+    <button class="btn btn--primary" onclick="saveForm(true)">Save</button>
   </div>
 
   <h1>Record No. 5a – Temperature Control Log: Cook / Cool / Reheat & Serve</h1>
-  <div class="banner"><b>Process targets:</b> Cook ≥ 75&nbsp;°C · Reheat ≥ 60&nbsp;°C · Cool 60→21&nbsp;°C within 2 hrs, 21→5&nbsp;°C within 4 hrs · Serve promptly. Take corrective action if outside limits.</div>
+  <div class="banner"><b>Process targets:</b> Cook ≥ 75 °C · Reheat ≥ 60 °C · Cool 60→21 °C within 2 hrs, 21→5 °C within 4 hrs · Serve promptly. Take corrective action if outside limits.</div>
 
   <table>
     <colgroup>
-      <col style="width:9%"><col style="width:14%"><col style="width:12%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:10%"><col style="width:8%">
+      <col style="width:9%"><col style="width:14%"><col style="width:12%"><col style="width:9%"><col style="width:9%">
+      <col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:10%"><col style="width:8%">
     </colgroup>
     <thead>
       <tr>
@@ -61,9 +55,9 @@
         <th>Process</th>
         <th>Start Time</th>
         <th>Finish Time</th>
-        <th>Temp / Time 1<br>(60&nbsp;°C)</th>
-        <th>Temp / Time 2<br>(21&nbsp;°C)</th>
-        <th>Temp / Time 3<br>(5&nbsp;°C)</th>
+        <th>Temp / Time 1<br>(60 °C)</th>
+        <th>Temp / Time 2<br>(21 °C)</th>
+        <th>Temp / Time 3<br>(5 °C)</th>
         <th>Final Temp</th>
         <th>Initial</th>
       </tr>
@@ -71,17 +65,17 @@
     <tbody id="rows"></tbody>
   </table>
 
-  <div class="note"><b>Notes / Corrective actions:</b> Record any deviations (e.g., extended cooling, reheat, discard) and supervisor notified.</div>
-  <textarea placeholder="Describe action(s), who notified, and outcome."></textarea>
+  <div class="note"><b>Notes / Corrective actions:</b> Record any deviations (extended cooling, reheat, discard) and supervisor notified.</div>
+  <textarea id="notes" placeholder="Describe action(s), who notified, and outcome."></textarea>
 </div>
 
 <script>
-  // ---------- helpers for dates/times ----------
+  // Helpers
   function pad(n){return String(n).padStart(2,'0')}
   function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
   function fmtTime(d=new Date()){return pad(d.getHours())+':'+pad(d.getMinutes())}
 
-  // ---------- build table (unchanged) ----------
+  // Build table
   function addRow(){
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -104,3 +98,51 @@
       <td><input class="center" placeholder="°C"></td>
       <td><input class="init center" maxlength="3" placeholder=""></td>
     `;
+    return tr;
+  }
+  function build(){
+    const tbody=document.getElementById('rows');
+    for(let i=0;i<8;i++){ tbody.appendChild(addRow()); }
+    document.querySelectorAll('[data-autodate]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
+    });
+    document.querySelectorAll('[data-autotime]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtTime(); });
+    });
+  }
+
+  // Autosave
+  const KEY='mdk_record5a_v1';
+  function serialize(){
+    const fields=document.querySelectorAll('table input, table select, #notes');
+    return Array.from(fields).map(el=>el.value);
+  }
+  function deserialize(values){
+    if(!Array.isArray(values))return;
+    const fields=document.querySelectorAll('table input, table select, #notes');
+    fields.forEach((el,i)=>{if(values[i]!==undefined)el.value=values[i];});
+  }
+  function saveForm(showAlert=false){
+    localStorage.setItem(KEY, JSON.stringify(serialize()));
+    if(showAlert) alert('Saved locally.');
+  }
+  function loadForm(){
+    const raw=localStorage.getItem(KEY); if(!raw)return;
+    try{deserialize(JSON.parse(raw));}catch(e){}
+  }
+  function clearForm(){
+    document.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(el.tagName==='SELECT'){el.selectedIndex=0}else{el.value=''}
+    });
+    localStorage.removeItem(KEY);
+  }
+  function debounce(fn,ms=300){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms);}}
+  const autoSave=debounce(()=>saveForm(false),300);
+
+  // Init
+  build();
+  loadForm();
+  document.addEventListener('input', autoSave);
+</script>
+</body>
+</html>

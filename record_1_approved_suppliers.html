@@ -1,88 +1,116 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Record No. 1 – Approved Suppliers List</title>
-<style>
-  /* Toolbar */
-  .mdk-toolbar{max-width:900px;margin:10px auto 16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .mdk-btn{border:0;padding:9px 14px;border-radius:12px;font-weight:700;cursor:pointer;background:#eef2f7;color:#0f172a;display:flex;align-items:center;gap:8px;box-shadow:0 2px 6px rgba(2,6,23,.06)}
-  .mdk-btn:hover{filter:brightness(.97)} .mdk-btn--back{background:#ffc107;color:#1f2937} .mdk-btn--primary{background:#0d6efd;color:#fff}
-  @media print{.mdk-toolbar{display:none}}
-  /* Page */
-  :root{--ink:#0f172a;--muted:#6b7280;--line:#cfd6dd;--grid:#e5eaf0;--head:#f6f8fb;--fs:13px}
-  @page{size:A4 landscape;margin:10mm}
-  html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Arial}
-  .wrap{max-width:1180px;margin:0 auto 24px;padding:0 14px}
-  h1{font-size:20px;margin:6px 0 10px}
-  .banner{border:1px dashed var(--grid);border-radius:12px;background:#fbfdff;padding:8px 10px;color:#334155;margin-bottom:8px;font-size:12px}
-  table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:5px 6px;vertical-align:middle;background:#fff}
-  th:last-child,td:last-child{border-right:0} tr:last-child td{border-bottom:0} thead th{background:var(--head);text-align:center;font-weight:700}
-  input,textarea{width:100%;height:32px;border:1px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:#fff;box-sizing:border-box}
-  input.center{text-align:center}.init{width:60px;max-width:70px;text-transform:uppercase;text-align:center;margin:0 auto}
-  .note{font-size:12px;color:var(--muted);margin-top:8px}
-  .footer{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px;align-items:end}
-  .sig{display:flex;gap:10px;align-items:end}.line{border-bottom:1px solid #94a3b8;min-width:240px;height:1.2em}.label{font-size:12px;color:#334155}
-</style>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Record No. 1 – Approved Suppliers List</title>
+  <link rel="stylesheet" href="shared/styles.css">
 </head>
 <body>
-<nav class="mdk-toolbar" data-back="kitchen.html">
-  <button class="mdk-btn mdk-btn--back" onclick="mdkBack(this)">← Back</button>
-  <button class="mdk-btn" onclick="window.print()">🖨️ Print</button>
-  <button class="mdk-btn" onclick="clearForm()">✖️ Clear</button>
-  <button class="mdk-btn mdk-btn--primary" onclick="saveForm()">💾 Save</button>
-</nav>
-<div class="wrap">
-  <h1>Record No. 1 – Approved Suppliers List</h1>
-  <div class="banner"><b>Guidance:</b> Maintain a current list of approved suppliers. Review at least annually or when suppliers change.</div>
-  <table>
-    <colgroup><col style="width:12%"><col style="width:22%"><col style="width:24%"><col style="width:12%"><col style="width:12%"><col style="width:18%"></colgroup>
-    <thead><tr>
-      <th>Date Added</th><th>Supplier Name</th>
-      <th>Contact Details<br><span style="font-weight:600;color:#64748b">Phone / Email / Address</span></th>
-      <th>Approved By<br><span style="font-weight:600;color:#64748b">(Initials)</span></th>
-      <th>Review Date</th><th>Notes / Corrective Actions</th>
-    </tr></thead>
-    <tbody id="rows"></tbody>
-  </table>
-  <div class="note"><b>Notes:</b> Record reasons for approval (e.g., compliance evidence) and any corrective actions taken if supplier performance issues occur.</div>
-  <div class="footer">
-    <div class="sig"><div class="line"></div><div class="label">Supervisor signature</div></div>
-    <div class="sig"><div class="line"></div><div class="label">Date</div></div>
-  </div>
-</div>
-<script>
-  const KEY='rec1_suppliers_v1';
-  function pad(n){return String(n).padStart(2,'0')}
-  function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
-  function addRow(d={}){const tr=document.createElement('tr');tr.innerHTML=`
-    <td><input class="center" data-k="d" placeholder="dd/mm/yyyy" value="${d.d||''}"></td>
-    <td><input data-k="n" placeholder="Supplier / Company name" value="${d.n||''}"></td>
-    <td><input data-k="c" placeholder="Phone, email, street address" value="${d.c||''}"></td>
-    <td><input class="init center" maxlength="3" data-k="i" value="${d.i||''}"></td>
-    <td><input class="center" data-k="r" placeholder="dd/mm/yyyy" value="${d.r||''}"></td>
-    <td><input data-k="x" placeholder="Notes / actions" value="${d.x||''}"></td>`;return tr;}
-  function build(){
-    const tbody=document.getElementById('rows');
-    const saved=JSON.parse(localStorage.getItem(KEY)||'[]');
-    const rows=saved.length?saved:new Array(12).fill(null);
-    rows.forEach(row=>tbody.appendChild(addRow(row||{})));
-    document.querySelectorAll('input[placeholder="dd/mm/yyyy"]').forEach(el=>{
-      el.addEventListener('focus',()=>{if(!el.value)el.value=fmtDate()})
-    });
-  }
-  function clearForm(){document.querySelectorAll('input,textarea').forEach(el=>el.value=''); saveForm();}
-  function saveForm(){
-    const data=[...document.querySelectorAll('#rows tr')].map(tr=>{
-      const get=k=>tr.querySelector(`[data-k="${k}"]`)?.value||'';
-      return {d:get('d'),n:get('n'),c:get('c'),i:get('i'),r:get('r'),x:get('x')};
-    });
-    localStorage.setItem(KEY,JSON.stringify(data));
-    alert('Saved.');
-  }
-  function mdkBack(btn){location.href=btn.closest('nav')?.dataset?.back||'index.html'}
-  build();
-</script>
+  <div class="mdk-wash"></div>
+  <main class="mdk-wrap">
+
+    <!-- Toolbar -->
+    <nav class="mdk-toolbar">
+      <a class="mdk-btn mdk-btn--light" href="kitchen.html">← Back</a>
+      <button class="mdk-btn mdk-btn--light" onclick="window.print()">🖨 Print</button>
+      <button class="mdk-btn mdk-btn--light" onclick="clearForm()">✖ Clear</button>
+      <button class="mdk-btn mdk-btn--primary" onclick="saveForm()">💾 Save</button>
+    </nav>
+
+    <h1>Record No. 1 – Approved Suppliers List</h1>
+
+    <div class="banner"><b>Guidance:</b> Maintain a current list of approved suppliers. Review annually or when suppliers change.</div>
+
+    <table>
+      <colgroup>
+        <col style="width:12%"><col style="width:22%"><col style="width:24%">
+        <col style="width:12%"><col style="width:12%"><col style="width:18%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Date Added</th>
+          <th>Supplier Name</th>
+          <th>Contact Details<br><span style="font-weight:600;color:#64748b">Phone / Email / Address</span></th>
+          <th>Approved By<br><span style="font-weight:600;color:#64748b">(Initials)</span></th>
+          <th>Review Date</th>
+          <th>Notes / Corrective Actions</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+
+    <div class="note">
+      <b>Notes:</b> Record reasons for approval (e.g., compliance evidence) and any corrective actions if supplier performance issues occur.
+    </div>
+
+    <div class="footer">
+      <div class="sig">
+        <div class="line"></div>
+        <div class="label">Supervisor signature</div>
+      </div>
+      <div class="sig">
+        <div class="line"></div>
+        <div class="label">Date</div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const pad=n=>String(n).padStart(2,'0');
+    const fmtDate=(d=new Date())=>`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+
+    function addRow(){
+      const tr=document.createElement('tr');
+      tr.innerHTML=`
+        <td><input class="center" data-autodate placeholder="dd/mm/yyyy"></td>
+        <td><input placeholder="Supplier / Company"></td>
+        <td><input placeholder="Phone, Email, Address"></td>
+        <td><input class="init center" maxlength="3" placeholder=""></td>
+        <td><input class="center" data-autodate placeholder="dd/mm/yyyy"></td>
+        <td><input placeholder="Notes / actions"></td>
+      `;
+      return tr;
+    }
+
+    function build(){
+      const tbody=document.getElementById('rows');
+      for(let i=0;i<12;i++) tbody.appendChild(addRow());
+      document.querySelectorAll('[data-autodate]').forEach(el=>{
+        el.addEventListener('focus',()=>{ if(!el.value) el.value=fmtDate(); });
+      });
+    }
+
+    function clearForm(){
+      document.querySelectorAll('input,textarea').forEach(el=>{
+        if(el.type==='checkbox'||el.type==='radio'){ el.checked=false; } else { el.value=''; }
+      });
+      try{ sessionStorage.removeItem('mdk_record1_cache'); }catch(e){}
+    }
+
+    function saveForm(){
+      const rows=[...document.querySelectorAll('#rows tr')].map(tr=>{
+        return [...tr.querySelectorAll('input')].map(i=>i.value);
+      });
+      sessionStorage.setItem('mdk_record1_cache', JSON.stringify(rows));
+      alert('Saved (temporary).');
+    }
+
+    function loadForm(){
+      try{
+        const raw=sessionStorage.getItem('mdk_record1_cache');
+        if(!raw) return;
+        const rows=JSON.parse(raw);
+        const trs=document.querySelectorAll('#rows tr');
+        rows.forEach((vals,rowIdx)=>{
+          const inputs=trs[rowIdx]?.querySelectorAll('input');
+          vals?.forEach((v,i)=>{ if(inputs?.[i]) inputs[i].value=v; });
+        });
+      }catch(e){}
+    }
+
+    build();
+    loadForm();
+  </script>
 </body>
 </html>

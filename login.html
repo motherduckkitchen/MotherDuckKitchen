@@ -1,56 +1,3 @@
-<!-- 🔒 Mother Duck Kitchen — auth guard + inactivity logout -->
-<!-- Keep this at the very top of <head> -->
-<style id="mdk-hide">html{visibility:hidden}</style>
-
-<!-- Firebase (CDN compat) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script>
-(function(){
-  // 🔑 your Firebase config (same as login.html)
-  const cfg = {
-    apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
-    authDomain: "mother-duck-kitchen.firebaseapp.com",
-    projectId: "mother-duck-kitchen",
-    storageBucket: "mother-duck-kitchen.appspot.com",
-    messagingSenderId: "925762762893",
-    appId: "1:925762762893:web:715285c11b9b30c9bccac4",
-    measurementId: "G-1EGZ0PWQYE"
-  };
-
-  // init (safe if already initialized on other pages)
-  if (!firebase.apps.length) firebase.initializeApp(cfg);
-  const auth = firebase.auth();
-
-  // ⏲️ 30-minute inactivity auto-logout
-  const TIMEOUT = 30 * 60 * 1000; // 30 min
-  let timer;
-  function resetTimer(){
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      auth.signOut().then(() => location.href = "login.html?msg=expired");
-    }, TIMEOUT);
-  }
-  // user interactions that count as activity
-  ["click","keydown","mousemove","touchstart","scroll","focus"].forEach(ev=>{
-    window.addEventListener(ev, resetTimer, {passive:true});
-  });
-
-  // 🚦 gate: require login, otherwise bounce to login.html
-  auth.onAuthStateChanged(user=>{
-    if(!user){
-      location.href = "login.html";
-    }else{
-      // show page and start inactivity timer
-      document.getElementById("mdk-hide")?.remove();
-      resetTimer();
-      // expose a global logout helper for your buttons
-      window.mdkLogout = () => auth.signOut().then(()=> location.href="login.html");
-    }
-  });
-})();
-</script>
-<!-- 🔒 end auth guard -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,35 +8,26 @@
     :root{--line:#cfd6dd}
     html,body{height:100%}
     body{
-      margin:0; 
-      background:#f1f5f9 url("kitchen.jpg") center/cover no-repeat fixed;
-      font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      display:flex; align-items:center; justify-content:center;
-      position:relative;
+      margin:0; font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:url("kitchen.jpg") center/cover fixed no-repeat;
+      display:flex; align-items:center; justify-content:center; position:relative;
     }
-    /* Blue wash overlay */
-    body::before{
-      content:""; 
-      position:absolute; inset:0; 
-      background:rgba(173, 216, 230, 0.55); /* very light blue */
-      backdrop-filter: blur(2px);
-    }
+    /* very light blue wash */
+    body::before{content:""; position:absolute; inset:0;
+      background:rgba(173,216,230,.55); backdrop-filter:blur(2px);}
     .card{
-      position:relative; z-index:1;
+      position:relative; z-index:1; width:100%; max-width:380px; text-align:center;
       background:#fff; border:1px solid var(--line); border-radius:16px;
       box-shadow:0 8px 28px rgba(0,0,0,.15); padding:26px;
-      width:100%; max-width:380px; text-align:center;
     }
-    .logo{
-      max-width:120px; margin:0 auto 14px; display:block;
-    }
+    .logo{max-width:120px; display:block; margin:0 auto 14px}
     h1{margin:0 0 16px; font-size:20px}
     input{width:100%; padding:10px; margin:8px 0; border:1px solid #cfd6dd; border-radius:10px}
     button{width:100%; padding:10px; margin-top:8px; border:0; border-radius:10px; font-weight:700; cursor:pointer}
     .login{background:#0d6efd; color:#fff}
     .create{background:#64748b; color:#fff}
-    .error{color:#e11d48; text-align:center; min-height:1.2em; margin-top:8px}
-    .msg{color:#0f766e; text-align:center; margin-bottom:6px}
+    .error{color:#e11d48; min-height:1.2em; margin-top:8px}
+    .msg{color:#0f766e; margin-bottom:6px}
   </style>
 </head>
 <body>
@@ -97,8 +35,8 @@
     <img src="logo.png" alt="Mother Duck Kitchen" class="logo"/>
     <h1>Sign in</h1>
     <div id="msg" class="msg"></div>
-    <input type="email" id="email" placeholder="Email" autocomplete="username" />
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    <input type="email" id="email" placeholder="Email" autocomplete="username"/>
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
     <button class="login"  onclick="login()">Log in</button>
     <button class="create" onclick="signup()">Create account</button>
     <div id="error" class="error"></div>
@@ -107,10 +45,10 @@
   <!-- Firebase CDN (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
   <script>
+    // 🔑 paste your exact console config here (these values match what you shared)
     const firebaseConfig = {
-      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
+      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
       projectId: "mother-duck-kitchen",
       storageBucket: "mother-duck-kitchen.appspot.com",
@@ -121,33 +59,27 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
+    // message from timeout
     const p = new URLSearchParams(location.search);
     if (p.get('msg') === 'expired') {
       document.getElementById('msg').textContent =
         'Session ended after 30 minutes of inactivity. Please sign in again.';
     }
 
+    // already signed in? go to dashboard
     auth.onAuthStateChanged(u => { if (u) location.href = "index.html"; });
 
     async function login(){
-      const email = document.getElementById('email').value.trim();
-      const pass  = document.getElementById('password').value;
-      try {
-        await auth.signInWithEmailAndPassword(email, pass);
+      try{
+        await auth.signInWithEmailAndPassword(email.value.trim(), password.value);
         location.href = "index.html";
-      } catch (e) {
-        document.getElementById('error').textContent = e.message;
-      }
+      }catch(e){ error.textContent = e.message; }
     }
     async function signup(){
-      const email = document.getElementById('email').value.trim();
-      const pass  = document.getElementById('password').value;
-      try {
-        await auth.createUserWithEmailAndPassword(email, pass);
+      try{
+        await auth.createUserWithEmailAndPassword(email.value.trim(), password.value);
         location.href = "index.html";
-      } catch (e) {
-        document.getElementById('error').textContent = e.message;
-      }
+      }catch(e){ error.textContent = e.message; }
     }
   </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Mother Duck Kitchen – Sign in</title>
+  <title>Mother Duck Kitchen — Sign in</title>
   <style>
     :root{--line:#cfd6dd}
     html,body{height:100%}
@@ -12,19 +12,14 @@
       background:url("kitchen.jpg") center/cover fixed no-repeat;
       display:flex; align-items:center; justify-content:center; position:relative;
     }
-    body::before{content:""; position:absolute; inset:0;
-      background:rgba(173,216,230,.55); backdrop-filter:blur(2px);}
-    .card{
-      position:relative; z-index:1; width:100%; max-width:380px; text-align:center;
-      background:#fff; border:1px solid var(--line); border-radius:16px;
-      box-shadow:0 8px 28px rgba(0,0,0,.15); padding:26px;
-    }
+    body::before{content:""; position:absolute; inset:0; background:rgba(173,216,230,.55); backdrop-filter:blur(2px);}
+    .card{position:relative; z-index:1; width:100%; max-width:380px; text-align:center; background:#fff;
+      border:1px solid var(--line); border-radius:16px; box-shadow:0 8px 28px rgba(0,0,0,.15); padding:26px;}
     .logo{max-width:120px; display:block; margin:0 auto 14px}
     h1{margin:0 0 16px; font-size:20px}
     input{width:100%; padding:10px; margin:8px 0; border:1px solid #cfd6dd; border-radius:10px}
     button{width:100%; padding:10px; margin-top:8px; border:0; border-radius:10px; font-weight:700; cursor:pointer}
     .login{background:#0d6efd; color:#fff}
-    .create{background:#64748b; color:#fff}
     .error{color:#e11d48; min-height:1.2em; margin-top:8px}
     .msg{color:#0f766e; margin-bottom:6px}
   </style>
@@ -36,18 +31,14 @@
     <div id="msg" class="msg"></div>
     <input type="email" id="email" placeholder="Email" autocomplete="username"/>
     <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
-    <button class="login"  onclick="login()">Log in</button>
-    <button class="create" onclick="signup()">Create account</button>
+    <button class="login" onclick="login()">Log in</button>
     <div id="error" class="error"></div>
   </div>
 
-  <!-- Firebase Modular SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } 
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-    // 🔑 Your config (from Firebase console)
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
@@ -57,39 +48,36 @@
       appId: "1:925762762893:web:715285c11b9b30c9bccac4",
       measurementId: "G-1EGZ0PWQYE"
     };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    // Init
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    // show message if you were auto-logged-out for inactivity
+    const p = new URLSearchParams(location.search);
+    if (p.get('msg') === 'expired') {
+      msg.textContent = 'Session ended after 30 minutes of inactivity. Please sign in again.';
+    }
 
-    // auto-redirect if logged in
-    onAuthStateChanged(auth, (user) => {
-      if (user) location.href = "index.html";
+    // already signed in? if verified, go inside; if not, tell them to verify
+    auth.onAuthStateChanged(u => {
+      if (!u) return;
+      if (u.emailVerified) location.href = "index.html";
+      else msg.textContent = 'Check your email and verify your address, then sign in.';
     });
 
-    // login
-    async function login() {
+    async function login(){
+      error.textContent = '';
       try {
-        await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
+        const { user } = await auth.signInWithEmailAndPassword(email.value.trim(), password.value);
+        await user.reload();
+        if (!user.emailVerified) {
+          error.textContent = "Email not verified. Please verify first.";
+          return;
+        }
         location.href = "index.html";
       } catch (e) {
         error.textContent = e.message;
       }
     }
-
-    // signup
-    async function signup() {
-      try {
-        await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
-        location.href = "index.html";
-      } catch (e) {
-        error.textContent = e.message;
-      }
-    }
-
-    // make functions visible globally
-    window.login = login;
-    window.signup = signup;
   </script>
 </body>
 </html>

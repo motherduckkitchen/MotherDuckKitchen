@@ -37,16 +37,16 @@
     <div id="msg" class="msg"></div>
     <input type="email" id="email" placeholder="Email" autocomplete="username"/>
     <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
-    <button class="login"  onclick="login()">Log in</button>
+    <button class="login" onclick="login()">Log in</button>
     <button class="create" onclick="signup()">Create account</button>
     <div id="error" class="error"></div>
   </div>
 
-  <!-- Firebase CDN (compat) -->
+  <!-- ✅ Firebase compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script>
-    // 🔑 paste your exact console config here (these values match what you shared)
+    // ✅ Your Firebase config (straight from console → Project settings → SDK setup → CDN)
     const firebaseConfig = {
       apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
@@ -56,30 +56,34 @@
       appId: "1:925762762893:web:715285c11b9b30c9bccac4",
       measurementId: "G-1EGZ0PWQYE"
     };
+
+    // ✅ Initialize Firebase
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // message from timeout
-    const p = new URLSearchParams(location.search);
-    if (p.get('msg') === 'expired') {
-      document.getElementById('msg').textContent =
-        'Session ended after 30 minutes of inactivity. Please sign in again.';
-    }
-
-    // already signed in? go to dashboard
-    auth.onAuthStateChanged(u => { if (u) location.href = "index.html"; });
+    // ✅ Auto-redirect if logged in
+    auth.onAuthStateChanged(user => { if (user) location.href = "index.html"; });
 
     async function login(){
-      try{
-        await auth.signInWithEmailAndPassword(email.value.trim(), password.value);
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
         location.href = "index.html";
-      }catch(e){ error.textContent = e.message; }
+      } catch (e) {
+        document.getElementById("error").textContent = e.message;
+      }
     }
+
     async function signup(){
-      try{
-        await auth.createUserWithEmailAndPassword(email.value.trim(), password.value);
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      try {
+        await auth.createUserWithEmailAndPassword(email, password);
         location.href = "index.html";
-      }catch(e){ error.textContent = e.message; }
+      } catch (e) {
+        document.getElementById("error").textContent = e.message;
+      }
     }
   </script>
 </body>

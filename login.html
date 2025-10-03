@@ -1,3 +1,56 @@
+<!-- 🔒 Mother Duck Kitchen — auth guard + inactivity logout -->
+<!-- Keep this at the very top of <head> -->
+<style id="mdk-hide">html{visibility:hidden}</style>
+
+<!-- Firebase (CDN compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+(function(){
+  // 🔑 your Firebase config (same as login.html)
+  const cfg = {
+    apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
+    authDomain: "mother-duck-kitchen.firebaseapp.com",
+    projectId: "mother-duck-kitchen",
+    storageBucket: "mother-duck-kitchen.appspot.com",
+    messagingSenderId: "925762762893",
+    appId: "1:925762762893:web:715285c11b9b30c9bccac4",
+    measurementId: "G-1EGZ0PWQYE"
+  };
+
+  // init (safe if already initialized on other pages)
+  if (!firebase.apps.length) firebase.initializeApp(cfg);
+  const auth = firebase.auth();
+
+  // ⏲️ 30-minute inactivity auto-logout
+  const TIMEOUT = 30 * 60 * 1000; // 30 min
+  let timer;
+  function resetTimer(){
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      auth.signOut().then(() => location.href = "login.html?msg=expired");
+    }, TIMEOUT);
+  }
+  // user interactions that count as activity
+  ["click","keydown","mousemove","touchstart","scroll","focus"].forEach(ev=>{
+    window.addEventListener(ev, resetTimer, {passive:true});
+  });
+
+  // 🚦 gate: require login, otherwise bounce to login.html
+  auth.onAuthStateChanged(user=>{
+    if(!user){
+      location.href = "login.html";
+    }else{
+      // show page and start inactivity timer
+      document.getElementById("mdk-hide")?.remove();
+      resetTimer();
+      // expose a global logout helper for your buttons
+      window.mdkLogout = () => auth.signOut().then(()=> location.href="login.html");
+    }
+  });
+})();
+</script>
+<!-- 🔒 end auth guard -->
 <!doctype html>
 <html lang="en">
 <head>

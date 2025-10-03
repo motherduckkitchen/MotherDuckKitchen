@@ -1,23 +1,78 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Mother Duck Kitchen – Sign in</title>
+  <style>
+    :root{--line:#cfd6dd}
+    html,body{height:100%}
+    body{margin:0;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      display:flex;align-items:center;justify-content:center;background:#f1f5f9}
+    .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08);
+      padding:22px;max-width:360px;width:100%}
+    h1{margin:0 0 16px;font-size:20px;text-align:center}
+    input{width:100%;padding:10px;margin:8px 0;border:1px solid var(--line);border-radius:10px}
+    button{width:100%;padding:10px;margin-top:8px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
+    .login{background:#0d6efd;color:#fff}
+    .create{background:#64748b;color:#fff}
+    .error{color:#e11d48;text-align:center;min-height:1.2em;margin-top:8px}
+    .msg{color:#0f766e;text-align:center;margin-bottom:6px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Sign in</h1>
+    <div id="msg" class="msg"></div>
+    <input type="email" id="email" placeholder="Email" autocomplete="username"/>
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
+    <button class="login" onclick="login()">Log in</button>
+    <button class="create" onclick="signup()">Create account</button>
+    <div id="error" class="error"></div>
+  </div>
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
-    authDomain: "mother-duck-kitchen.firebaseapp.com",
-    projectId: "mother-duck-kitchen",
-    storageBucket: "mother-duck-kitchen.firebasestorage.app",
-    messagingSenderId: "925762762893",
-    appId: "1:925762762893:web:715285c11b9b30c9bccac4",
-    measurementId: "G-1EGZ0PWQYE"
-  };
+  <!-- Firebase SDKs (script-tag compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script>
+    // 🔑 your Firebase config (from your console)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
+      authDomain: "mother-duck-kitchen.firebaseapp.com",
+      projectId: "mother-duck-kitchen",
+      storageBucket: "mother-duck-kitchen.appspot.com",
+      messagingSenderId: "925762762893",
+      appId: "1:925762762893:web:715285c11b9b30c9bccac4",
+      measurementId: "G-1EGZ0PWQYE"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+    // show message from ?msg=expired
+    const p = new URLSearchParams(location.search);
+    if (p.get('msg') === 'expired') {
+      document.getElementById('msg').textContent = 'Session ended after 30 minutes of inactivity. Please sign in again.';
+    }
+
+    // already signed in? go home
+    auth.onAuthStateChanged(u => { if (u) location.href = "index.html"; });
+
+    async function login(){
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('password').value;
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+        location.href = "index.html";
+      } catch (e) { document.getElementById('error').textContent = e.message; }
+    }
+    async function signup(){
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('password').value;
+      try {
+        await auth.createUserWithEmailAndPassword(email, pass);
+        location.href = "index.html";
+      } catch (e) { document.getElementById('error').textContent = e.message; }
+    }
+  </script>
+</body>
+</html>

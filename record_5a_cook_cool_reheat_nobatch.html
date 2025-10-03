@@ -4,272 +4,264 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Record 5a — Temperature Control Log — Cook/Cool/Reheat & Serve</title>
+
+<!-- A4-safe, same “card” look as your Heating Log -->
 <style>
   :root{
-    --ink:#0f172a; --muted:#64748b; --line:#cfd6dd; --grid:#e7edf3; --head:#f6f8fb;
-    --chip:#eef2f7; --brand:#0d6efd; --warn:#ffc107; --ok:#16a34a;
-    --fs:13px;
+    --ink:#0f172a; --muted:#6b7280; --line:#cfd6dd; --grid:#e7edf3; --head:#f6f8fb;
+    --chip:#eef2f7; --brand:#0d6efd; --warn:#ffc107; --danger:#e11d48;
   }
-  @page{ size:A4 portrait; margin:12mm }
-  html,body{margin:0;background:#e8f0f4;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  body{
-    background-image:url("kitchen.jpg");
-    background-size:cover;background-attachment:fixed;background-position:center;
-  }
+  @page { size: A4 portrait; margin: 10mm }
+  html,body{margin:0;background:#e8f0f4;color:var(--ink);font:13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  body{background:url("kitchen.jpg") center/cover fixed no-repeat}
   .wash{position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:-1}
-  .wrap{max-width:1000px;margin:22px auto;padding:0 14px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.10);padding:16px}
+  /* A4 content width = 190mm (10mm margins each side) */
+  .sheet{width:190mm; margin:14mm auto} /* small screen also looks centered */
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.10);padding:14px}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-  .btn{border:0;border-radius:12px;background:var(--chip);padding:9px 14px;font-weight:700;cursor:pointer;color:#0f172a;display:flex;align-items:center;gap:8px;box-shadow:0 2px 6px rgba(2,6,23,.06)}
+  .btn{border:0;border-radius:12px;background:var(--chip);padding:8px 12px;font-weight:700;cursor:pointer;color:#0f172a;display:flex;align-items:center;gap:8px;box-shadow:0 2px 6px rgba(2,6,23,.06)}
   .btn:hover{filter:brightness(.97)}
   .btn--back{background:var(--warn)}
   .btn--primary{background:var(--brand);color:#fff}
-  h1{margin:8px 0 12px;font-size:20px;text-align:center}
-  .meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;margin:8px 0 14px}
+  h1{margin:6px 0 10px;font-size:19px;text-align:center}
+  .meta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;margin:6px 0 10px}
   label{font-weight:700}
-  input, select, textarea{
-    border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff
-  }
-  input[type="date"], input[type="time"], input[type="month"] { min-width:150px }
-  .row{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}
-  .row + .row{margin-top:8px}
-  .full{grid-column:1/-1}
-  .note{font-size:12px;color:var(--muted);margin-top:10px}
+  input,select,textarea{border:1px solid var(--line);border-radius:10px;padding:7px 9px;background:#fff}
+  input[type="date"],input[type="time"],input[type="month"]{min-width:130px}
   .badge{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2f7;border:1px solid var(--line)}
-  .recTime{font-weight:700;color:var(--ok)}
-  .group{border:1px dashed var(--line);border-radius:12px;padding:12px;background:#fff}
-  .legend{font-weight:800;margin:0 0 8px}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
   table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:8px 10px;background:#fff;vertical-align:middle}
-  thead th{background:var(--head);text-align:left}
+  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 8px;background:#fff;vertical-align:middle}
+  thead th{background:var(--head);text-align:center;font-weight:700}
   tr:last-child td{border-bottom:0}
   th:last-child,td:last-child{border-right:0}
-  .sr-only{position:absolute;left:-9999px}
+  .small{font-size:12px;color:var(--muted)}
+  .row{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}
+  .full{grid-column:1 / -1}
+  .pill{display:inline-flex;align-items:center;gap:6px;margin:3px 10px 0 0}
+  .grid-proc{display:flex;gap:14px;flex-wrap:wrap}
+  textarea{resize:vertical}
   @media print{ .toolbar{display:none} body{background:#fff} .wash{display:none} }
 </style>
 </head>
 <body>
 <div class="wash"></div>
-<div class="wrap card">
+<div class="sheet">
+  <div class="card">
 
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <a href="kitchen.html" class="btn btn--back">← Back</a>
-    <button class="btn" onclick="window.print()">🖨️ Print</button>
-    <button class="btn" id="btnClear">✖️ Clear</button>
-    <button class="btn btn--primary" id="btnSave">💾 Save</button>
-    <span class="badge">Recorded at: <span id="recordedAt" class="recTime">—</span></span>
-    <div style="flex:1"></div>
-    <label class="badge" style="background:#fff;border:none">Month:&nbsp;<input type="month" id="archiveMonth"></label>
-    <button class="btn" id="btnLoadMonth">📂 Load Month</button>
-    <button class="btn" id="btnArchive">📦 Archive Month</button>
-  </div>
-
-  <h1>Record 5a — Temperature Control Log — Cook/Cool/Reheat &amp; Serve</h1>
-
-  <!-- Top meta row -->
-  <div class="meta">
-    <label>Date: <input type="date" id="date"></label>
-    <label>Item: <input type="text" id="item" placeholder="Menu Item / Food"></label>
-    <label>Produced/Batch No: <input type="text" id="batch"></label>
-  </div>
-
-  <!-- PROCESS per wording in Food Safety Program -->
-  <div class="group">
-    <p class="legend">Process (select all that apply — wording per program):</p>
-    <div class="row full">
-      <label><input type="checkbox" name="process" value="Cook 75°C"> Cook 75°C</label>
-      <label><input type="checkbox" name="process" value="Reheat 60°C"> Reheat 60°C</label>
-      <label><input type="checkbox" name="process" value="Cool 60-21°C in 2 hrs"> Cool 60-21°C in 2 hrs</label>
-      <label><input type="checkbox" name="process" value="21-5°C in 4 hrs"> 21-5°C in 4 hrs</label>
-      <label><input type="checkbox" name="process" value="Serve"> Serve</label>
+    <!-- Toolbar (matches your Heating Log layout) -->
+    <div class="toolbar">
+      <a href="kitchen.html" class="btn btn--back">← Back</a>
+      <button class="btn" onclick="window.print()">🖨️ Print</button>
+      <button class="btn" id="btnClear">✖️ Clear</button>
+      <button class="btn btn--primary" id="btnSave">💾 Save</button>
+      <span class="badge">Recorded at: <b id="recordedAt">—</b></span>
+      <span style="flex:1"></span>
+      <label class="badge" style="background:#fff;border:none">Month: <input type="month" id="archiveMonth"></label>
+      <button class="btn" id="btnLoadMonth">📂 Load Month</button>
+      <button class="btn" id="btnArchive">📦 Archive Month</button>
     </div>
-  </div>
 
-  <!-- Description + Ck/Cl/Rh -->
-  <div class="row" style="margin-top:10px">
-    <div class="full">
-      <label for="desc">Description</label>
-      <textarea id="desc" rows="2" placeholder="Description of item/process"></textarea>
+    <h1>Record 5a — Temperature Control Log — Cook/Cool/Reheat &amp; Serve</h1>
+
+    <!-- Meta row (same sizing rhythm as Heating Log) -->
+    <div class="meta">
+      <label>Date: <input type="date" id="date"></label>
+      <label>Item: <input type="text" id="item" placeholder="Menu Item / Food"></label>
+      <label>Produced/Batch No: <input type="text" id="batch"></label>
     </div>
-    <div class="full">
-      <span style="font-weight:800">Cook (Ck) Cool (Cl) Reheat (Rh):</span>
-      <label style="margin-left:12px"><input type="checkbox" name="ckclrh" value="Ck"> Ck</label>
-      <label style="margin-left:12px"><input type="checkbox" name="ckclrh" value="Cl"> Cl</label>
-      <label style="margin-left:12px"><input type="checkbox" name="ckclrh" value="Rh"> Rh</label>
+
+    <!-- Process (exact wording options, nicer look) -->
+    <div class="card" style="padding:10px;margin-bottom:10px">
+      <div class="small" style="font-weight:800;margin-bottom:6px">Process (select all that apply — per Food Safety Program):</div>
+      <div class="grid-proc">
+        <label class="pill"><input type="checkbox" name="process" value="Cook 75°C"> Cook 75°C</label>
+        <label class="pill"><input type="checkbox" name="process" value="Reheat 60°C"> Reheat 60°C</label>
+        <label class="pill"><input type="checkbox" name="process" value="Cool 60–21°C in 2 hrs"> Cool 60–21°C in 2 hrs</label>
+        <label class="pill"><input type="checkbox" name="process" value="21–5°C in 4 hrs"> 21–5°C in 4 hrs</label>
+        <label class="pill"><input type="checkbox" name="process" value="Serve"> Serve</label>
+      </div>
     </div>
-  </div>
 
-  <!-- Times & Temperatures table (verbatim headings) -->
-  <table style="margin-top:12px">
-    <thead>
-      <tr>
-        <th>Start Time</th>
-        <th>Finish Time</th>
-        <th>Temp °C</th>
-        <th>Time 1</th>
-        <th>Temp °C (60°)</th>
-        <th>Time 2</th>
-        <th>Temp °C (21°)</th>
-        <th>Time 3</th>
-        <th>Temp °C (5°)</th>
-        <th>Time</th>
-        <th>Temp °C</th>
-        <th>Initial</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="time" id="startTime"></td>
-        <td><input type="time" id="finishTime"></td>
-        <td><input type="number" id="tempFinal" step="0.1" placeholder="e.g. 75.0"></td>
-        <td><input type="time" id="time1"></td>
-        <td><input type="number" id="temp60" step="0.1" placeholder="60.0"></td>
-        <td><input type="time" id="time2"></td>
-        <td><input type="number" id="temp21" step="0.1" placeholder="21.0"></td>
-        <td><input type="time" id="time3"></td>
-        <td><input type="number" id="temp5" step="0.1" placeholder="5.0"></td>
-        <td><input type="time" id="serveTime"></td>
-        <td><input type="number" id="serveTemp" step="0.1"></td>
-        <td><input type="text" id="initials" placeholder="Staff Sign"></td>
-      </tr>
-    </tbody>
-  </table>
+    <!-- Description + Ck/Cl/Rh -->
+    <div class="row">
+      <div class="full">
+        <label>Description</label>
+        <textarea id="desc" rows="2" placeholder="Description of item/process"></textarea>
+      </div>
+      <div class="full small" style="font-weight:800;margin-top:4px">
+        Cook (Ck) Cool (Cl) Reheat (Rh):
+        <label class="pill"><input type="checkbox" name="ckclrh" value="Ck"> Ck</label>
+        <label class="pill"><input type="checkbox" name="ckclrh" value="Cl"> Cl</label>
+        <label class="pill"><input type="checkbox" name="ckclrh" value="Rh"> Rh</label>
+      </div>
+    </div>
 
-  <div class="note">
-    <b>Note:</b> Headings and wording match the Food Safety Program Record 5a exactly. Temperature targets & cooling timeframes align with the program requirements. 2
+    <!-- Times & Temperatures table (verbatim headings) -->
+    <div class="table-wrap" style="margin-top:10px">
+      <table>
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>Finish Time</th>
+            <th>Temp °C</th>
+            <th>Time 1</th>
+            <th>Temp °C (60°)</th>
+            <th>Time 2</th>
+            <th>Temp °C (21°)</th>
+            <th>Time 3</th>
+            <th>Temp °C (5°)</th>
+            <th>Time</th>
+            <th>Temp °C</th>
+            <th>Initial</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="time" id="startTime"></td>
+            <td><input type="time" id="finishTime"></td>
+            <td><input type="number" step="0.1" id="tempFinal" placeholder="75.0"></td>
+            <td><input type="time" id="time1"></td>
+            <td><input type="number" step="0.1" id="temp60" placeholder="60.0"></td>
+            <td><input type="time" id="time2"></td>
+            <td><input type="number" step="0.1" id="temp21" placeholder="21.0"></td>
+            <td><input type="time" id="time3"></td>
+            <td><input type="number" step="0.1" id="temp5" placeholder="5.0"></td>
+            <td><input type="time" id="serveTime"></td>
+            <td><input type="number" step="0.1" id="serveTemp"></td>
+            <td><input type="text" id="initials" maxlength="3" oninput="this.value=this.value.toUpperCase()" placeholder="AB"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>Note:</b> Headings and wording match the Food Safety Program for Record 5a. Page is constrained to A4 portrait for printing; inputs and spacing align with your Heating Log style. Automatic date & time stamp appear next to “Recorded at”.
+    </div>
+
   </div>
 </div>
 
-<!-- Firebase SDKs (script-tag version) -->
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-/* ------------------  Firebase CONFIG (paste yours)  ------------------ */
+/* ===== Firebase CONFIG — paste your real values ===== */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
   projectId: "YOUR_PROJECT_ID",
   storageBucket: "YOUR_PROJECT.appspot.com",
   messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  appId: "YOUR_APP_ID"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-/* -------------------------------------------------------------------- */
+/* ==================================================== */
 
 const $ = id => document.getElementById(id);
 const recordedAtEl = $('recordedAt');
 const archiveMonth = $('archiveMonth');
 
-/* Utility */
-function ymd(date){ const d = new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;}
-function ym(date){ const d = new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}`;}
-function nowLocal(){ const d = new Date(); return d.toLocaleString(); }
+function ymd(date){ const d=new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; }
+function ym(date){ const d=new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}`; }
+function nowLocal(){ return new Date().toLocaleString(); }
 
-/* Collect form data with exact labels */
 function getProcesses(){ return Array.from(document.querySelectorAll('input[name=process]:checked')).map(x=>x.value); }
 function getCkClRh(){ return Array.from(document.querySelectorAll('input[name=ckclrh]:checked')).map(x=>x.value); }
 
-function readForm(){
+/* Build one entry (single row + meta) with exact labels */
+function buildEntry(){
   return {
-    // Official labels per program:
     Date: $('date').value || null,
     Item: $('item').value || '',
     "Produced/Batch No": $('batch').value || '',
-    Process: getProcesses(),                              // Cook 75°C, Reheat 60°C, Cool 60-21… etc
+    Process: getProcesses(),
     Description: $('desc').value || '',
-    "Cook (Ck) Cool (Cl) Reheat (Rh)": getCkClRh(),       // ['Ck','Cl','Rh'] subset
+    "Cook (Ck) Cool (Cl) Reheat (Rh)": getCkClRh(),
 
-    // Times & Temps block (verbatim headings)
     "Start Time": $('startTime').value || null,
     "Finish Time": $('finishTime').value || null,
-    "Temp °C": Number($('tempFinal').value || 0) || null,
+    "Temp °C": numOrNull($('tempFinal').value),
     "Time 1": $('time1').value || null,
-    "Temp °C (60°)": Number($('temp60').value || 0) || null,
+    "Temp °C (60°)": numOrNull($('temp60').value),
     "Time 2": $('time2').value || null,
-    "Temp °C (21°)": Number($('temp21').value || 0) || null,
+    "Temp °C (21°)": numOrNull($('temp21').value),
     "Time 3": $('time3').value || null,
-    "Temp °C (5°)": Number($('temp5').value || 0) || null,
+    "Temp °C (5°)": numOrNull($('temp5').value),
     "Time": $('serveTime').value || null,
-    "Temp °C (serve)": Number($('serveTemp').value || 0) || null,
+    "Temp °C (serve)": numOrNull($('serveTemp').value),
     "Initial": $('initials').value || '',
 
-    // Stamps
-    recordedAtLocal: nowLocal(),                          // visible stamp
+    recordedAtLocal: nowLocal(),
     savedAt: firebase.firestore.FieldValue.serverTimestamp()
   };
 }
+function numOrNull(v){ const n=parseFloat(v); return Number.isFinite(n)? n : null; }
 
-/* Paths */
-function monthColl(monthStr){ return `record5a/${monthStr}`; }
-function archiveDoc(monthStr){ return `archives/record5a/${monthStr}`; }
+/* Firestore paths (month-bucket like your other sheets) */
+const monthColl = m => `record5a/${m}`;
+const archiveDoc = m => `archives/record5a/${m}`;
 
-/* Save one entry (document) inside month collection) */
+/* Save one row into the month bucket (keeps page tight for A4) */
 async function saveEntry(){
-  const monthKey = ym($('date').value || new Date());
-  const data = readForm();
+  const d = $('date').value;
+  if(!d){ alert('Please set Date.'); return; }
+  if(!$('item').value.trim()){ alert('Please enter Item.'); return; }
 
-  // Minimal guard: program requires target temps/cooling windows; basic nudge
-  if(!data.Date){ alert('Please set Date.'); return; }
-  if(!data.Item){ alert('Please enter Item.'); return; }
-
-  await db.collection(monthColl(monthKey)).add(data);
+  const m = ym(d);
+  const data = buildEntry();
+  await db.collection(monthColl(m)).add(data);
   recordedAtEl.textContent = data.recordedAtLocal;
-  alert('Saved to Firestore ✅');
+  alert('Saved ✅');
 }
 
-/* Load Month (read-only printable view) */
+/* Load Month → printable view (read-only) */
 async function loadMonth(){
   const m = archiveMonth.value;
-  if(!m){ alert('Choose a Month first.'); return; }
+  if(!m){ alert('Choose Month'); return; }
   const snap = await db.collection(monthColl(m)).get();
-
-  const rows = [];
-  snap.forEach(doc => rows.push({id:doc.id, ...doc.data()}));
+  const rows = []; snap.forEach(doc=> rows.push({id:doc.id, ...doc.data()}));
   rows.sort((a,b)=> (a.Date||'').localeCompare(b.Date||'') || (a['Start Time']||'').localeCompare(b['Start Time']||''));
 
   const w = window.open('', '_blank');
   const css = `
-    body{font-family:system-ui,Segoe UI,Arial;margin:20px}
+    body{font-family:system-ui,Segoe UI,Arial;margin:14mm}
     table{border-collapse:collapse;width:100%}
     th,td{border:1px solid #cfd6dd;padding:6px 8px;vertical-align:top}
     thead th{background:#f6f8fb}
     h2{margin:0 0 8px}
   `;
-  w.document.write(`<html><head><title>Record 5a — ${m}</title><style>${css}</style></head><body>`);
-  w.document.write(`<h2>Record 5a — Temperature Control Log — ${m}</h2>`);
-  w.document.write('<table><thead><tr>' +
-    ['Date','Item','Produced/Batch No','Process','Description','Ck/Cl/Rh','Start Time','Finish Time','Temp °C','Time 1','Temp °C (60°)','Time 2','Temp °C (21°)','Time 3','Temp °C (5°)','Time','Temp °C (serve)','Initial','Recorded at'].map(h=>`<th>${h}</th>`).join('')
-    + '</tr></thead><tbody>');
+  w.document.write('<html><head><title>Record 5a — '+m+'</title><style>'+css+'</style></head><body>');
+  w.document.write('<h2>Record 5a — Temperature Control Log — '+m+'</h2>');
+  w.document.write('<table><thead><tr>'+
+    ['Date','Item','Produced/Batch No','Process','Description','Ck/Cl/Rh','Start Time','Finish Time','Temp °C','Time 1','Temp °C (60°)','Time 2','Temp °C (21°)','Time 3','Temp °C (5°)','Time','Temp °C (serve)','Initial','Recorded at']
+      .map(h=>'<th>'+h+'</th>').join('')
+  +'</tr></thead><tbody>');
   rows.forEach(r=>{
-    w.document.write('<tr>' +
-      [
-        r.Date||'', r.Item||'', r['Produced/Batch No']||'',
-        (r.Process||[]).join(', '), r.Description||'',
-        (r['Cook (Ck) Cool (Cl) Reheat (Rh)']||[]).join(', '),
-        r['Start Time']||'', r['Finish Time']||'', (r['Temp °C']??''),
-        r['Time 1']||'', (r['Temp °C (60°)']??''), r['Time 2']||'', (r['Temp °C (21°)']??''),
-        r['Time 3']||'', (r['Temp °C (5°)']??''), r['Time']||'', (r['Temp °C (serve)']??''), r['Initial']||'',
-        r['recordedAtLocal']||''
-      ].map(v=>`<td>${v===null?'':v}</td>`).join('') + '</tr>');
+    w.document.write('<tr>'+[
+      r.Date||'', r.Item||'', r['Produced/Batch No']||'',
+      (r.Process||[]).join(', '), r.Description||'',
+      (r['Cook (Ck) Cool (Cl) Reheat (Rh)']||[]).join(', '),
+      r['Start Time']||'', r['Finish Time']||'', show(r['Temp °C']),
+      r['Time 1']||'', show(r['Temp °C (60°)']), r['Time 2']||'', show(r['Temp °C (21°)']),
+      r['Time 3']||'', show(r['Temp °C (5°)']), r['Time']||'', show(r['Temp °C (serve)']),
+      r['Initial']||'', r['recordedAtLocal']||''
+    ].map(td=>'<td>'+td+'</td>').join('') +'</tr>');
   });
   w.document.write('</tbody></table></body></html>');
   w.document.close(); w.focus();
 }
+function show(v){ return (v===null||v===undefined) ? '' : v; }
 
-/* Archive Month (snapshot month -> archives/record5a/{YYYY-MM}) */
+/* Archive Month → snapshot doc */
 async function archiveMonthData(){
   const m = archiveMonth.value;
-  if(!m){ alert('Choose a Month first.'); return; }
+  if(!m){ alert('Choose Month'); return; }
   const snap = await db.collection(monthColl(m)).get();
   const entries = []; snap.forEach(doc=> entries.push({id:doc.id, ...doc.data()}));
-  await db.doc(archiveDoc(m)).set({
-    month:m,
-    entries,
-    archivedAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  await db.doc(archiveDoc(m)).set({ month:m, entries, archivedAt: firebase.firestore.FieldValue.serverTimestamp() });
   alert(`Archived ${entries.length} entr${entries.length===1?'y':'ies'} to ${m}.`);
 }
 
@@ -284,11 +276,11 @@ $('btnClear').addEventListener('click', ()=>{
   recordedAtEl.textContent = '—';
 });
 
-/* Defaults */
+/* Defaults (A4 fit + stamps) */
 (function init(){
   const t = new Date();
   $('date').value = ymd(t);
-  archiveMonth.value = ym(t);
+  $('archiveMonth').value = ym(t);
   recordedAtEl.textContent = '—';
 })();
 </script>

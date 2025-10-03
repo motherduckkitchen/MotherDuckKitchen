@@ -3,66 +3,78 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Mother Duck Kitchen – Login</title>
+  <title>Mother Duck Kitchen – Sign in</title>
   <style>
-    body {
-      margin: 0;
-      font: 14px/1.4 system-ui, sans-serif;
-      background: url("kitchen.jpg") center/cover no-repeat;
-      display: flex; justify-content: center; align-items: center; height: 100vh;
+    :root{--line:#cfd6dd}
+    html,body{height:100%}
+    body{
+      margin:0; font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:url("kitchen.jpg") center/cover fixed no-repeat;
+      display:flex; align-items:center; justify-content:center; position:relative;
     }
-    .card {
-      background: #fff;
-      padding: 26px;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,.2);
-      max-width: 380px; width: 100%; text-align: center;
+    /* very light blue wash */
+    body::before{content:""; position:absolute; inset:0;
+      background:rgba(173,216,230,.55); backdrop-filter:blur(2px);}
+    .card{
+      position:relative; z-index:1; width:100%; max-width:380px; text-align:center;
+      background:#fff; border:1px solid var(--line); border-radius:16px;
+      box-shadow:0 8px 28px rgba(0,0,0,.15); padding:26px;
     }
-    .logo { max-width:120px; margin-bottom: 14px; }
-    h1 { font-size: 20px; margin: 0 0 14px; }
-    input { width: 100%; padding: 10px; margin: 6px 0; border: 1px solid #ccc; border-radius: 8px; }
-    button { width: 100%; padding: 10px; margin-top: 10px; border: 0; border-radius: 8px; background: #0d6efd; color: #fff; font-weight: bold; cursor: pointer; }
-    .error { color: #e11d48; margin-top: 8px; min-height: 1.2em; }
+    .logo{max-width:120px; display:block; margin:0 auto 14px}
+    h1{margin:0 0 16px; font-size:20px}
+    input{width:100%; padding:10px; margin:8px 0; border:1px solid #cfd6dd; border-radius:10px}
+    button{width:100%; padding:10px; margin-top:8px; border:0; border-radius:10px; font-weight:700; cursor:pointer}
+    .login{background:#0d6efd; color:#fff}
+    .error{color:#e11d48; min-height:1.2em; margin-top:8px}
+    .msg{color:#0f766e; margin-bottom:6px}
   </style>
 </head>
 <body>
   <div class="card">
-    <img src="logo.png" class="logo" alt="Mother Duck Kitchen"/>
+    <img src="logo.png" alt="Mother Duck Kitchen" class="logo"/>
     <h1>Sign in</h1>
+    <div id="msg" class="msg"></div>
     <input type="email" id="email" placeholder="Email" autocomplete="username"/>
     <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
-    <button onclick="login()">Log in</button>
+    <button class="login" onclick="login()">Log in</button>
     <div id="error" class="error"></div>
   </div>
 
-  <!-- Firebase scripts -->
+  <!-- Firebase CDN (compat version, safe for plain HTML hosting) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script>
-    // Your Firebase config
+    // ✅ Firebase project config (paste from your console)
     const firebaseConfig = {
-      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
+      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
       projectId: "mother-duck-kitchen",
       storageBucket: "mother-duck-kitchen.appspot.com",
       messagingSenderId: "925762762893",
-      appId: "1:925762762893:web:715285c11b9b30c9bccac4",
-      measurementId: "G-1EGZ0PWQYE"
+      appId: "1:925762762893:web:1bcd3228ddc9481fbccac4",
+      measurementId: "G-FLXJB5YBCV"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // if already logged in → go to main page
-    auth.onAuthStateChanged(user => { if (user) location.href = "index.html"; });
+    // If redirected here due to timeout
+    const p = new URLSearchParams(location.search);
+    if (p.get('msg') === 'expired') {
+      document.getElementById('msg').textContent =
+        'Session ended after 30 minutes of inactivity. Please sign in again.';
+    }
 
-    async function login() {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    // If already logged in, go straight to home
+    auth.onAuthStateChanged(u => { if (u) location.href = "index.html"; });
+
+    async function login(){
       try {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
         await auth.signInWithEmailAndPassword(email, password);
         location.href = "index.html";
-      } catch (e) {
-        document.getElementById("error").textContent = e.message;
+      } catch(e){
+        document.getElementById('error').textContent = e.message;
       }
     }
   </script>

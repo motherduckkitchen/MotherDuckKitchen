@@ -1,152 +1,127 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Record 3a — Incoming Goods</title>
-  <link rel="stylesheet" href="shared/styles.css">
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Record No. 4 – Temperature Control Log ~ Appliances</title>
+<style>
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: url("kitchen.jpg") center/cover fixed no-repeat;
+    color:#0b1320;
+    padding:20px;
+  }
+  .overlay{
+    position:fixed; inset:0; background:rgba(255,255,255,0.85); z-index:-1;
+  }
+  .container{
+    max-width: 1100px; margin: 0 auto;
+    background:#fff; border-radius:14px; padding:22px;
+    box-shadow: 0 8px 28px rgba(0,0,0,.12);
+    border:1px solid #e5e7eb;
+  }
+
+  .topbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
+  .btn{border:0; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; background:#e5e7eb;}
+  .btn:hover{filter:brightness(.97)}
+  .btn--back{background:#ffc107; color:#000;}
+  .btn--primary{background:#0d6efd; color:#fff;}
+
+  h1{margin:6px 0 14px; font-size:22px; text-align:center;}
+  .banner{border:1px dashed #cfd6dd; border-radius:10px; background:#fbfdff; padding:6px 8px; color:#334155; margin-bottom:14px; font-size:12px}
+
+  table{width:100%; border-collapse:separate; border-spacing:0; table-layout:fixed; border:1px solid #cfd6dd; border-radius:12px; overflow:hidden;}
+  th,td{border-right:1px solid #e5eaf0; border-bottom:1px solid #e5eaf0; padding:8px; vertical-align:middle; background:#fff; text-align:center;}
+  th:last-child,td:last-child{border-right:0}
+  tr:last-child td{border-bottom:0}
+  thead th{background:#f6f8fb; font-weight:700}
+  input,textarea{width:100%; height:32px; border:1px solid #cfd6dd; border-radius:8px; padding:6px 8px; font:inherit; background:#fff; box-sizing:border-box}
+  input.center{text-align:center}
+  .init{width:60px; text-transform:uppercase; text-align:center; margin:0 auto}
+  textarea{min-height:80px; border-radius:10px; width:100%}
+  .note{font-size:12px; color:#6b7280; margin-top:6px}
+
+  @page{size:A4 landscape; margin:12mm;}
+  @media print{ .topbar,.banner{display:none!important} body{background:#fff} .overlay{display:none} }
+</style>
 </head>
 <body>
-  <div class="mdk-wash"></div>
+  <div class="overlay"></div>
+  <div class="container">
 
-  <main class="mdk-wrap">
     <!-- Toolbar -->
-<nav class="mdk-toolbar">
-  <a class="mdk-btn mdk-btn--back" href="kitchen.html">← Back</a>
-  <button class="mdk-btn" onclick="window.print()">🖨 Print</button>
-  <button class="mdk-btn" onclick="clearForm()">✖ Clear</button>
-  <button class="mdk-btn mdk-btn--primary" onclick="saveForm()">💾 Save</button>
-</nav>
-    <h1>Record 3a — Incoming Goods</h1>
-
-    <!-- Meta -->
-    <div class="mdk-meta">
-      <label>Date: <input type="date" id="date"></label>
-      <label>Supplier: <input type="text" id="supplier" placeholder="Company name"></label>
-      <label>Receiver (Initials): <input type="text" id="receiver" maxlength="3" placeholder=""></label>
+    <div class="topbar">
+      <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
+      <button class="btn" onclick="window.print()">Print</button>
+      <button class="btn" onclick="clearForm()">Clear</button>
+      <button class="btn btn--primary" onclick="saveForm()">Save</button>
     </div>
 
-    <!-- Table -->
+    <h1>Record No. 4 – Temperature Control Log ~ Appliances</h1>
+    <div class="banner"><b>Targets:</b> Fridge ≤ 5 °C · Freezer ≤ −15 °C (or hard frozen) · Dishwasher ≥ 82 °C.  
+    Take corrective action if outside limits and record below.</div>
+
     <table>
+      <colgroup>
+        <col style="width:12%"><col style="width:12%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:12%"><col style="width:22%">
+      </colgroup>
       <thead>
         <tr>
-          <th>Item</th>
-          <th>Batch / Lot</th>
-          <th>Temp (°C)</th>
-          <th>Accept / Reject</th>
-          <th>Initials</th>
-          <th>Notes</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Fridge Temp (°C)</th>
+          <th>Freezer Temp (°C)</th>
+          <th>Dishwasher Temp (°C)</th>
+          <th>Initial</th>
+          <th>Notes / Corrective Actions</th>
         </tr>
       </thead>
-      <tbody id="rows">
-        <!-- rows injected -->
-      </tbody>
+      <tbody id="rows"></tbody>
     </table>
 
-    <!-- Guidance text (as in Food Safety Program) -->
-    <div class="note" style="text-align:left; margin-top:12px">
-      <b>Temperature information</b><br>
-      • Cold foods – at or below 5 °C &nbsp;&nbsp; • Frozen foods – frozen hard (not partially thawed) &nbsp;&nbsp; • Hot foods – at or above 60 °C
-      <br><br>
-      <b>Designated storage areas</b><br>
-      Store incoming goods promptly in: Refrigerators/Freezers, Dry storage, or Hot holding equipment (as appropriate).
-      <br><br>
-      <b>Visual check</b><br>
-      • Use by / Best before date &nbsp;&nbsp; • Packaging (not damaged/deteriorated/perished; appropriate material)<br>
-      • Labelling (name of food, supplier name & address, lot identification) &nbsp;&nbsp; • Pest contamination &nbsp;&nbsp; • Foreign objects
-    </div>
-  </main>
+    <div class="note"><b>Corrective actions:</b> If out of spec, record action (e.g., adjust thermostat, call service, discard food, move stock) and notify supervisor.</div>
+  </div>
 
-  <script>
-    // ---- Build 10 blank rows
-    const LINES = 10;
-    const tbody = document.getElementById('rows');
+<script>
+  function pad(n){return String(n).padStart(2,'0')}
+  function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+  function fmtTime(d=new Date()){return pad(d.getHours())+':'+pad(d.getMinutes())}
 
-    function addRow(){
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input data-k="item" placeholder="Description of goods"></td>
-        <td><input data-k="lot" placeholder="Batch / Lot"></td>
-        <td><input type="number" step="0.1" data-k="temp" placeholder="°C"></td>
-        <td>
-          <select data-k="accept">
-            <option value=""></option>
-            <option>Accept</option>
-            <option>Reject</option>
-          </select>
-        </td>
-        <td><input data-k="init" maxlength="3" placeholder=""></td>
-        <td><input data-k="note" placeholder="Notes / corrective action"></td>
-      `;
-      return tr;
-    }
+  function addRow(){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input class="center" data-autodate placeholder="dd/mm/yyyy"></td>
+      <td><input class="center" data-autotime placeholder="HH:MM"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="center init" maxlength="3"></td>
+      <td><input placeholder="If out of spec: action taken"></td>
+    `;
+    return tr;
+  }
 
-    for (let i=0; i<LINES; i++) tbody.appendChild(addRow());
+  function build(){
+    const tbody=document.getElementById('rows');
+    for(let i=0;i<10;i++){ tbody.appendChild(addRow()); }
+    document.querySelectorAll('[data-autodate]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
+    });
+    document.querySelectorAll('[data-autotime]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtTime(); });
+    });
+  }
 
-    // ---- Simple Save / Load (sessionStorage for now)
-    const dateEl = document.getElementById('date');
-    const supplierEl = document.getElementById('supplier');
-    const receiverEl = document.getElementById('receiver');
-    const CACHE_KEY = 'mdk_record3a_cache';
+  function clearForm(){
+    document.querySelectorAll('input,textarea').forEach(el=> el.value='');
+  }
 
-    function serialize(){
-      const rows = [...tbody.querySelectorAll('tr')].map(tr=>{
-        const get = k => tr.querySelector(`[data-k="${k}"]`)?.value || '';
-        return {
-          item: get('item'),
-          lot: get('lot'),
-          temp: get('temp'),
-          accept: get('accept'),
-          init: get('init'),
-          note: get('note')
-        };
-      });
-      return {
-        date: dateEl.value || '',
-        supplier: supplierEl.value || '',
-        receiver: receiverEl.value || '',
-        rows
-      };
-    }
+  function saveForm(){
+    alert("Saved (connect to Firebase later)");
+  }
 
-    function hydrate(data){
-      if(!data) return;
-      dateEl.value = data.date || '';
-      supplierEl.value = data.supplier || '';
-      receiverEl.value = data.receiver || '';
-      const trs = [...tbody.querySelectorAll('tr')];
-      (data.rows || []).forEach((r, i)=>{
-        const set = (k,v)=>{ const el = trs[i]?.querySelector(`[data-k="${k}"]`); if(el) el.value = v || ''; };
-        set('item', r.item);
-        set('lot', r.lot);
-        set('temp', r.temp);
-        set('accept', r.accept);
-        set('init', r.init);
-        set('note', r.note);
-      });
-    }
-
-    function saveForm(){
-      try{
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify(serialize()));
-        alert('Saved (temporary).');
-      }catch(e){ alert('Could not save'); }
-    }
-
-    function clearForm(){
-      document.querySelectorAll('input, select, textarea').forEach(el=>{
-        if(el.type==='checkbox' || el.type==='radio'){ el.checked = false; }
-        else { el.value = ''; }
-      });
-      try{ sessionStorage.removeItem(CACHE_KEY); }catch(e){}
-    }
-
-    (function init(){
-      try{
-        const raw = sessionStorage.getItem(CACHE_KEY);
-        if(raw) hydrate(JSON.parse(raw));
-      }catch(e){}
-    })();
-  </script>
+  build();
+</script>
 </body>
 </html>

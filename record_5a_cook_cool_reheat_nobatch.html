@@ -1,49 +1,148 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Sign in — Mother Duck Kitchen</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Record No. 5a – Temperature Control Log: Cook / Cool / Reheat & Serve</title>
 <style>
-  body{font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#f3f7fb;margin:0}
-  .card{max-width:420px;margin:10vh auto;background:#fff;border:1px solid #cfd6dd;border-radius:14px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
-  label{display:block;margin:8px 0 4px;font-weight:700}
-  input{width:100%;border:1px solid #cfd6dd;border-radius:10px;padding:8px 10px}
-  button{margin-top:12px;width:100%;padding:10px;border:0;border-radius:10px;background:#0d6efd;color:#fff;font-weight:700;cursor:pointer}
-  .row{display:flex;gap:8px}
+  :root{ --ink:#0f172a; --muted:#6b7280; --line:#cfd6dd; --grid:#e5eaf0; --head:#f6f8fb; --fs:12px; }
+  @page{ size:A4 landscape; margin:10mm }
+  html,body{margin:0;background:#fff;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+  .wrap{max-width:1180px;margin:20px auto 24px;padding:0 14px}
+  .topbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;font-weight:600}
+  .btn:hover{background:#f8fafc}
+  h1{font-size:18px;margin:10px 0}
+  .banner{border:1px dashed var(--grid);border-radius:10px;background:#fbfdff;padding:6px 8px;color:#334155;margin-bottom:8px;font-size:12px}
+  table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:4px;vertical-align:middle;background:#fff;text-align:center}
+  th:last-child,td:last-child{border-right:0}
+  tr:last-child td{border-bottom:0}
+  thead th{background:var(--head);font-weight:700}
+  input,select,textarea{width:100%;height:28px;border:1px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;background:#fff;box-sizing:border-box}
+  input.center{text-align:center}
+  .init{width:50px;text-transform:uppercase;text-align:center;margin:0 auto}
+  textarea{min-height:80px;border-radius:10px;width:100%}
+  .note{font-size:12px;color:var(--muted);margin-top:6px}
+  @media print{ .topbar,.banner{display:none!important} input::placeholder,textarea::placeholder{color:transparent} th,td{padding:3px} }
 </style>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDxnmDRp_Kr_FZjgo_E8D1ycxv1_D2kWhQ",
-    authDomain: "mother-duck-kitchen.firebaseapp.com",
-    projectId: "mother-duck-kitchen",
-    storageBucket: "mother-duck-kitchen.appspot.com",
-    messagingSenderId: "952076262983",
-    appId: "1:952076262983:web:8ddc71f2485154ebcca4",
-    measurementId: "G-FY6VT03FRT"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  auth.onAuthStateChanged(u=>{ if(u) location.href="kitchen.html"; });
-</script>
 </head>
 <body>
-  <div class="card">
-    <h2>Sign in</h2>
-    <label>Email</label><input id="email" type="email" autocomplete="username">
-    <label>Password</label><input id="pw" type="password" autocomplete="current-password">
-    <div class="row">
-      <button onclick="login()">Log in</button>
-      <button style="background:#64748b" onclick="signup()">Create account</button>
-    </div>
-    <p id="msg" style="color:#e11d48"></p>
+<div class="wrap">
+
+  <!-- Toolbar -->
+  <div class="topbar">
+    <a href="kitchen.html"><button class="btn btn--back">← Back</button></a>
+    <button class="btn" onclick="window.print()">Print</button>
+    <button class="btn" onclick="clearForm()">Clear</button>
+    <button class="btn btn--primary" onclick="saveForm()">Save</button>
   </div>
+
+  <h1>Record No. 5a – Temperature Control Log: Cook / Cool / Reheat & Serve</h1>
+  <div class="banner"><b>Process targets:</b> Cook ≥ 75&nbsp;°C · Reheat ≥ 60&nbsp;°C · Cool 60→21&nbsp;°C within 2 hrs, 21→5&nbsp;°C within 4 hrs · Serve promptly. Take corrective action if outside limits.</div>
+
+  <table>
+    <colgroup>
+      <col style="width:9%"><col style="width:14%"><col style="width:12%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:9%"><col style="width:10%"><col style="width:8%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Item</th>
+        <th>Process</th>
+        <th>Start Time</th>
+        <th>Finish Time</th>
+        <th>Temp / Time 1<br>(60&nbsp;°C)</th>
+        <th>Temp / Time 2<br>(21&nbsp;°C)</th>
+        <th>Temp / Time 3<br>(5&nbsp;°C)</th>
+        <th>Final Temp</th>
+        <th>Initial</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <div class="note"><b>Notes / Corrective actions:</b> Record any deviations (e.g., extended cooling, reheat, discard) and supervisor notified.</div>
+  <textarea id="notes" placeholder="Describe action(s), who notified, and outcome."></textarea>
+</div>
+
 <script>
-  async function login(){ try{ await auth.signInWithEmailAndPassword(email.value.trim(), pw.value); }
-    catch(e){ msg.textContent = e.message; } }
-  async function signup(){ try{ await auth.createUserWithEmailAndPassword(email.value.trim(), pw.value); }
-    catch(e){ msg.textContent = e.message; } }
+  const KEY = "record5a_data";
+
+  function pad(n){return String(n).padStart(2,'0')}
+  function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+  function fmtTime(d=new Date()){return pad(d.getHours())+':'+pad(d.getMinutes())}
+
+  function addRow(){
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input class="center" data-autodate placeholder="dd/mm/yyyy"></td>
+      <td><input placeholder="Dish name"></td>
+      <td>
+        <select>
+          <option value=""></option>
+          <option>Cook</option>
+          <option>Cool</option>
+          <option>Reheat</option>
+          <option>Serve</option>
+        </select>
+      </td>
+      <td><input class="center" data-autotime placeholder="HH:MM"></td>
+      <td><input class="center" data-autotime placeholder="HH:MM"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="center" placeholder="°C"></td>
+      <td><input class="init center" maxlength="3" placeholder=""></td>
+    `;
+    return tr;
+  }
+
+  function build(){
+    const tbody=document.getElementById('rows');
+    for(let i=0;i<8;i++){ tbody.appendChild(addRow()); }
+    document.querySelectorAll('[data-autodate]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
+    });
+    document.querySelectorAll('[data-autotime]').forEach(el=>{
+      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtTime(); });
+    });
+  }
+
+  function saveForm(){
+    const rows = Array.from(document.querySelectorAll('#rows tr')).map(tr=>{
+      return Array.from(tr.querySelectorAll('input,select')).map(el=>el.value);
+    });
+    const data = {rows, notes: document.getElementById('notes').value};
+    localStorage.setItem(KEY, JSON.stringify(data));
+    alert("Saved locally.");
+  }
+
+  function loadForm(){
+    const raw = localStorage.getItem(KEY);
+    if(!raw) return;
+    try{
+      const data = JSON.parse(raw);
+      const trs = document.querySelectorAll('#rows tr');
+      data.rows.forEach((row,i)=>{
+        if(trs[i]){
+          const els = trs[i].querySelectorAll('input,select');
+          row.forEach((val,j)=>{ if(els[j]) els[j].value = val; });
+        }
+      });
+      if(data.notes) document.getElementById('notes').value = data.notes;
+    }catch(e){}
+  }
+
+  function clearForm(){
+    document.querySelectorAll('input,textarea,select').forEach(el=>{
+      if(el.tagName==='SELECT'){el.selectedIndex=0}else{el.value=''}
+    });
+    localStorage.removeItem(KEY);
+  }
+
+  build();
+  loadForm();
 </script>
 </body>
 </html>

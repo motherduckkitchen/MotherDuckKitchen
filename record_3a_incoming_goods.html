@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Record No. 4 – Temperature Control Log ~ Appliances</title>
+<title>Record 3a — Incoming Goods</title>
 <style>
+  /* Page & background */
   body{
     margin:0;
     font-family: Arial, sans-serif;
@@ -12,9 +13,7 @@
     color:#0b1320;
     padding:20px;
   }
-  .overlay{
-    position:fixed; inset:0; background:rgba(255,255,255,0.85); z-index:-1;
-  }
+  .overlay{ position:fixed; inset:0; background:rgba(255,255,255,0.85); z-index:-1; }
   .container{
     max-width: 1100px; margin: 0 auto;
     background:#fff; border-radius:14px; padding:22px;
@@ -22,6 +21,7 @@
     border:1px solid #e5e7eb;
   }
 
+  /* Toolbar */
   .topbar{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
   .btn{border:0; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; background:#e5e7eb;}
   .btn:hover{filter:brightness(.97)}
@@ -29,21 +29,30 @@
   .btn--primary{background:#0d6efd; color:#fff;}
 
   h1{margin:6px 0 14px; font-size:22px; text-align:center;}
-  .banner{border:1px dashed #cfd6dd; border-radius:10px; background:#fbfdff; padding:6px 8px; color:#334155; margin-bottom:14px; font-size:12px}
 
+  /* Meta row */
+  .meta{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px; justify-content:center}
+  .meta label{font-weight:700; margin-right:6px}
+  .meta input{height:34px; border:1px solid #d1d5db; border-radius:8px; padding:6px 10px; min-width:200px}
+
+  /* Table */
   table{width:100%; border-collapse:separate; border-spacing:0; table-layout:fixed; border:1px solid #cfd6dd; border-radius:12px; overflow:hidden;}
   th,td{border-right:1px solid #e5eaf0; border-bottom:1px solid #e5eaf0; padding:8px; vertical-align:middle; background:#fff; text-align:center;}
   th:last-child,td:last-child{border-right:0}
   tr:last-child td{border-bottom:0}
   thead th{background:#f6f8fb; font-weight:700}
-  input,textarea{width:100%; height:32px; border:1px solid #cfd6dd; border-radius:8px; padding:6px 8px; font:inherit; background:#fff; box-sizing:border-box}
+  input,select,textarea{
+    width:100%; height:32px; border:1px solid #cfd6dd; border-radius:8px; padding:6px 8px; font:inherit; background:#fff; box-sizing:border-box
+  }
   input.center{text-align:center}
   .init{width:60px; text-transform:uppercase; text-align:center; margin:0 auto}
-  textarea{min-height:80px; border-radius:10px; width:100%}
-  .note{font-size:12px; color:#6b7280; margin-top:6px}
+  textarea{min-height:90px; border-radius:10px; width:100%}
+  .guidance{font-size:13px; color:#334155; margin-top:12px; line-height:1.45}
+  .guidance b{color:#0f172a}
+  ul{margin:6px 0 0 18px}
 
   @page{size:A4 landscape; margin:12mm;}
-  @media print{ .topbar,.banner{display:none!important} body{background:#fff} .overlay{display:none} }
+  @media print{ .topbar{display:none!important} body{background:#fff} .overlay{display:none} }
 </style>
 </head>
 <body>
@@ -58,67 +67,90 @@
       <button class="btn btn--primary" onclick="saveForm()">Save</button>
     </div>
 
-    <h1>Record No. 4 – Temperature Control Log ~ Appliances</h1>
-    <div class="banner"><b>Targets:</b> Fridge ≤ 5 °C · Freezer ≤ −15 °C (or hard frozen) · Dishwasher ≥ 82 °C.  
-    Take corrective action if outside limits and record below.</div>
+    <h1>Record 3a — Incoming Goods</h1>
+
+    <!-- Meta -->
+    <div class="meta">
+      <label for="rdate">Date:</label>
+      <input id="rdate" type="date">
+      <label for="rsupplier">Supplier:</label>
+      <input id="rsupplier" type="text" placeholder="Company name">
+      <label for="rrecv">Receiver (Initials):</label>
+      <input id="rrecv" class="init" maxlength="3" type="text" placeholder="">
+    </div>
 
     <table>
       <colgroup>
-        <col style="width:12%"><col style="width:12%"><col style="width:14%"><col style="width:14%"><col style="width:14%"><col style="width:12%"><col style="width:22%">
+        <col style="width:20%"><col style="width:16%"><col style="width:12%"><col style="width:12%"><col style="width:12%"><col style="width:28%">
       </colgroup>
       <thead>
         <tr>
-          <th>Date</th>
-          <th>Time</th>
-          <th>Fridge Temp (°C)</th>
-          <th>Freezer Temp (°C)</th>
-          <th>Dishwasher Temp (°C)</th>
-          <th>Initial</th>
-          <th>Notes / Corrective Actions</th>
+          <th>Item</th>
+          <th>Batch / Lot</th>
+          <th>Temp (°C)</th>
+          <th>Accept / Reject</th>
+          <th>Initials</th>
+          <th>Notes / Corrective Action</th>
         </tr>
       </thead>
       <tbody id="rows"></tbody>
     </table>
 
-    <div class="note"><b>Corrective actions:</b> If out of spec, record action (e.g., adjust thermostat, call service, discard food, move stock) and notify supervisor.</div>
+    <!-- Guidance (from your FSP wording) -->
+    <div class="guidance">
+      <b>Temperature information</b>
+      <ul>
+        <li>Cold foods – at or below 5 °C</li>
+        <li>Frozen foods – Frozen hard (does not include partially thawed)</li>
+        <li>Hot foods – at or above 60 °C</li>
+      </ul>
+      <b>Designated storage areas</b>
+      <div>Store incoming goods promptly in: Refrigerators/Freezers, Dry storage, or Hot holding equipment (as appropriate).</div>
+      <b>Visual check</b>
+      <ul>
+        <li>Use by / Best before date</li>
+        <li>Packaging (damaged, deteriorated, perished or inappropriate material)</li>
+        <li>Labelling (name of food, name &amp; address of supplier, lot identification)</li>
+        <li>Pest contamination (droppings, eggs, webs, feathers etc.)</li>
+        <li>Foreign objects (dirt, metal, hair)</li>
+      </ul>
+    </div>
   </div>
 
 <script>
-  function pad(n){return String(n).padStart(2,'0')}
-  function fmtDate(d=new Date()){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
-  function fmtTime(d=new Date()){return pad(d.getHours())+':'+pad(d.getMinutes())}
-
   function addRow(){
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td><input class="center" data-autodate placeholder="dd/mm/yyyy"></td>
-      <td><input class="center" data-autotime placeholder="HH:MM"></td>
+      <td><input placeholder="Description of goods"></td>
+      <td><input placeholder="Batch / Lot"></td>
       <td><input class="center" placeholder="°C"></td>
-      <td><input class="center" placeholder="°C"></td>
-      <td><input class="center" placeholder="°C"></td>
-      <td><input class="center init" maxlength="3"></td>
-      <td><input placeholder="If out of spec: action taken"></td>
+      <td>
+        <select class="center">
+          <option value=""></option>
+          <option>Accept</option>
+          <option>Reject</option>
+        </select>
+      </td>
+      <td><input class="init center" maxlength="3"></td>
+      <td><input placeholder="Notes / corrective action"></td>
     `;
     return tr;
   }
 
   function build(){
-    const tbody=document.getElementById('rows');
-    for(let i=0;i<10;i++){ tbody.appendChild(addRow()); }
-    document.querySelectorAll('[data-autodate]').forEach(el=>{
-      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtDate(); });
-    });
-    document.querySelectorAll('[data-autotime]').forEach(el=>{
-      el.addEventListener('focus', ()=>{ if(!el.value) el.value = fmtTime(); });
-    });
+    const tbody = document.getElementById('rows');
+    for(let i=0;i<9;i++){ tbody.appendChild(addRow()); }
   }
 
   function clearForm(){
-    document.querySelectorAll('input,textarea').forEach(el=> el.value='');
+    document.querySelectorAll('input,select,textarea').forEach(el=>{
+      if(el.tagName==='SELECT'){ el.selectedIndex = 0; }
+      else { el.value=''; }
+    });
   }
 
   function saveForm(){
-    alert("Saved (connect to Firebase later)");
+    alert('Saved (connect to Firebase later).');
   }
 
   build();

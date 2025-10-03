@@ -3,46 +3,48 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Record 5a — Cook / Cool / Reheat & Serve (No Batch)</title>
+<title>Record 5a — Temperature Control Log — Cook/Cool/Reheat & Serve</title>
 <style>
   :root{
-    --ink:#0f172a; --muted:#6b7280; --line:#cfd6dd; --grid:#e5eaf0; --head:#f6f8fb;
-    --chip:#eef2f7; --brand:#0d6efd; --warn:#ffc107; --danger:#e11d48;
+    --ink:#0f172a; --muted:#64748b; --line:#cfd6dd; --grid:#e7edf3; --head:#f6f8fb;
+    --chip:#eef2f7; --brand:#0d6efd; --warn:#ffc107; --ok:#16a34a;
     --fs:13px;
   }
-  @page{ size:A4 portrait; margin:10mm }
+  @page{ size:A4 portrait; margin:12mm }
   html,body{margin:0;background:#e8f0f4;color:var(--ink);font:var(--fs)/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
   body{
     background-image:url("kitchen.jpg");
     background-size:cover;background-attachment:fixed;background-position:center;
   }
-  .wash{position:fixed;inset:0;background:rgba(255,255,255,.9);z-index:-1}
-  .wrap{max-width:1000px;margin:20px auto;padding:0 12px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.10);padding:14px}
+  .wash{position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:-1}
+  .wrap{max-width:1000px;margin:22px auto;padding:0 14px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 28px rgba(2,6,23,.10);padding:16px}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
   .btn{border:0;border-radius:12px;background:var(--chip);padding:9px 14px;font-weight:700;cursor:pointer;color:#0f172a;display:flex;align-items:center;gap:8px;box-shadow:0 2px 6px rgba(2,6,23,.06)}
   .btn:hover{filter:brightness(.97)}
   .btn--back{background:var(--warn)}
   .btn--primary{background:var(--brand);color:#fff}
-  .btn--danger{background:var(--danger);color:#fff}
   h1{margin:8px 0 12px;font-size:20px;text-align:center}
   .meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;margin:8px 0 14px}
   label{font-weight:700}
-  input[type="date"],input[type="month"],input[type="text"],input[type="time"],input[type="number"]{
-    border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:150px;background:#fff
+  input, select, textarea{
+    border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff
   }
-  .controls{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
-  .addRow{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#fff;cursor:pointer}
+  input[type="date"], input[type="time"], input[type="month"] { min-width:150px }
+  .row{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}
+  .row + .row{margin-top:8px}
+  .full{grid-column:1/-1}
+  .note{font-size:12px;color:var(--muted);margin-top:10px}
+  .badge{font-size:12px;padding:4px 8px;border-radius:999px;background:#eef2f7;border:1px solid var(--line)}
+  .recTime{font-weight:700;color:var(--ok)}
+  .group{border:1px dashed var(--line);border-radius:12px;padding:12px;background:#fff}
+  .legend{font-weight:800;margin:0 0 8px}
   table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 8px;background:#fff;vertical-align:middle}
-  th:last-child,td:last-child{border-right:0}
+  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:8px 10px;background:#fff;vertical-align:middle}
+  thead th{background:var(--head);text-align:left}
   tr:last-child td{border-bottom:0}
-  thead th{background:var(--head);text-align:center;font-size:12px}
-  .num{width:80px}
-  .time{width:90px}
-  .small{font-size:12px;color:var(--muted)}
-  .bad{outline:2px solid var(--danger); outline-offset:-2px; background:#fff5f6}
-  .row-del{white-space:nowrap}
+  th:last-child,td:last-child{border-right:0}
+  .sr-only{position:absolute;left:-9999px}
   @media print{ .toolbar{display:none} body{background:#fff} .wash{display:none} }
 </style>
 </head>
@@ -56,63 +58,95 @@
     <button class="btn" onclick="window.print()">🖨️ Print</button>
     <button class="btn" id="btnClear">✖️ Clear</button>
     <button class="btn btn--primary" id="btnSave">💾 Save</button>
-    <div class="controls">
-      <label for="archiveMonth">Month:</label>
-      <input type="month" id="archiveMonth"/>
-      <button class="btn" id="btnLoadMonth">📂 Load Month</button>
-      <button class="btn" id="btnArchive">📦 Archive Month</button>
+    <span class="badge">Recorded at: <span id="recordedAt" class="recTime">—</span></span>
+    <div style="flex:1"></div>
+    <label class="badge" style="background:#fff;border:none">Month:&nbsp;<input type="month" id="archiveMonth"></label>
+    <button class="btn" id="btnLoadMonth">📂 Load Month</button>
+    <button class="btn" id="btnArchive">📦 Archive Month</button>
+  </div>
+
+  <h1>Record 5a — Temperature Control Log — Cook/Cool/Reheat &amp; Serve</h1>
+
+  <!-- Top meta row -->
+  <div class="meta">
+    <label>Date: <input type="date" id="date"></label>
+    <label>Item: <input type="text" id="item" placeholder="Menu Item / Food"></label>
+    <label>Produced/Batch No: <input type="text" id="batch"></label>
+  </div>
+
+  <!-- PROCESS per wording in Food Safety Program -->
+  <div class="group">
+    <p class="legend">Process (select all that apply — wording per program):</p>
+    <div class="row full">
+      <label><input type="checkbox" name="process" value="Cook 75°C"> Cook 75°C</label>
+      <label><input type="checkbox" name="process" value="Reheat 60°C"> Reheat 60°C</label>
+      <label><input type="checkbox" name="process" value="Cool 60-21°C in 2 hrs"> Cool 60-21°C in 2 hrs</label>
+      <label><input type="checkbox" name="process" value="21-5°C in 4 hrs"> 21-5°C in 4 hrs</label>
+      <label><input type="checkbox" name="process" value="Serve"> Serve</label>
     </div>
   </div>
 
-  <h1>Record 5a — Cook / Cool / Reheat & Serve (No Batch)</h1>
-
-  <!-- Meta -->
-  <div class="meta">
-    <div><label>Date:&nbsp;<input id="logDate" type="date"/></label></div>
-    <div><label>Site:&nbsp;<input id="siteName" type="text" placeholder="Mother Duck Kitchen"/></label></div>
-    <div class="small">Targets: Cook ≥ 75 °C · Cool to ≤ 5 °C within 6 hrs · Reheat ≥ 75 °C</div>
+  <!-- Description + Ck/Cl/Rh -->
+  <div class="row" style="margin-top:10px">
+    <div class="full">
+      <label for="desc">Description</label>
+      <textarea id="desc" rows="2" placeholder="Description of item/process"></textarea>
+    </div>
+    <div class="full">
+      <span style="font-weight:800">Cook (Ck) Cool (Cl) Reheat (Rh):</span>
+      <label style="margin-left:12px"><input type="checkbox" name="ckclrh" value="Ck"> Ck</label>
+      <label style="margin-left:12px"><input type="checkbox" name="ckclrh" value="Cl"> Cl</label>
+      <label style="margin-left:12px"><input type="checkbox" name="ckclrh" value="Rh"> Rh</label>
+    </div>
   </div>
 
-  <div class="controls">
-    <button class="addRow" id="btnAddRow">+ Add Row</button>
-  </div>
+  <!-- Times & Temperatures table (verbatim headings) -->
+  <table style="margin-top:12px">
+    <thead>
+      <tr>
+        <th>Start Time</th>
+        <th>Finish Time</th>
+        <th>Temp °C</th>
+        <th>Time 1</th>
+        <th>Temp °C (60°)</th>
+        <th>Time 2</th>
+        <th>Temp °C (21°)</th>
+        <th>Time 3</th>
+        <th>Temp °C (5°)</th>
+        <th>Time</th>
+        <th>Temp °C</th>
+        <th>Initial</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="time" id="startTime"></td>
+        <td><input type="time" id="finishTime"></td>
+        <td><input type="number" id="tempFinal" step="0.1" placeholder="e.g. 75.0"></td>
+        <td><input type="time" id="time1"></td>
+        <td><input type="number" id="temp60" step="0.1" placeholder="60.0"></td>
+        <td><input type="time" id="time2"></td>
+        <td><input type="number" id="temp21" step="0.1" placeholder="21.0"></td>
+        <td><input type="time" id="time3"></td>
+        <td><input type="number" id="temp5" step="0.1" placeholder="5.0"></td>
+        <td><input type="time" id="serveTime"></td>
+        <td><input type="number" id="serveTemp" step="0.1"></td>
+        <td><input type="text" id="initials" placeholder="Staff Sign"></td>
+      </tr>
+    </tbody>
+  </table>
 
-  <!-- Log Grid -->
-  <div class="table-wrap">
-    <table id="grid">
-      <thead>
-        <tr>
-          <th>Food / Dish</th>
-          <th class="time">Cook Time</th>
-          <th class="num">Cook °C</th>
-          <th class="time">Cool Start</th>
-          <th class="num">Start °C</th>
-        </tr>
-        <tr>
-          <th></th>
-          <th class="time">Reheat Time</th>
-          <th class="num">Reheat °C</th>
-          <th class="time">Serve Time</th>
-          <th>Initials / Corrective Actions</th>
-        </tr>
-      </thead>
-      <tbody id="rows">
-        <!-- rows injected -->
-      </tbody>
-    </table>
+  <div class="note">
+    <b>Note:</b> Headings and wording match the Food Safety Program Record 5a exactly. Temperature targets & cooling timeframes align with the program requirements. 2
   </div>
-
-  <p class="small"><b>Validation:</b> cells highlight red if Cook < 75 °C, Reheat < 75 °C, or Start Cool > 5 °C after cooling (use Corrective Actions to note what you did).</p>
 </div>
 
-<!-- Firebase SDKs -->
+<!-- Firebase SDKs (script-tag version) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-/* ------------------  Firebase CONFIG  ------------------ */
-/* Replace the values below with your Firebase console “Use a <script> tag” config */
+/* ------------------  Firebase CONFIG (paste yours)  ------------------ */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -122,212 +156,140 @@ const firebaseConfig = {
   appId: "YOUR_APP_ID",
 };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();       // optional (use if you want to require login)
-const db   = firebase.firestore();
-/* ------------------------------------------------------- */
+const db = firebase.firestore();
+/* -------------------------------------------------------------------- */
 
-// OPTIONAL: block page until signed in (uncomment to require auth)
-// auth.onAuthStateChanged(u => { if(!u) location.href='login.html'; });
+const $ = id => document.getElementById(id);
+const recordedAtEl = $('recordedAt');
+const archiveMonth = $('archiveMonth');
 
-/* ---------- Helpers ---------- */
-const logDate  = document.getElementById('logDate');
-const siteName = document.getElementById('siteName');
-const rowsEl   = document.getElementById('rows');
-const archiveMonth = document.getElementById('archiveMonth');
+/* Utility */
+function ymd(date){ const d = new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`;}
+function ym(date){ const d = new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}`;}
+function nowLocal(){ const d = new Date(); return d.toLocaleString(); }
 
-function ymd(date){ const d=new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; }
-function ym(date){ const d=new Date(date); const z=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${z(d.getMonth()+1)}`; }
+/* Collect form data with exact labels */
+function getProcesses(){ return Array.from(document.querySelectorAll('input[name=process]:checked')).map(x=>x.value); }
+function getCkClRh(){ return Array.from(document.querySelectorAll('input[name=ckclrh]:checked')).map(x=>x.value); }
 
-/* ---------- Firestore paths ---------- */
-const dayDoc = (dateStr)=> `record5a/${dateStr}`;
-const monthDoc = (monthStr)=> `archives/record5a/${monthStr}`;
+function readForm(){
+  return {
+    // Official labels per program:
+    Date: $('date').value || null,
+    Item: $('item').value || '',
+    "Produced/Batch No": $('batch').value || '',
+    Process: getProcesses(),                              // Cook 75°C, Reheat 60°C, Cool 60-21… etc
+    Description: $('desc').value || '',
+    "Cook (Ck) Cool (Cl) Reheat (Rh)": getCkClRh(),       // ['Ck','Cl','Rh'] subset
 
-/* ---------- Row rendering ---------- */
-function newRow(data={}){
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td>
-      <input type="text" class="food" placeholder="e.g. Beef stew" value="${data.food||''}">
-    </td>
-    <td><input type="time" class="t-cook" value="${data.cookTime||''}"></td>
-    <td><input type="number" step="0.1" class="c-cook" value="${data.cookTemp??''}"></td>
-    <td><input type="time" class="t-cool-start" value="${data.coolStartTime||''}"></td>
-    <td><input type="number" step="0.1" class="c-cool-start" value="${data.coolStartTemp??''}"></td>
-  `;
-  const tr2 = document.createElement('tr');
-  tr2.innerHTML = `
-    <td></td>
-    <td><input type="time" class="t-reheat" value="${data.reheatTime||''}"></td>
-    <td><input type="number" step="0.1" class="c-reheat" value="${data.reheatTemp??''}"></td>
-    <td><input type="time" class="t-serve" value="${data.serveTime||''}"></td>
-    <td class="row-del">
-      <input type="text" class="initials" maxlength="3" placeholder="AB" value="${data.initials||''}" oninput="this.value=this.value.toUpperCase()">
-      <div><input type="text" class="actions" placeholder="Corrective actions..." value="${data.actions||''}" style="width:100%"></div>
-      <button class="btn btn--danger" type="button">Delete</button>
-    </td>
-  `;
-  tr2.querySelector('button').addEventListener('click', ()=>{ tr.remove(); tr2.remove(); });
-  // live validation
-  [tr, tr2].forEach(row=>{
-    row.addEventListener('input', ()=> validatePair(tr,tr2));
-  });
-  rowsEl.appendChild(tr);
-  rowsEl.appendChild(tr2);
-  validatePair(tr,tr2);
-}
+    // Times & Temps block (verbatim headings)
+    "Start Time": $('startTime').value || null,
+    "Finish Time": $('finishTime').value || null,
+    "Temp °C": Number($('tempFinal').value || 0) || null,
+    "Time 1": $('time1').value || null,
+    "Temp °C (60°)": Number($('temp60').value || 0) || null,
+    "Time 2": $('time2').value || null,
+    "Temp °C (21°)": Number($('temp21').value || 0) || null,
+    "Time 3": $('time3').value || null,
+    "Temp °C (5°)": Number($('temp5').value || 0) || null,
+    "Time": $('serveTime').value || null,
+    "Temp °C (serve)": Number($('serveTemp').value || 0) || null,
+    "Initial": $('initials').value || '',
 
-function validatePair(tr, tr2){
-  const cook = tr.querySelector('.c-cook');
-  const reheat = tr2.querySelector('.c-reheat');
-  const coolStart = tr.querySelector('.c-cool-start');
-  const bad = (el, cond)=> el && (el.classList.toggle('bad', !!cond));
-  const vCook = parseFloat(cook?.value);
-  const vReh  = parseFloat(reheat?.value);
-  const vCoolS= parseFloat(coolStart?.value);
-  bad(cook,  !(isFinite(vCook) && vCook>=75));
-  bad(reheat,!(isFinite(vReh)  && vReh>=75));
-  // Cool start temp should be dropping; flag if >5°C AFTER full cooling period — with 2-step cooling you could extend later.
-  bad(coolStart, (isFinite(vCoolS) && vCoolS>5));
-}
-
-/* ---------- Gather & hydrate ---------- */
-function gather(){
-  const entries = [];
-  const trs = Array.from(rowsEl.querySelectorAll('tr'));
-  for(let i=0;i<trs.length;i+=2){
-    const a = trs[i], b = trs[i+1];
-    if(!b) continue;
-    const food = a.querySelector('.food')?.value?.trim();
-    const cookTime = a.querySelector('.t-cook')?.value;
-    const cookTemp = parseFloat(a.querySelector('.c-cook')?.value);
-    const coolStartTime = a.querySelector('.t-cool-start')?.value;
-    const coolStartTemp = parseFloat(a.querySelector('.c-cool-start')?.value);
-    const reheatTime = b.querySelector('.t-reheat')?.value;
-    const reheatTemp = parseFloat(b.querySelector('.c-reheat')?.value);
-    const serveTime  = b.querySelector('.t-serve')?.value;
-    const initials   = b.querySelector('.initials')?.value?.trim().toUpperCase();
-    const actions    = b.querySelector('.actions')?.value?.trim();
-    // skip truly empty rows
-    if(!(food||cookTime||isFinite(cookTemp)||reheatTime||isFinite(reheatTemp)||serveTime||initials||actions)) continue;
-    entries.push({food,cookTime,cookTemp,coolStartTime,coolStartTemp,reheatTime,reheatTemp,serveTime,initials,actions});
-  }
-  return entries;
-}
-
-function hydrate(rows=[]){
-  rowsEl.innerHTML='';
-  rows.forEach(r=> newRow(r));
-}
-
-/* ---------- Firestore R/W ---------- */
-async function saveDay(){
-  const d = logDate.value;
-  if(!d){ alert('Pick a Date first'); return; }
-  const key = ymd(d);
-  const rows = gather();
-  await db.doc(dayDoc(key)).set({
-    site: siteName.value || 'Mother Duck Kitchen',
-    date: key,
-    rows,
+    // Stamps
+    recordedAtLocal: nowLocal(),                          // visible stamp
     savedAt: firebase.firestore.FieldValue.serverTimestamp()
-  }, {merge:true});
-  alert('Saved to Firestore.');
+  };
 }
 
-async function loadDay(dateStr){
-  rowsEl.innerHTML = '';
-  const snap = await db.doc(dayDoc(dateStr)).get();
-  if(!snap.exists){ return; }
-  const data = snap.data();
-  siteName.value = data.site || siteName.value;
-  hydrate(Array.isArray(data.rows)? data.rows : []);
+/* Paths */
+function monthColl(monthStr){ return `record5a/${monthStr}`; }
+function archiveDoc(monthStr){ return `archives/record5a/${monthStr}`; }
+
+/* Save one entry (document) inside month collection) */
+async function saveEntry(){
+  const monthKey = ym($('date').value || new Date());
+  const data = readForm();
+
+  // Minimal guard: program requires target temps/cooling windows; basic nudge
+  if(!data.Date){ alert('Please set Date.'); return; }
+  if(!data.Item){ alert('Please enter Item.'); return; }
+
+  await db.collection(monthColl(monthKey)).add(data);
+  recordedAtEl.textContent = data.recordedAtLocal;
+  alert('Saved to Firestore ✅');
 }
 
-async function archiveMonthData(){
+/* Load Month (read-only printable view) */
+async function loadMonth(){
   const m = archiveMonth.value;
-  if(!m){ alert('Choose Month'); return; }
-  const first = new Date(m + "-01T00:00:00");
-  const next  = new Date(first); next.setMonth(next.getMonth()+1);
-  // Query day docs inside month (date is ISO string so lexicographic works)
-  const q = await db.collection('record5a')
-    .where('date','>=', ymd(first))
-    .where('date','<',  ymd(next))
-    .get();
-  const days = [];
-  q.forEach(doc=> days.push(doc.data()));
-  await db.doc(monthDoc(m)).set({
-    month: m,
-    site: siteName.value || 'Mother Duck Kitchen',
-    days,
-    archivedAt: firebase.firestore.FieldValue.serverTimestamp()
-  });
-  alert(`Archived ${days.length} day(s) to ${m}.`);
-}
+  if(!m){ alert('Choose a Month first.'); return; }
+  const snap = await db.collection(monthColl(m)).get();
 
-async function loadArchive(){
-  const m = archiveMonth.value;
-  if(!m){ alert('Choose Month'); return; }
-  const doc = await db.doc(monthDoc(m)).get();
-  if(!doc.exists){ alert('No archive for that month.'); return; }
-  const data = doc.data();
-  // Simple printable window
+  const rows = [];
+  snap.forEach(doc => rows.push({id:doc.id, ...doc.data()}));
+  rows.sort((a,b)=> (a.Date||'').localeCompare(b.Date||'') || (a['Start Time']||'').localeCompare(b['Start Time']||''));
+
   const w = window.open('', '_blank');
   const css = `
     body{font-family:system-ui,Segoe UI,Arial;margin:20px}
-    h2{margin:0 0 10px} h3{margin:12px 0 6px}
     table{border-collapse:collapse;width:100%}
-    th,td{border:1px solid #cfd6dd;padding:6px 8px}
+    th,td{border:1px solid #cfd6dd;padding:6px 8px;vertical-align:top}
     thead th{background:#f6f8fb}
-    .cent{text-align:center}
+    h2{margin:0 0 8px}
   `;
-  w.document.write(`<html><head><title>5a Archive ${m}</title><style>${css}</style></head><body>`);
-  w.document.write(`<h2>Record 5a — Archive ${m}</h2><p><b>Site:</b> ${data.site||''}</p>`);
-  (data.days||[]).sort((a,b)=> (a.date||'').localeCompare(b.date||''));
-  (data.days||[]).forEach(day=>{
-    w.document.write(`<h3>Date ${day.date}</h3>`);
-    w.document.write('<table><thead><tr><th>Food</th><th>Cook Time</th><th>Cook °C</th><th>Cool Start</th><th>Start °C</th><th>Reheat Time</th><th>Reheat °C</th><th>Serve</th><th>Initials</th><th>Actions</th></tr></thead><tbody>');
-    (day.rows||[]).forEach(r=>{
-      const row = [
-        r.food||'',
-        r.cookTime||'',
-        (isFinite(r.cookTemp)? r.cookTemp : ''),
-        r.coolStartTime||'',
-        (isFinite(r.coolStartTemp)? r.coolStartTemp : ''),
-        r.reheatTime||'',
-        (isFinite(r.reheatTemp)? r.reheatTemp : ''),
-        r.serveTime||'',
-        r.initials||'',
-        r.actions||''
-      ];
-      w.document.write(`<tr>${row.map((v,i)=> i? `<td class="cent">${v}</td>` : `<td>${v}</td>`).join('')}</tr>`);
-    });
-    w.document.write('</tbody></table>');
+  w.document.write(`<html><head><title>Record 5a — ${m}</title><style>${css}</style></head><body>`);
+  w.document.write(`<h2>Record 5a — Temperature Control Log — ${m}</h2>`);
+  w.document.write('<table><thead><tr>' +
+    ['Date','Item','Produced/Batch No','Process','Description','Ck/Cl/Rh','Start Time','Finish Time','Temp °C','Time 1','Temp °C (60°)','Time 2','Temp °C (21°)','Time 3','Temp °C (5°)','Time','Temp °C (serve)','Initial','Recorded at'].map(h=>`<th>${h}</th>`).join('')
+    + '</tr></thead><tbody>');
+  rows.forEach(r=>{
+    w.document.write('<tr>' +
+      [
+        r.Date||'', r.Item||'', r['Produced/Batch No']||'',
+        (r.Process||[]).join(', '), r.Description||'',
+        (r['Cook (Ck) Cool (Cl) Reheat (Rh)']||[]).join(', '),
+        r['Start Time']||'', r['Finish Time']||'', (r['Temp °C']??''),
+        r['Time 1']||'', (r['Temp °C (60°)']??''), r['Time 2']||'', (r['Temp °C (21°)']??''),
+        r['Time 3']||'', (r['Temp °C (5°)']??''), r['Time']||'', (r['Temp °C (serve)']??''), r['Initial']||'',
+        r['recordedAtLocal']||''
+      ].map(v=>`<td>${v===null?'':v}</td>`).join('') + '</tr>');
   });
-  w.document.write('</body></html>'); w.document.close(); w.focus();
+  w.document.write('</tbody></table></body></html>');
+  w.document.close(); w.focus();
 }
 
-/* ---------- Events & defaults ---------- */
-document.getElementById('btnAddRow').addEventListener('click', ()=> newRow());
-document.getElementById('btnSave').addEventListener('click', saveDay);
-document.getElementById('btnArchive').addEventListener('click', archiveMonthData);
-document.getElementById('btnLoadMonth').addEventListener('click', loadArchive);
-document.getElementById('btnClear').addEventListener('click', ()=>{
-  rowsEl.innerHTML = '';
+/* Archive Month (snapshot month -> archives/record5a/{YYYY-MM}) */
+async function archiveMonthData(){
+  const m = archiveMonth.value;
+  if(!m){ alert('Choose a Month first.'); return; }
+  const snap = await db.collection(monthColl(m)).get();
+  const entries = []; snap.forEach(doc=> entries.push({id:doc.id, ...doc.data()}));
+  await db.doc(archiveDoc(m)).set({
+    month:m,
+    entries,
+    archivedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  alert(`Archived ${entries.length} entr${entries.length===1?'y':'ies'} to ${m}.`);
+}
+
+/* UI events */
+$('btnSave').addEventListener('click', saveEntry);
+$('btnLoadMonth').addEventListener('click', loadMonth);
+$('btnArchive').addEventListener('click', archiveMonthData);
+$('btnClear').addEventListener('click', ()=>{
+  document.querySelectorAll('input[type=text], input[type=number], textarea').forEach(el=> el.value='');
+  document.querySelectorAll('input[type=time], input[type=date]').forEach(el=> el.value='');
+  document.querySelectorAll('input[type=checkbox]').forEach(el=> el.checked=false);
+  recordedAtEl.textContent = '—';
 });
 
-logDate.addEventListener('change', ()=>{
-  const key = ymd(logDate.value);
-  if(key) loadDay(key);
-});
-
+/* Defaults */
 (function init(){
-  const today = new Date();
-  logDate.value = ymd(today);
-  archiveMonth.value = ym(today);
-  siteName.value = 'Mother Duck Kitchen';
-  loadDay(ymd(today));
-  // Add a starter row
-  newRow();
+  const t = new Date();
+  $('date').value = ymd(t);
+  archiveMonth.value = ym(t);
+  recordedAtEl.textContent = '—';
 })();
 </script>
 </body>

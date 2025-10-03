@@ -35,49 +35,21 @@
     <div id="error" class="error"></div>
   </div>
 
-  <!-- Firebase (compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
-      authDomain: "mother-duck-kitchen.firebaseapp.com",
-      projectId: "mother-duck-kitchen",
-      storageBucket: "mother-duck-kitchen.appspot.com",
-      messagingSenderId: "925762762893",
-      appId: "1:925762762893:web:715285c11b9b30c9bccac4",
-      measurementId: "G-1EGZ0PWQYE"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    // show message if you were auto-logged-out for inactivity
-    const p = new URLSearchParams(location.search);
-    if (p.get('msg') === 'expired') {
-      msg.textContent = 'Session ended after 30 minutes of inactivity. Please sign in again.';
-    }
-
-    // already signed in? if verified, go inside; if not, tell them to verify
-    auth.onAuthStateChanged(u => {
-      if (!u) return;
-      if (u.emailVerified) location.href = "index.html";
-      else msg.textContent = 'Check your email and verify your address, then sign in.';
-    });
-
-    async function login(){
-      error.textContent = '';
-      try {
-        const { user } = await auth.signInWithEmailAndPassword(email.value.trim(), password.value);
-        await user.reload();
-        if (!user.emailVerified) {
-          error.textContent = "Email not verified. Please verify first.";
-          return;
-        }
-        location.href = "index.html";
-      } catch (e) {
-        error.textContent = e.message;
-      }
-    }
-  </script>
-</body>
+ <!-- Firebase (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+  // PASTE the exact values from Console here:
+  const firebaseConfig = {
+    apiKey: "PASTE_FROM_CONSOLE",
+    authDomain: "PASTE_FROM_CONSOLE",
+    projectId: "PASTE_FROM_CONSOLE",
+    storageBucket: "PASTE_FROM_CONSOLE",
+    messagingSenderId: "PASTE_FROM_CONSOLE",
+    appId: "PASTE_FROM_CONSOLE",
+    measurementId: "PASTE_FROM_CONSOLE"
+  };
+  if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+</script></body>
 </html>

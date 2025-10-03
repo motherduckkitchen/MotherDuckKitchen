@@ -7,37 +7,57 @@
   <style>
     :root{--line:#cfd6dd}
     html,body{height:100%}
-    body{margin:0;font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      display:flex;align-items:center;justify-content:center;background:#f1f5f9}
-    .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.08);
-      padding:22px;max-width:360px;width:100%}
-    h1{margin:0 0 16px;font-size:20px;text-align:center}
-    input{width:100%;padding:10px;margin:8px 0;border:1px solid var(--line);border-radius:10px}
-    button{width:100%;padding:10px;margin-top:8px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
-    .login{background:#0d6efd;color:#fff}
-    .create{background:#64748b;color:#fff}
-    .error{color:#e11d48;text-align:center;min-height:1.2em;margin-top:8px}
-    .msg{color:#0f766e;text-align:center;margin-bottom:6px}
+    body{
+      margin:0; 
+      background:#f1f5f9 url("kitchen.jpg") center/cover no-repeat fixed;
+      font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      display:flex; align-items:center; justify-content:center;
+      position:relative;
+    }
+    /* Blue wash overlay */
+    body::before{
+      content:""; 
+      position:absolute; inset:0; 
+      background:rgba(173, 216, 230, 0.55); /* very light blue */
+      backdrop-filter: blur(2px);
+    }
+    .card{
+      position:relative; z-index:1;
+      background:#fff; border:1px solid var(--line); border-radius:16px;
+      box-shadow:0 8px 28px rgba(0,0,0,.15); padding:26px;
+      width:100%; max-width:380px; text-align:center;
+    }
+    .logo{
+      max-width:120px; margin:0 auto 14px; display:block;
+    }
+    h1{margin:0 0 16px; font-size:20px}
+    input{width:100%; padding:10px; margin:8px 0; border:1px solid #cfd6dd; border-radius:10px}
+    button{width:100%; padding:10px; margin-top:8px; border:0; border-radius:10px; font-weight:700; cursor:pointer}
+    .login{background:#0d6efd; color:#fff}
+    .create{background:#64748b; color:#fff}
+    .error{color:#e11d48; text-align:center; min-height:1.2em; margin-top:8px}
+    .msg{color:#0f766e; text-align:center; margin-bottom:6px}
   </style>
 </head>
 <body>
   <div class="card">
+    <img src="logo.png" alt="Mother Duck Kitchen" class="logo"/>
     <h1>Sign in</h1>
     <div id="msg" class="msg"></div>
-    <input type="email" id="email" placeholder="Email" autocomplete="username"/>
-    <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
-    <button class="login" onclick="login()">Log in</button>
+    <input type="email" id="email" placeholder="Email" autocomplete="username" />
+    <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
+    <button class="login"  onclick="login()">Log in</button>
     <button class="create" onclick="signup()">Create account</button>
     <div id="error" class="error"></div>
   </div>
 
-  <!-- Firebase SDKs (script-tag compat) -->
+  <!-- Firebase CDN (compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
   <script>
-    // 🔑 your Firebase config (from your console)
     const firebaseConfig = {
-      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
+      apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
       projectId: "mother-duck-kitchen",
       storageBucket: "mother-duck-kitchen.appspot.com",
@@ -48,13 +68,12 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // show message from ?msg=expired
     const p = new URLSearchParams(location.search);
     if (p.get('msg') === 'expired') {
-      document.getElementById('msg').textContent = 'Session ended after 30 minutes of inactivity. Please sign in again.';
+      document.getElementById('msg').textContent =
+        'Session ended after 30 minutes of inactivity. Please sign in again.';
     }
 
-    // already signed in? go home
     auth.onAuthStateChanged(u => { if (u) location.href = "index.html"; });
 
     async function login(){
@@ -63,7 +82,9 @@
       try {
         await auth.signInWithEmailAndPassword(email, pass);
         location.href = "index.html";
-      } catch (e) { document.getElementById('error').textContent = e.message; }
+      } catch (e) {
+        document.getElementById('error').textContent = e.message;
+      }
     }
     async function signup(){
       const email = document.getElementById('email').value.trim();
@@ -71,7 +92,10 @@
       try {
         await auth.createUserWithEmailAndPassword(email, pass);
         location.href = "index.html";
-      } catch (e) { document.getElementById('error').textContent = e.message; }
+      } catch (e) {
+        document.getElementById('error').textContent = e.message;
+      }
     }
   </script>
 </body>
+</html>

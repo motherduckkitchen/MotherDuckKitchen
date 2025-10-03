@@ -1,0 +1,58 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<title>Record 5a – Cook / Cool / Reheat & Serve</title><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--line:#cbd5e1;--ink:#0b2149;--muted:#475569;--blue:#0090d9}
+*{box-sizing:border-box}
+html,body{margin:0;background:#fff;color:#000;font:14px/1.4 Arial,Helvetica,sans-serif}
+.wrapper{max-width:1200px;margin:18px auto;padding:0 16px 32px}
+.topbar{display:flex;gap:8px;margin:8px 0 12px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#f8fafc;border-radius:8px;padding:8px 12px;cursor:pointer}
+.btn:hover{background:#eef2f7}
+.titlebar{display:flex;gap:10px;align-items:center;margin:4px 0 8px}
+.titlebar img{height:38px}
+.titlebar h1{margin:0;font-size:20px}
+.note{font-size:12px;color:#334155;margin:6px 0 10px}
+.table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+th,td{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:6px;vertical-align:middle}
+th:last-child,td:last-child{border-right:0}tr:last-child td{border-bottom:0}
+thead th{background:#eef6ff;font-weight:700;text-align:center}
+input[type=text],textarea,select{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+textarea{min-height:48px}
+.checkbox-cell{text-align:center;cursor:pointer}
+.checkbox-cell input{transform:scale(1.15)}
+.footer{margin-top:10px;font-size:11px;color:#111}
+@media print{@page{size:A4 landscape;margin:10mm}.topbar{display:none}.wrapper{padding:0;margin:0}.btn{display:none}}
+</style>
+<body><div class="wrapper">
+  <div class="topbar">
+    <button class="btn" data-nav="back">← Back</button>
+    <button class="btn" data-nav="print">🖨 Print</button>
+    <button class="btn" data-nav="clear">🧼 Clear</button>
+  </div>
+  <div class="titlebar"><img src="../assets/md-logo.svg" alt="MD"><h1>Record 5a – Cook / Cool / Reheat & Serve</h1></div>
+  
+  <table class='table'><thead><tr><th>Date</th><th>Time</th><th>Food Item</th><th>Process (Cook/Cool/Reheat/Serve)</th><th>Temp °C</th><th>Action Taken / Corrective Action</th><th>Initial</th></tr></thead><tbody><tr>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="dd/mm/yyyy"><button class="btn" data-action="today">Today</button></div></td>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="h:mm AM/PM"><button class="btn" data-action="now">Now</button></div></td>
+<td><input type='text' placeholder='e.g., Tuna Pasta Bake'></td><td><input type='text' placeholder='Cook / Cool / Reheat / Serve'></td><td><input type='text' placeholder='°C'></td><td><input type='text' placeholder='Action (if out of spec)'></td><td><input type='text' placeholder='Initial'></td></tr><tr>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="dd/mm/yyyy"><button class="btn" data-action="today">Today</button></div></td>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="h:mm AM/PM"><button class="btn" data-action="now">Now</button></div></td>
+<td><input type='text' placeholder='e.g., Tuna Pasta Bake'></td><td><input type='text' placeholder='Cook / Cool / Reheat / Serve'></td><td><input type='text' placeholder='°C'></td><td><input type='text' placeholder='Action (if out of spec)'></td><td><input type='text' placeholder='Initial'></td></tr><tr>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="dd/mm/yyyy"><button class="btn" data-action="today">Today</button></div></td>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="h:mm AM/PM"><button class="btn" data-action="now">Now</button></div></td>
+<td><input type='text' placeholder='e.g., Tuna Pasta Bake'></td><td><input type='text' placeholder='Cook / Cool / Reheat / Serve'></td><td><input type='text' placeholder='°C'></td><td><input type='text' placeholder='Action (if out of spec)'></td><td><input type='text' placeholder='Initial'></td></tr><tr>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="dd/mm/yyyy"><button class="btn" data-action="today">Today</button></div></td>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="h:mm AM/PM"><button class="btn" data-action="now">Now</button></div></td>
+<td><input type='text' placeholder='e.g., Tuna Pasta Bake'></td><td><input type='text' placeholder='Cook / Cool / Reheat / Serve'></td><td><input type='text' placeholder='°C'></td><td><input type='text' placeholder='Action (if out of spec)'></td><td><input type='text' placeholder='Initial'></td></tr><tr>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="dd/mm/yyyy"><button class="btn" data-action="today">Today</button></div></td>
+<td><div style="display:flex;gap:6px;align-items:center"><input type="text" placeholder="h:mm AM/PM"><button class="btn" data-action="now">Now</button></div></td>
+<td><input type='text' placeholder='e.g., Tuna Pasta Bake'></td><td><input type='text' placeholder='Cook / Cool / Reheat / Serve'></td><td><input type='text' placeholder='°C'></td><td><input type='text' placeholder='Action (if out of spec)'></td><td><input type='text' placeholder='Initial'></td></tr></tbody></table>
+<div class="note">
+  <b>Processes & Targets:</b> Cook to ≥75°C. Reheat to ≥60°C. Cool from 60→21°C within 2 hrs, then 21→5°C within 4 hrs (6 hrs total).
+  <br><b>Corrective Action:</b> Continue heating/cooling; discard if in danger zone too long; document action.
+</div>
+
+  <div class="footer">Food Safety Program – Mother Duck Kallangur (1) January 2021 – Transport Amendment.docx<br>Accredited Food Safety Program – Food Act 2006 (QLD) – LI/2021/0345. Accredited by Michael Taylor (Authorised Person Moreton Bay Regional Council) 23 March 2021.</div>
+</div>
+<script defer src="../hotfix.js"></script>
+</body></html>

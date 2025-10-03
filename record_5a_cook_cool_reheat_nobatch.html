@@ -1,133 +1,49 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Record 5a — Temperature Control Log — Cook/Cool/Reheat & Serve</title>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Sign in — Mother Duck Kitchen</title>
 <style>
-  :root{
-    --ink:#0f172a; --line:#cfd6dd; --grid:#e7edf3; --head:#f6f8fb;
-    --chip:#eef2f7; --brand:#0d6efd; --warn:#ffc107;
-  }
-  @page{ size:A4 portrait; margin:10mm }
-  html,body{margin:0;background:#e8f0f4;color:var(--ink);font:13px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
-  body{background:url("kitchen.jpg") center/cover fixed no-repeat}
-  .wash{position:fixed;inset:0;background:rgba(255,255,255,.88);z-index:-1}
-  .sheet{width:190mm;margin:14mm auto}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 16px rgba(0,0,0,.08);padding:14px}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-  .btn{border:0;border-radius:12px;background:var(--chip);padding:8px 12px;font-weight:600;cursor:pointer;color:#0f172a}
-  .btn--back{background:var(--warn)}
-  .btn--primary{background:var(--brand);color:#fff}
-  h1{text-align:center;font-size:18px;margin:6px 0 12px}
-  label{font-weight:600}
-  input,textarea{border:1px solid var(--line);border-radius:8px;padding:6px 8px}
-  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:10px}
-  th,td{border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);padding:6px 8px;background:#fff;text-align:center}
-  thead th{background:var(--head)}
-  tr:last-child td{border-bottom:0}
-  th:last-child,td:last-child{border-right:0}
-  .note{font-size:12px;color:#555;margin-top:8px}
-  @media print{.toolbar{display:none}body{background:#fff}.wash{display:none}}
+  body{font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;background:#f3f7fb;margin:0}
+  .card{max-width:420px;margin:10vh auto;background:#fff;border:1px solid #cfd6dd;border-radius:14px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+  label{display:block;margin:8px 0 4px;font-weight:700}
+  input{width:100%;border:1px solid #cfd6dd;border-radius:10px;padding:8px 10px}
+  button{margin-top:12px;width:100%;padding:10px;border:0;border-radius:10px;background:#0d6efd;color:#fff;font-weight:700;cursor:pointer}
+  .row{display:flex;gap:8px}
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDxnmDRp_Kr_FZjgo_E8D1ycxv1_D2kWhQ",
+    authDomain: "mother-duck-kitchen.firebaseapp.com",
+    projectId: "mother-duck-kitchen",
+    storageBucket: "mother-duck-kitchen.appspot.com",
+    messagingSenderId: "952076262983",
+    appId: "1:952076262983:web:8ddc71f2485154ebcca4",
+    measurementId: "G-FY6VT03FRT"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  auth.onAuthStateChanged(u=>{ if(u) location.href="kitchen.html"; });
+</script>
 </head>
 <body>
-<div class="wash"></div>
-<div class="sheet">
   <div class="card">
-
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <a href="kitchen.html" class="btn btn--back">← Back</a>
-      <button class="btn" onclick="window.print()">🖨️ Print</button>
-      <button class="btn" id="btnClear">✖️ Clear</button>
-      <button class="btn btn--primary" id="btnSave">💾 Save</button>
+    <h2>Sign in</h2>
+    <label>Email</label><input id="email" type="email" autocomplete="username">
+    <label>Password</label><input id="pw" type="password" autocomplete="current-password">
+    <div class="row">
+      <button onclick="login()">Log in</button>
+      <button style="background:#64748b" onclick="signup()">Create account</button>
     </div>
-
-    <h1>Record 5a — Temperature Control Log — Cook/Cool/Reheat &amp; Serve</h1>
-
-    <!-- Meta -->
-    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px">
-      <label>Date: <input type="date" id="date"></label>
-      <label>Item: <input type="text" id="item" placeholder="Menu Item / Food"></label>
-      <label>Produced/Batch No: <input type="text" id="batch"></label>
-    </div>
-
-    <!-- Processes -->
-    <div style="margin-bottom:12px">
-      <strong>Process (select all that apply — per Food Safety Program):</strong><br>
-      <label><input type="checkbox" value="Cook 75°C"> Cook 75°C</label>
-      <label><input type="checkbox" value="Reheat 60°C"> Reheat 60°C</label>
-      <label><input type="checkbox" value="Cool 60–21°C in 2 hrs"> Cool 60–21°C in 2 hrs</label>
-      <label><input type="checkbox" value="21–5°C in 4 hrs"> 21–5°C in 4 hrs</label>
-      <label><input type="checkbox" value="Serve"> Serve</label>
-    </div>
-
-    <!-- Description -->
-    <div style="margin-bottom:12px">
-      <label>Description:<br>
-      <textarea id="desc" rows="2" style="width:100%"></textarea></label>
-    </div>
-
-    <!-- Ck/Cl/Rh -->
-    <div style="margin-bottom:12px">
-      <strong>Cook (Ck) Cool (Cl) Reheat (Rh):</strong>
-      <label><input type="checkbox" value="Ck"> Ck</label>
-      <label><input type="checkbox" value="Cl"> Cl</label>
-      <label><input type="checkbox" value="Rh"> Rh</label>
-    </div>
-
-    <!-- Table -->
-    <table>
-      <thead>
-        <tr>
-          <th>Start Time</th>
-          <th>Finish Time</th>
-          <th>Temp °C</th>
-          <th>Time 1</th>
-          <th>Temp °C (60°)</th>
-          <th>Time 2</th>
-          <th>Temp °C (21°)</th>
-          <th>Time 3</th>
-          <th>Temp °C (5°)</th>
-          <th>Time</th>
-          <th>Temp °C</th>
-          <th>Initial</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><input type="time"></td>
-          <td><input type="time"></td>
-          <td><input type="number" step="0.1"></td>
-          <td><input type="time"></td>
-          <td><input type="number" step="0.1"></td>
-          <td><input type="time"></td>
-          <td><input type="number" step="0.1"></td>
-          <td><input type="time"></td>
-          <td><input type="number" step="0.1"></td>
-          <td><input type="time"></td>
-          <td><input type="number" step="0.1"></td>
-          <td><input type="text" maxlength="3" oninput="this.value=this.value.toUpperCase()"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="note">
-      Headings and wording match the Food Safety Program Record 5a exactly .  
-      A4 portrait, single-row layout like your Heating Log. No auto date/time stamps.
-    </div>
-
+    <p id="msg" style="color:#e11d48"></p>
   </div>
-</div>
-
 <script>
-// Simple clear button
-document.getElementById('btnClear').addEventListener('click',()=>{
-  document.querySelectorAll('input,textarea').forEach(el=>{
-    if(el.type==="checkbox") el.checked=false; else el.value="";
-  });
-});
+  async function login(){ try{ await auth.signInWithEmailAndPassword(email.value.trim(), pw.value); }
+    catch(e){ msg.textContent = e.message; } }
+  async function signup(){ try{ await auth.createUserWithEmailAndPassword(email.value.trim(), pw.value); }
+    catch(e){ msg.textContent = e.message; } }
 </script>
 </body>
 </html>

@@ -12,7 +12,6 @@
       background:url("kitchen.jpg") center/cover fixed no-repeat;
       display:flex; align-items:center; justify-content:center; position:relative;
     }
-    /* very light blue wash */
     body::before{content:""; position:absolute; inset:0;
       background:rgba(173,216,230,.55); backdrop-filter:blur(2px);}
     .card{
@@ -37,16 +36,18 @@
     <div id="msg" class="msg"></div>
     <input type="email" id="email" placeholder="Email" autocomplete="username"/>
     <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
-    <button class="login" onclick="login()">Log in</button>
+    <button class="login"  onclick="login()">Log in</button>
     <button class="create" onclick="signup()">Create account</button>
     <div id="error" class="error"></div>
   </div>
 
-  <!-- ✅ Firebase compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script>
-    // ✅ Your Firebase config (straight from console → Project settings → SDK setup → CDN)
+  <!-- Firebase Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } 
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 🔑 Your config (from Firebase console)
     const firebaseConfig = {
       apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
@@ -57,34 +58,38 @@
       measurementId: "G-1EGZ0PWQYE"
     };
 
-    // ✅ Initialize Firebase
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    // Init
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    // ✅ Auto-redirect if logged in
-    auth.onAuthStateChanged(user => { if (user) location.href = "index.html"; });
+    // auto-redirect if logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) location.href = "index.html";
+    });
 
-    async function login(){
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    // login
+    async function login() {
       try {
-        await auth.signInWithEmailAndPassword(email, password);
+        await signInWithEmailAndPassword(auth, email.value.trim(), password.value);
         location.href = "index.html";
       } catch (e) {
-        document.getElementById("error").textContent = e.message;
+        error.textContent = e.message;
       }
     }
 
-    async function signup(){
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    // signup
+    async function signup() {
       try {
-        await auth.createUserWithEmailAndPassword(email, password);
+        await createUserWithEmailAndPassword(auth, email.value.trim(), password.value);
         location.href = "index.html";
       } catch (e) {
-        document.getElementById("error").textContent = e.message;
+        error.textContent = e.message;
       }
     }
+
+    // make functions visible globally
+    window.login = login;
+    window.signup = signup;
   </script>
 </body>
 </html>

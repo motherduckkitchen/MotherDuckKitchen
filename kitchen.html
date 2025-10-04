@@ -19,7 +19,7 @@
     if (!firebase.apps.length) firebase.initializeApp(cfg);
     const auth = firebase.auth();
 
-    // 30-minute inactivity
+    // 30-minute inactivity auto-logout
     const TIMEOUT = 30*60*1000; 
     let t;
     function reset(){ 
@@ -30,16 +30,21 @@
 
     auth.onAuthStateChanged(u=>{
       if(!u){ 
-        location.replace("login.html"); 
+        location.replace("login.html");   // ✅ replace (no back bounce)
       } else { 
         document.getElementById("mdk-hide")?.remove(); 
         reset(); 
-        window.mdkLogout = () => auth.signOut().then(()=>location.replace("login.html")); 
+        window.mdkLogout = () => auth.signOut().then(()=>location.replace("login.html"));
       }
     });
   })();
   </script>
   <!-- 🔒 end guard -->  
+
+  <!-- Prevent caching -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -133,6 +138,7 @@
 
   <main class="container">
     <header>
+      <!-- Back goes directly to index.html -->
       <a class="btn-back" href="index.html">← Back</a>
       <h1><img src="logo.png" alt="Mother Duck Kitchen Logo"> Kitchen Records</h1>
       <button class="logout-btn" onclick="mdkLogout()">Log out</button>
@@ -150,5 +156,13 @@
       <a class="btn" href="record_12_supervisor_checklist.html">Supervisor Checklist</a>
     </div>
   </main>
+
+  <!-- Optional: completely block back button -->
+  <script>
+    history.replaceState(null, '', location.href);
+    window.addEventListener('popstate', () => {
+      history.replaceState(null, '', location.href);
+    });
+  </script>
 </body>
 </html>

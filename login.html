@@ -4,6 +4,12 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Mother Duck Kitchen – Sign in</title>
+
+  <!-- Prevent caching so Back button won't revive this page -->
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <style>
     :root{--line:#cfd6dd}
     html,body{height:100%}
@@ -36,15 +42,15 @@
     <div id="msg" class="msg"></div>
     <input type="email" id="email" placeholder="Email" autocomplete="username"/>
     <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
-    <button class="login" onclick="login()">Log in</button>
+    <button class="login" id="loginBtn">Log in</button>
     <div id="error" class="error"></div>
   </div>
 
-  <!-- Firebase CDN (compat version, safe for plain HTML hosting) -->
+  <!-- Firebase CDN (compat version) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script>
-    // ✅ Firebase project config (paste from your console)
+    // ✅ Paste your exact CDN config
     const firebaseConfig = {
       apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2KwHQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
@@ -57,26 +63,38 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // If redirected here due to timeout
+    // Show message if timeout sent you here
     const p = new URLSearchParams(location.search);
     if (p.get('msg') === 'expired') {
       document.getElementById('msg').textContent =
         'Session ended after 30 minutes of inactivity. Please sign in again.';
     }
 
-    // If already logged in, go straight to home
-    auth.onAuthStateChanged(u => { if (u) location.href = "index.html"; });
+    // If already signed in, go inside (replace so login isn’t in history)
+    auth.onAuthStateChanged(u => { if (u) location.replace("index.html"); });
 
-    async function login(){
-      try {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-        await auth.signInWithEmailAndPassword(email, password);
-        location.href = "index.html";
-      } catch(e){
-        document.getElementById('error').textContent = e.message;
+    const emailEl = document.getElementById('email');
+    const passEl  = document.getElementById('password');
+    const btn     = document.getElementById('loginBtn');
+    const errEl   = document.getElementById('error');
+
+    async function doLogin(){
+      errEl.textContent = '';
+      const email = (emailEl.value||'').trim();
+      const pass  = passEl.value||'';
+      if(!email || !pass){ errEl.textContent = 'Please enter email and password.'; return; }
+      btn.disabled = true; const old = btn.textContent; btn.textContent = 'Signing in...';
+      try{
+        await auth.signInWithEmailAndPassword(email, pass);
+        location.replace("index.html"); // 🔑 replace, not href
+      }catch(e){
+        errEl.textContent = e.message || 'Sign-in failed.';
+        btn.disabled = false; btn.textContent = old;
+        console.error(e);
       }
     }
+    btn.addEventListener('click', doLogin);
+    [emailEl, passEl].forEach(el => el.addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); }));
   </script>
 </body>
 </html>

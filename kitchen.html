@@ -1,53 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mother Duck Kitchen – Kitchen Records</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitchen Records – Mother Duck Kitchen</title>
 
-  <!-- 🔒 MDK Auth Guard (keeps page hidden until logged in) -->
   <style id="mdk-hide">html{visibility:hidden}</style>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-  <script src="/shared/auth-guard.js"></script>
 
   <script>
-    (function(){
-      const cfg = {
-        apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
-        authDomain: "mother-duck-kitchen.firebaseapp.com",
-        projectId: "mother-duck-kitchen",
-        storageBucket: "mother-duck-kitchen.appspot.com",
-        messagingSenderId: "925762762893",
-        appId: "1:925762762893:web:715285c11b9b30c9bccac4",
-        measurementId: "G-1EGZ0PWQYE"
-      };
-      if (!firebase.apps.length) firebase.initializeApp(cfg);
-      const auth = firebase.auth();
-
-      // 30-minute inactivity auto-logout
-      const TIMEOUT = 30*60*1000;
-      let t;
-      function reset(){
-        clearTimeout(t);
-        t = setTimeout(() => auth.signOut().then(() => location.replace("login.html?msg=expired")), TIMEOUT);
-      }
-      ["click","keydown","mousemove","touchstart","scroll","focus"].forEach(e =>
-        window.addEventListener(e, reset, {passive:true})
-      );
-
-      auth.onAuthStateChanged(u => {
-        if (!u) {
-          location.replace("login.html");
-        } else {
-          document.getElementById("mdk-hide")?.remove();
-          reset();
-          window.mdkLogout = () => auth.signOut().then(() => location.replace("login.html"));
-        }
-      });
-    })();
-  </script>  
-  const cfg = {
+  (function(){
+    const cfg = {
       apiKey: "AIzaSyDxnmPRp_Kr_FZj9Q_E8Dy1cxv1_D2kWhQ",
       authDomain: "mother-duck-kitchen.firebaseapp.com",
       projectId: "mother-duck-kitchen",
@@ -56,129 +20,64 @@
       appId: "1:925762762893:web:715285c11b9b30c9bccac4",
       measurementId: "G-1EGZ0PWQYE"
     };
+
     if (!firebase.apps.length) firebase.initializeApp(cfg);
     const auth = firebase.auth();
 
     // 30-minute inactivity auto-logout
-    const TIMEOUT = 30*60*1000; 
-    let t;
-    function reset(){ 
-      clearTimeout(t); 
-      t = setTimeout(()=>auth.signOut().then(()=>location.replace("login.html?msg=expired")), TIMEOUT); 
+    const TIMEOUT = 30 * 60 * 1000;
+    let timer;
+    function resetTimer() {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        auth.signOut().then(() => location.replace("login.html?msg=expired"));
+      }, TIMEOUT);
     }
-    ["click","keydown","mousemove","touchstart","scroll","focus"].forEach(e=>window.addEventListener(e, reset, {passive:true}));
 
-    auth.onAuthStateChanged(u=>{
-      if(!u){ 
-        location.replace("login.html");   // ✅ replace (no back bounce)
-      } else { 
-        document.getElementById("mdk-hide")?.remove(); 
-        reset(); 
-        window.mdkLogout = () => auth.signOut().then(()=>location.replace("login.html"));
+    ["click","keydown","mousemove","touchstart","scroll","focus"]
+      .forEach(e => window.addEventListener(e, resetTimer, {passive:true}));
+
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        location.replace("login.html");
+      } else {
+        document.getElementById("mdk-hide")?.remove();
+        resetTimer();
+        window.mdkLogout = () => auth.signOut().then(() => location.replace("login.html"));
       }
     });
   })();
   </script>
-  <!-- 🔒 end guard -->  
 
-  <!-- Prevent caching -->
-  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Kitchen Records</title>
-
-  <!-- Self-contained styles -->
   <style>
     :root{
       --brand:#0d6efd;
       --brand-hover:#0b5ed7;
       --accent:#ffc107;
-      --card-bg: rgba(255,255,255,.80);
+      --card-bg: rgba(255,255,255,.85);
       --text:#0f172a;
     }
 
-    html,body{ height:100%; }
-    body{
-      margin:0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
-      color:var(--text);
-      background: url("kitchen.jpg") center/cover fixed no-repeat;
-    }
-    .overlay{
-      position:fixed; inset:0;
-      background: rgba(173,216,230,0.45); /* light blue wash */
-      z-index:0;
-    }
-
-    main.container{
-      position:relative;
-      z-index:1;
-      max-width:1100px;
-      margin: 40px auto;
-      padding: 28px 22px;
-      background: var(--card-bg);
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.10);
-    }
-
-    header{
-      display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
-      margin-bottom: 18px;
-    }
-    h1{ font-size: clamp(22px, 2.6vw, 30px); margin:0; display:flex; align-items:center; gap:10px; }
+    html,body{ height:100%; margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:var(--text); background:url("kitchen.jpg") center/cover fixed no-repeat; }
+    .overlay{ position:fixed; inset:0; background:rgba(173,216,230,.45); z-index:0; }
+    main.container{ position:relative; z-index:1; max-width:1100px; margin:40px auto; padding:28px 22px; background:var(--card-bg); border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.1); }
+    header{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:18px; }
+    h1{ font-size:clamp(22px,2.6vw,30px); margin:0; display:flex; align-items:center; gap:10px; }
     h1 img{ height:40px; }
-
-    .btn-back{
-      display:inline-block;
-      background: var(--accent);
-      color:#000;
-      text-decoration:none;
-      font-weight:600;
-      padding: 10px 16px;
-      border-radius: 8px;
-      box-shadow: 0 1px 1px rgba(0,0,0,.06);
-    }
-
-    .logout-btn{
-      background:#dc3545;
-      color:#fff;
-      border:none;
-      border-radius:8px;
-      padding:10px 16px;
-      font-weight:600;
-      cursor:pointer;
-    }
+    .btn-back{ background:var(--accent); color:#000; text-decoration:none; font-weight:600; padding:10px 16px; border-radius:8px; }
+    .logout-btn{ background:#dc3545; color:#fff; border:none; border-radius:8px; padding:10px 16px; font-weight:600; cursor:pointer; }
     .logout-btn:hover{ background:#bb2d3b; }
-
     .btn-row{ display:flex; flex-wrap:wrap; gap:12px; margin-top:10px; }
-    .btn{
-      display:inline-block;
-      background: var(--brand);
-      color:#fff; text-decoration:none;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-weight:600;
-      letter-spacing:.2px;
-      box-shadow: 0 2px 6px rgba(13,110,253,.25);
-      transition: transform .06s ease, background .15s ease, box-shadow .15s ease;
-    }
-    .btn:hover{ background: var(--brand-hover); transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0); }
-
-    @media (max-width:640px){
-      .btn{ flex: 1 1 100%; text-align:center; }
-    }
+    .btn{ background:var(--brand); color:#fff; text-decoration:none; padding:12px 16px; border-radius:10px; font-weight:600; box-shadow:0 2px 6px rgba(13,110,253,.25); transition:transform .06s ease,background .15s ease; }
+    .btn:hover{ background:var(--brand-hover); transform:translateY(-1px); }
+    @media(max-width:640px){ .btn{ flex:1 1 100%; text-align:center; } }
   </style>
 </head>
+
 <body>
   <div class="overlay" aria-hidden="true"></div>
-
   <main class="container">
     <header>
-      <!-- Back goes directly to index.html -->
       <a class="btn-back" href="index.html">← Back</a>
       <h1><img src="logo.png" alt="Mother Duck Kitchen Logo"> Kitchen Records</h1>
       <button class="logout-btn" onclick="mdkLogout()">Log out</button>
@@ -196,13 +95,5 @@
       <a class="btn" href="record_12_supervisor_checklist.html">Supervisor Checklist</a>
     </div>
   </main>
-
-  <!-- Optional: completely block back button -->
-  <script>
-    history.replaceState(null, '', location.href);
-    window.addEventListener('popstate', () => {
-      history.replaceState(null, '', location.href);
-    });
-  </script>
 </body>
 </html>
